@@ -43,7 +43,12 @@
 }
 
 
--(void)applicationDidFinishLaunching:(NSNotification *)notification{}
+-(void)applicationDidFinishLaunching:(NSNotification *)notification{
+    NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"default_prefs" ofType:@"plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:file];
+    [preferences registerDefaults:dict];
+}
 
 
 

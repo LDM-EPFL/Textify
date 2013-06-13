@@ -203,11 +203,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SinK3/AppDelegate.m"
-         timestampString = "392163096.106806"
+         timestampString = "392814049.030076"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "66"
-         endingLineNumber = "66"
+         startingLineNumber = "71"
+         endingLineNumber = "71"
          landmarkName = "-tabView:didSelectTabViewItem:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -281,11 +281,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "392165909.525353"
+         timestampString = "392814754.278988"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "63"
-         endingLineNumber = "63"
+         startingLineNumber = "62"
+         endingLineNumber = "62"
          landmarkName = "-drawRect:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -294,11 +294,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "392165909.525353"
+         timestampString = "392815426.089917"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "98"
-         endingLineNumber = "98"
+         startingLineNumber = "114"
+         endingLineNumber = "114"
          landmarkName = "-drawRect:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -307,11 +307,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "392165909.525353"
+         timestampString = "392814754.278988"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "35"
-         endingLineNumber = "35"
+         startingLineNumber = "34"
+         endingLineNumber = "34"
          landmarkName = "@implementation BigFontView"
          landmarkType = "3">
       </FileBreakpoint>
@@ -320,11 +320,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "392165909.525353"
+         timestampString = "392814754.278988"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "60"
-         endingLineNumber = "60"
+         startingLineNumber = "59"
+         endingLineNumber = "59"
          landmarkName = "-scrollText"
          landmarkType = "5">
       </FileBreakpoint>
@@ -333,11 +333,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "392165909.525353"
+         timestampString = "392814754.278988"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "55"
-         endingLineNumber = "55"
+         startingLineNumber = "54"
+         endingLineNumber = "54"
          landmarkName = "-scrollText"
          landmarkType = "5">
       </FileBreakpoint>
@@ -365,6 +365,45 @@
          startingLineNumber = "63"
          endingLineNumber = "63"
          landmarkName = "-goFullscreen"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SinK3/main.m"
+         timestampString = "392814474.04157"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "12"
+         endingLineNumber = "12"
+         landmarkName = "main()"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SinK3/AppDelegate.m"
+         timestampString = "392814698.331004"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "46"
+         endingLineNumber = "46"
+         landmarkName = "-applicationDidFinishLaunching:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BigFontView.m"
+         timestampString = "392814748.004419"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "22"
+         endingLineNumber = "22"
+         landmarkName = "-initWithFrame:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

@@ -91,6 +91,7 @@
 		49A0DEDD1760072100629841 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49A0DEDC1760072100629841 /* icon.icns */; };
 		49AA7308175FDDD9002F15F7 /* KeyHandlerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA7307175FDDD9002F15F7 /* KeyHandlerView.m */; };
 		49C311BF1719C77C000E904F /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 491BD7F416BBFC350012A5E1 /* AppController.m */; };
+		49DBFCE11769DBCF000A4476 /* default_prefs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49DBFCE01769DBCF000A4476 /* default_prefs.plist */; };
 		49E336AF16C52B4700FD7845 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 49E336AD16C52B4700FD7845 /* lz4.c */; };
 /* End PBXBuildFile section */
 
@@ -203,6 +204,7 @@
 		49AA7306175FDDD9002F15F7 /* KeyHandlerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyHandlerView.h; sourceTree = "<group>"; };
 		49AA7307175FDDD9002F15F7 /* KeyHandlerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyHandlerView.m; sourceTree = "<group>"; };
 		49C8AF7E172486D600D54BAE /* libcinder_d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcinder_d.a; path = ../../Libraries/Cinder/lib/libcinder_d.a; sourceTree = "<group>"; };
+		49DBFCE01769DBCF000A4476 /* default_prefs.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = default_prefs.plist; path = ../default_prefs.plist; sourceTree = "<group>"; };
 		49E336AD16C52B4700FD7845 /* lz4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lz4.c; sourceTree = "<group>"; };
 		49E336AE16C52B4700FD7845 /* lz4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lz4.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -328,6 +330,7 @@
 		491BD7D716BBF0560012A5E1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				49DBFCE01769DBCF000A4476 /* default_prefs.plist */,
 				491BD7E816BBF0570012A5E1 /* SinK3.xcdatamodeld */,
 				491BD7D816BBF0560012A5E1 /* CyborgameSubtitler-Info.plist */,
 				491BD7D916BBF0560012A5E1 /* InfoPlist.strings */,
@@ -532,6 +535,7 @@
 				491BD7E116BBF0570012A5E1 /* Credits.rtf in Resources */,
 				491BD7E716BBF0570012A5E1 /* MainMenu.xib in Resources */,
 				49A0DEDD1760072100629841 /* icon.icns in Resources */,
+				49DBFCE11769DBCF000A4476 /* default_prefs.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

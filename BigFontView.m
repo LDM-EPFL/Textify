@@ -19,8 +19,7 @@
 
 
 
-- (id)initWithFrame:(NSRect)frame
-{
+- (id)initWithFrame:(NSRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
@@ -62,21 +61,38 @@ bool f_scrolling = false;
 
 - (void)drawRect:(NSRect)dirtyRect {
     
-    // Retrieve settings from UI
-    NSColor *backgroundColor=(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground"]];
-    NSFont  *fontToUse=(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]];
-    if (!fontToUse){
-        fontToUse=[NSFont fontWithName:@"Helvetica" size:20];
+    // Defaults
+    NSFont  *fontToUse=[NSFont fontWithName:@"Helvetica" size:20];
+    NSColor *backgroundColor=[NSColor whiteColor];
+    NSColor *backgroundColor2=[NSColor blackColor];
+    NSColor *fontColor=[NSColor blackColor];
+    NSColor *fontColorShadow=[NSColor blackColor];
+    
+    // Try and get these from the userprefs (will fail if not initialized before)
+    @try {
+        // Retrieve settings from UI
+        backgroundColor=(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground"]];
+        
+        fontToUse=(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]];
+        
+        backgroundColor2=(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground2"]];
+        
+        fontColor=(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFont"]];
+        
+        fontColorShadow=(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFontShadow"]];
     }
+    @catch (NSException *exception) {
+        NSLog(@"Using defaults...");
+    }
+
+
     
     //Save it
     NSData *fontSelected = [NSArchiver archivedDataWithRootObject:fontToUse];
     [[NSUserDefaults standardUserDefaults] setValue:fontSelected forKey:@"fontSelected"];
     
     
-    NSColor *backgroundColor2=(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground2"]];
-    NSColor *fontColor=(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFont"]];
-    NSColor *fontColorShadow=(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFontShadow"]];
+   
     
     NSString *displayString = [[NSUserDefaults standardUserDefaults] valueForKey:@"displayText"];
 

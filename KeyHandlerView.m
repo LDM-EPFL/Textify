@@ -65,8 +65,16 @@ bool f_fullscreenMode=false;
     [mainWindow setContentView:[_fullScreenView contentView]];
     
    
-    [mainWindow makeKeyAndOrderFront:nil];
+    [mainWindow makeKeyAndOrderFront:self];
 
+    if (!isAnimating) {
+		// Mark the view as needing drawing to initalize its contents
+		[_fullScreenView setNeedsDisplay:YES];
+	}
+	else {
+		// Start playing the animation
+		[_fullScreenView startAnimation];
+	}
     
     f_fullscreenMode=true;
 }

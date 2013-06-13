@@ -11,6 +11,7 @@
 @interface KeyHandlerView : NSView{
      NSWindow *mainWindow;
     __unsafe_unretained NSPanel *_fullScreenView;
+    BOOL isAnimating;
 }
 @property (unsafe_unretained) IBOutlet NSPanel *fullScreenView;
 @end
