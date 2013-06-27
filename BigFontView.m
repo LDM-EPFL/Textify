@@ -56,6 +56,7 @@ bool f_scrolling = false;
 
 
 // Actually scroll the text
+int y = 1;
 -(void)scrollText{
     
     // If direction changes
@@ -152,7 +153,8 @@ bool f_scrolling = false;
     if (f_scrolling){
         displayString=scrollString;
     }else{
-        scrollString = [NSMutableString stringWithFormat:@"       %@       ",displayString];
+        //scrollString = [NSMutableString stringWithFormat:@"       %@       ",displayString];
+        scrollString = [NSMutableString stringWithFormat:@"%@",displayString];
     }
        
     // Build the gradient

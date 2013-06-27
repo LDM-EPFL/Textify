@@ -56,7 +56,7 @@ bool f_fullscreenMode=false;
                                                  defer:NO 
                                                 screen:[NSScreen mainScreen]];
     [mainWindow setLevel:windowLevel];
-    [mainWindow setBackgroundColor:[NSColor blackColor]];
+    [mainWindow setBackgroundColor:[NSColor grayColor]];
     
         
     // Load our content view into it
