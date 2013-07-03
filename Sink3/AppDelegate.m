@@ -34,44 +34,33 @@
 - (void)changeFont:(id)sender{
     NSFontManager *fontManager = [NSFontManager sharedFontManager];
     NSFont *panelFont = [fontManager convertFont:[fontManager selectedFont]];
+    [panelFont setValue:@"20" forKey:@"size"];
+
     NSData *fontSelected = [NSArchiver archivedDataWithRootObject:panelFont];
     [[NSUserDefaults standardUserDefaults] setValue:fontSelected forKey:@"fontSelected"];
 }
 
 - (unsigned int)validModesForFontPanel:(NSFontPanel *)fontPanel{
-    return ( NSFontPanelSizeModeMask |  NSFontPanelFaceModeMask);
+    return NSFontPanelFaceModeMask | NSFontPanelCollectionModeMask;// | NSFontPanelSizeModeMask;
 }
-
 
 -(void)applicationDidFinishLaunching:(NSNotification *)notification{
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     NSString *file = [[NSBundle mainBundle] pathForResource:@"default_prefs" ofType:@"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:file];
     [preferences registerDefaults:dict];
+
+
+    // Defaults
+    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"displayText"];
+    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textFile"];
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_translateX"];
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_translateY"];
+    [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"f_scrollPause"];
+    
 }
 
 
-
-// Once per frame (manual callback from GLView)
-+ (void)perFrame {
-
-}
-
-
-// Helper function to just log all the current preferences
-- (void)dumpUserPrefs{
-   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-   NSLog(@"%@", [defaults dictionaryRepresentation]);
-}
-
-
-
-
-// Tab view delegate
-- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem{
-    NSLog(@"Tab Switch: %@",[[_appTab selectedTabViewItem] label]);
-    [[NSUserDefaults standardUserDefaults] setBool:([[[_appTab selectedTabViewItem] label] isEqualToString:@"Kinect"]) forKey:@"kinectTabVisible"];
-}
 
 
 
@@ -200,8 +189,12 @@
     }
 }
 
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
-{
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender{
+    
+    
+    
+    
+    
     // Save changes in the application's managed object context before the application terminates.
     
     if (!_managedObjectContext) {

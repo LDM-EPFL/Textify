@@ -35,8 +35,7 @@
 		4987A37A16C31DE30035FB17 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4987A37916C31DE30035FB17 /* GCDAsyncSocket.m */; };
 		4987A38916C322C20035FB17 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4987A38816C322C20035FB17 /* Security.framework */; };
 		49A0DEDD1760072100629841 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49A0DEDC1760072100629841 /* icon.icns */; };
-		49AA7308175FDDD9002F15F7 /* KeyHandlerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49AA7307175FDDD9002F15F7 /* KeyHandlerView.m */; };
-		49C311BF1719C77C000E904F /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 491BD7F416BBFC350012A5E1 /* AppController.m */; };
+		49BF395217842D910045361C /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BF395117842D910045361C /* AppController.m */; };
 		49DBFCE11769DBCF000A4476 /* default_prefs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49DBFCE01769DBCF000A4476 /* default_prefs.plist */; };
 		49E336AF16C52B4700FD7845 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 49E336AD16C52B4700FD7845 /* lz4.c */; };
 /* End PBXBuildFile section */
@@ -71,8 +70,6 @@
 		491BD7E316BBF0570012A5E1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SinK3/AppDelegate.m; sourceTree = "<group>"; };
 		491BD7E616BBF0570012A5E1 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		491BD7E916BBF0570012A5E1 /* SinK3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SinK3.xcdatamodel; sourceTree = "<group>"; };
-		491BD7F316BBFC350012A5E1 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppController.h; path = SinK3/AppController.h; sourceTree = "<group>"; };
-		491BD7F416BBFC350012A5E1 /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppController.m; path = SinK3/AppController.m; sourceTree = "<group>"; };
 		491BD80016BECE9A0012A5E1 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
 		491BD80116BECE9A0012A5E1 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		491BD83416BED10F0012A5E1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -147,8 +144,8 @@
 		4987A37916C31DE30035FB17 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		4987A38816C322C20035FB17 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		49A0DEDC1760072100629841 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
-		49AA7306175FDDD9002F15F7 /* KeyHandlerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyHandlerView.h; sourceTree = "<group>"; };
-		49AA7307175FDDD9002F15F7 /* KeyHandlerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyHandlerView.m; sourceTree = "<group>"; };
+		49BF395017842D910045361C /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
+		49BF395117842D910045361C /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		49C8AF7E172486D600D54BAE /* libcinder_d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcinder_d.a; path = ../../Libraries/Cinder/lib/libcinder_d.a; sourceTree = "<group>"; };
 		49DBFCE01769DBCF000A4476 /* default_prefs.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = default_prefs.plist; path = ../default_prefs.plist; sourceTree = "<group>"; };
 		49E336AD16C52B4700FD7845 /* lz4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lz4.c; sourceTree = "<group>"; };
@@ -196,14 +193,12 @@
 			isa = PBXGroup;
 			children = (
 				49A0DEDC1760072100629841 /* icon.icns */,
-				491BD7F316BBFC350012A5E1 /* AppController.h */,
-				491BD7F416BBFC350012A5E1 /* AppController.m */,
 				491BD7E216BBF0570012A5E1 /* AppDelegate.h */,
 				491BD7E316BBF0570012A5E1 /* AppDelegate.m */,
+				49BF395017842D910045361C /* AppController.h */,
+				49BF395117842D910045361C /* AppController.m */,
 				491BD7E516BBF0570012A5E1 /* MainMenu.xib */,
-				49AA7306175FDDD9002F15F7 /* KeyHandlerView.h */,
-				49AA7307175FDDD9002F15F7 /* KeyHandlerView.m */,
-				491E3FDE171729B300DB7734 /* Cinder */,
+				491E3FDE171729B300DB7734 /* Main Code */,
 				494301B416C5E052006B5DEA /* SupportCode */,
 				491BD7D716BBF0560012A5E1 /* Resources */,
 				49D319951718A798001FE074 /* Frameworks */,
@@ -244,13 +239,13 @@
 			name = Networking;
 			sourceTree = "<group>";
 		};
-		491E3FDE171729B300DB7734 /* Cinder */ = {
+		491E3FDE171729B300DB7734 /* Main Code */ = {
 			isa = PBXGroup;
 			children = (
 				4907B3B3175FA3290042E1C8 /* BigFontView.h */,
 				4907B3B4175FA3290042E1C8 /* BigFontView.m */,
 			);
-			name = Cinder;
+			name = "Main Code";
 			sourceTree = "<group>";
 		};
 		492950921728A88C00B118C8 /* OpenCV */ = {
@@ -441,13 +436,12 @@
 				491BD7DD16BBF0570012A5E1 /* main.m in Sources */,
 				491BD7E416BBF0570012A5E1 /* AppDelegate.m in Sources */,
 				491BD7EA16BBF0570012A5E1 /* SinK3.xcdatamodeld in Sources */,
-				49C311BF1719C77C000E904F /* AppController.m in Sources */,
 				491BD80216BECE9A0012A5E1 /* GCDAsyncUdpSocket.m in Sources */,
 				4987A37A16C31DE30035FB17 /* GCDAsyncSocket.m in Sources */,
 				49E336AF16C52B4700FD7845 /* lz4.c in Sources */,
 				496E00CF171DDBE8008DF144 /* StepperTextField.m in Sources */,
 				4907B3B5175FA3290042E1C8 /* BigFontView.m in Sources */,
-				49AA7308175FDDD9002F15F7 /* KeyHandlerView.m in Sources */,
+				49BF395217842D910045361C /* AppController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
