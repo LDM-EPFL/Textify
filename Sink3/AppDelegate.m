@@ -52,7 +52,7 @@
 
 
     // Defaults
-    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"displayText"];
+    //[[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"displayText"];
     [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textFile"];
     [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_translateX"];
     [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_translateY"];
