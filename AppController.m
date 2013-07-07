@@ -7,6 +7,7 @@
 //
 
 #import "AppController.h"
+#import "AppDistributed.h"
 
 @implementation AppController
 
@@ -81,17 +82,13 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 		CVDisplayLinkStop(displayLink);
 }
 
+
 bool f_dockedMode=false;
 -(void)drawView{
     
     return;
     // If we're not animating, start
     if (!isAnimating) {[self startAnimation];}
-    
-    NSLog(@"Saving pos...");
-    NSRect frame = [self.window frame];
-    [[NSUserDefaults standardUserDefaults] setInteger:frame.origin.x forKey:@"dockPos_x"];
-    [[NSUserDefaults standardUserDefaults] setInteger:frame.origin.y forKey:@"dockPos_y"];
-    [[NSUserDefaults standardUserDefaults] setInteger:frame.size.width forKey:@"dockPos_width"];
+
 }
 @end

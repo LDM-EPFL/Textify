@@ -8,14 +8,47 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface BigFontView : NSView <NSDraggingDestination>{
+@interface BigFontView : NSView {
     CVDisplayLinkRef displayLink;
-    __unsafe_unretained NSTextView *_displayBox;
+    NSSize original_size;
+    bool f_fullscreenMode;
+    
 }
 
 - (void) startAnimation;
 - (void) stopAnimation;
-- (void) drawView;
+- (void)goFullscreen;
+- (void)goFullscreen2;
+- (void)goWindowed;
 
-@property (unsafe_unretained) IBOutlet NSTextView *displayBox;
+typedef enum scrollDirectionTypes{
+    HORIZONTAL,
+    VERTICAL
+} ScrollDirection;
+
+
+@property(atomic, copy)   NSURL   *droppedFileURL;
+@property(atomic, copy)   NSFont  *fontToUse;
+@property(atomic, strong) NSColor *backgroundColor;
+@property(atomic, strong) NSColor *backgroundColor2;
+@property(atomic, strong) NSColor *fontColor;
+@property(atomic, strong) NSColor *fontColorShadow;
+@property(atomic, copy) NSString* displayString;
+@property(atomic)  NSPoint position;
+
+@property(readwrite, assign) float scrollPosition;
+@property(readwrite, assign) bool f_autoScale;
+@property(readwrite, assign) bool f_centerText;
+@property(readwrite, assign) bool f_drawShadow;
+@property(readwrite, assign) bool f_flipText;
+@property(readwrite, assign) bool f_mirrorText;
+@property(readwrite, assign) bool f_scrollPause;
+@property(readwrite, assign) int scaleTextType;
+@property(readwrite, assign) ScrollDirection scrollDirection;
+@property(readwrite, assign) float gradientAngle;
+@property(readwrite, assign) float scaleFactor;
+@property(readwrite, assign) float global_offsetX;
+@property(readwrite, assign) float global_offsetY;
+@property(readwrite, assign) float scrollRate;
+
 @end

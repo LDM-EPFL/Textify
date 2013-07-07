@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "AppDistributed.h"
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -23,8 +23,8 @@
 
 - (IBAction)FontButton:(id)sender {
     
-    NSFont *fontToUse=(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]];
-    
+    //NSFont *fontToUse=(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]];
+    NSFont* fontToUse=[NSFont fontWithName:@"Helvetica" size:20];
     NSFontManager * fontManager = [NSFontManager sharedFontManager];
     [fontManager setTarget:self];
     [fontManager setSelectedFont:fontToUse isMultiple:NO];
@@ -49,14 +49,7 @@
     NSString *file = [[NSBundle mainBundle] pathForResource:@"default_prefs" ofType:@"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:file];
     [preferences registerDefaults:dict];
-
-
-    // Defaults
-    //[[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"displayText"];
-    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textFile"];
-    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_translateX"];
-    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_translateY"];
-    [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"f_scrollPause"];
+    [[AppDistributed sharedInstance] setNamespace:@"sinlab.ch" andApplicationID:@"subtitler"];
     
 }
 
