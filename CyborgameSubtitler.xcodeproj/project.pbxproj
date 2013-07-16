@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4907B3B5175FA3290042E1C8 /* BigFontView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4907B3B4175FA3290042E1C8 /* BigFontView.m */; };
+		4913DD79179053AA00667121 /* AppCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4913DD78179053AA00667121 /* AppCommon.m */; };
 		491BD7D116BBF0560012A5E1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD7D016BBF0560012A5E1 /* Cocoa.framework */; };
 		491BD7DB16BBF0560012A5E1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 491BD7D916BBF0560012A5E1 /* InfoPlist.strings */; };
 		491BD7DD16BBF0570012A5E1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 491BD7DC16BBF0570012A5E1 /* main.m */; };
@@ -35,6 +36,7 @@
 		4988878417860563007F0413 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4988878317860563007F0413 /* MainView.m */; };
 		49A0DEDD1760072100629841 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 49A0DEDC1760072100629841 /* icon.icns */; };
 		49BF395217842D910045361C /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BF395117842D910045361C /* AppController.m */; };
+		49C24D7E1795727D00F656BF /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C24D7D1795727D00F656BF /* OverlayView.m */; };
 		49DBFCE11769DBCF000A4476 /* default_prefs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49DBFCE01769DBCF000A4476 /* default_prefs.plist */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,8 @@
 /* Begin PBXFileReference section */
 		4907B3B3175FA3290042E1C8 /* BigFontView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigFontView.h; sourceTree = "<group>"; };
 		4907B3B4175FA3290042E1C8 /* BigFontView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigFontView.m; sourceTree = "<group>"; };
+		4913DD77179053AA00667121 /* AppCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCommon.h; sourceTree = "<group>"; };
+		4913DD78179053AA00667121 /* AppCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCommon.m; sourceTree = "<group>"; };
 		491BD7CC16BBF0560012A5E1 /* CyborgameSubtitler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CyborgameSubtitler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		491BD7D016BBF0560012A5E1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		491BD7D316BBF0560012A5E1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -86,6 +90,8 @@
 		49A0DEDC1760072100629841 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		49BF395017842D910045361C /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		49BF395117842D910045361C /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
+		49C24D7C1795727D00F656BF /* OverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayView.h; sourceTree = "<group>"; };
+		49C24D7D1795727D00F656BF /* OverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OverlayView.m; sourceTree = "<group>"; };
 		49DBFCE01769DBCF000A4476 /* default_prefs.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = default_prefs.plist; path = ../default_prefs.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -123,6 +129,8 @@
 				49A0DEDC1760072100629841 /* icon.icns */,
 				49637C251789B153003506E3 /* AppDistributed.h */,
 				49637C261789B153003506E3 /* AppDistributed.m */,
+				4913DD77179053AA00667121 /* AppCommon.h */,
+				4913DD78179053AA00667121 /* AppCommon.m */,
 				491BD7E216BBF0570012A5E1 /* AppDelegate.h */,
 				491BD7E316BBF0570012A5E1 /* AppDelegate.m */,
 				49BF395017842D910045361C /* AppController.h */,
@@ -162,6 +170,8 @@
 			children = (
 				4907B3B3175FA3290042E1C8 /* BigFontView.h */,
 				4907B3B4175FA3290042E1C8 /* BigFontView.m */,
+				49C24D7C1795727D00F656BF /* OverlayView.h */,
+				49C24D7D1795727D00F656BF /* OverlayView.m */,
 				4988878217860563007F0413 /* MainView.h */,
 				4988878317860563007F0413 /* MainView.m */,
 			);
@@ -266,6 +276,8 @@
 				49BF395217842D910045361C /* AppController.m in Sources */,
 				4988878417860563007F0413 /* MainView.m in Sources */,
 				49637C271789B153003506E3 /* AppDistributed.m in Sources */,
+				4913DD79179053AA00667121 /* AppCommon.m in Sources */,
+				49C24D7E1795727D00F656BF /* OverlayView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

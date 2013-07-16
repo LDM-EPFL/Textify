@@ -24,7 +24,7 @@ bool f_makeChildFront=true;
 
 -(void)updateState{
     
-    
+    /*
     // Window handling
     if([self.window isKeyWindow]){
         if(f_makeChildFront){
@@ -61,18 +61,34 @@ bool f_makeChildFront=true;
 
         //[_windowedText orderFront:self];
     }
+     */
 
     
+    
+    /*
+    // Make a "screenshot" to feed to network
+    NSRect visibleRect = [_windowedTextView visibleRect];
+    NSBitmapImageRep *imageRep = [_windowedTextView bitmapImageRepForCachingDisplayInRect:visibleRect];
+    [_windowedTextView cacheDisplayInRect:visibleRect toBitmapImageRep:imageRep];
+    NSSize windowSize=visibleRect.size;
+    visibleRect.size.height=visibleRect.size.height/3;
+    visibleRect.size.width=visibleRect.size.width/3;
+    NSImage *pubImage = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:windowSize];
+    [_pubImage setImage:pubImage];
+    [_pubImage setNeedsDisplay:YES];
+     */
+
+    
+    //NSImage *pubImage = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:windowSize];
+    
+    //NSImage *pubImage =[[NSImage alloc] initWithData:[compositeView dataWithPDFInsideRect:[compositeView bounds]]];
+    NSImage *pubImage =[[NSImage alloc] initWithData:[_windowedTextView dataWithPDFInsideRect:[_windowedTextView bounds]]];
+
+    [_pubImage setImage:pubImage];
+    [_pubImage setNeedsDisplay:YES];
+    
+    
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_publishImage"]){
-        NSRect visibleRect = [_windowedTextView visibleRect];
-        NSBitmapImageRep *imageRep = [_windowedTextView bitmapImageRepForCachingDisplayInRect:visibleRect];
-        [_windowedTextView cacheDisplayInRect:visibleRect toBitmapImageRep:imageRep];
-        NSSize windowSize=visibleRect.size;
-        visibleRect.size.height=visibleRect.size.height/3;
-        visibleRect.size.width=visibleRect.size.width/3;
-        NSImage *pubImage = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:windowSize];
-        [_pubImage setImage:pubImage];
-        [_pubImage setNeedsDisplay:YES];
         
         [[AppDistributed sharedInstance] updateObjectNamed:@"liveFeed" withObject:[pubImage TIFFRepresentation] withInfo:@"NSData: TIFF representation of an image"];
 
@@ -245,14 +261,48 @@ bool f_makeChildFront=true;
             if([event modifierFlags] & NSControlKeyMask){
                 
                 [[NSUserDefaults standardUserDefaults] setBool:![[NSUserDefaults standardUserDefaults] boolForKey:@"f_scaleText"] forKey:@"f_scaleText"];
+            
                 
-                // S
-            }else{}
+                /*
+                 
+                 NSDictionary *dict = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+                 
+                 [myDict writeToFile:path atomically:YES]
+                 
+                 displaytext
+                 font
+                 fontcolor
+                 shadow
+                 shadowcolor
+                 gradient
+                 horiz or vert
+                 scale or not
+                [[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetX"],
+                [[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetY"],
+                [[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"],
+                [[NSUserDefaults standardUserDefaults] floatForKey:@"scaleFactor"],
+                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
+                */
+            }
             break;
             
             
-                  
-        case 'r':case 'R':
+        // CMD+r
+        case 'r':
+            if([event modifierFlags] & NSCommandKeyMask){
+                
+                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetX"];
+                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetY"];
+                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
+               
+                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
+                f_resetScrollPosition=true;
+                
+               
+            }
+        
+        // CMD +SHFT+R
+        case 'R':
             
             // CMD R
             if([event modifierFlags] & NSCommandKeyMask){
@@ -272,10 +322,7 @@ bool f_makeChildFront=true;
                 [[NSUserDefaults standardUserDefaults] setFloat:1.0 forKey:@"scaleFactor"];
                 [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
                 f_resetScrollPosition=true;
-           
-            // R
-            }else{}
-            
+            }
         break;
             
         case 'p':case 'P': case ' ':

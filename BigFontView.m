@@ -8,10 +8,11 @@
 
 #import "BigFontView.h"
 #import "MainView.h"
+#import "AppCommon.h"
 
 @implementation BigFontView
 
-
+					
 
 @synthesize fontToUse;
 @synthesize backgroundColor;
@@ -68,7 +69,6 @@
         
         
         // Defaults
-        
         fontToUse=[NSFont fontWithName:@"Helvetica" size:20];
         f_autoScale = false;
         f_centerText = true;
@@ -148,6 +148,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 // Draw loop
 -(void)drawView{
+    
+    if ([[AppCommon sharedInstance] f_goFullscreen]){
+        [self goFullscreen];
+        [[AppCommon sharedInstance] setF_goFullscreen:FALSE];
+    }
+    if ([[AppCommon sharedInstance] f_goWindowed]){
+        [self goFullscreen];
+        [[AppCommon sharedInstance] setF_goWindowed:FALSE];
+    }
+    
+    [[AppCommon sharedInstance] setIsFullscreen:f_fullscreenMode];
     
     // Push the state onto the stack
     [NSGraphicsContext saveGraphicsState];
@@ -325,11 +336,20 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [NSGraphicsContext restoreGraphicsState];
     
     
+    
+    // Overlay
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_overlay"]){
+
+        
+        
+            }
+    
+    
 
 }
 
 - (void)keyDown:(NSEvent *)event {
-
+        NSLog(@"Key event...");
         unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
         switch(key) {
                 
@@ -391,6 +411,12 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 ///////////////////////////////////////////////////////////////////////
 - (void)goFullscreen{
     
+    if(f_fullscreenMode){
+        NSLog(@"Already full...");    
+        return;
+    }
+    
+    NSLog(@"Going full...");
     
     NSRect frame = [self.window frame];
     original_size = frame.size;
@@ -402,26 +428,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     
     [self enterFullScreenMode:[NSScreen mainScreen] withOptions:options];
-    
-    
-    
-    
-    //[self.window setContentSize:original_size];
-    /*
-    if(!done){
-        [self scaleUnitSquareToSize:NSMakeSize(2, 2)];
-        done=true;
-    }
-     */
-    
-    //CGDisplayHideCursor (kCGMain);
-    /*
-     NSRect frame = [self.window frame];
-     frame.origin.x=0;
-     frame.origin.y=0;
-     frame.size.width *= 2;
-     [self.window setContentSize:frame.size];
-     */
+
     f_fullscreenMode=true;
 }
 - (void)goFullscreen2{
@@ -453,6 +460,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     f_fullscreenMode=true;
 }
 - (void)goWindowed{
+    
+    if(!f_fullscreenMode){return;}
     [self exitFullScreenModeWithOptions:nil];
     [self.window makeFirstResponder:self];
     

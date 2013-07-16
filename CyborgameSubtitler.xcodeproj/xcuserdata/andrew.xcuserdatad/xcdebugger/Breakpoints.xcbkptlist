@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "394902338.221445"
+         timestampString = "395689832.493447"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "268"
-         endingLineNumber = "268"
+         startingLineNumber = "279"
+         endingLineNumber = "279"
          landmarkName = "-drawView"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,12 +21,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "394902338.221445"
+         timestampString = "395689832.493447"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "275"
-         endingLineNumber = "275"
+         startingLineNumber = "286"
+         endingLineNumber = "286"
          landmarkName = "-drawView"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BigFontView.m"
+         timestampString = "395689832.493447"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "352"
+         endingLineNumber = "352"
+         landmarkName = "-keyDown:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

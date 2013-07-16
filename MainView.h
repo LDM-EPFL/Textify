@@ -11,6 +11,8 @@
 
 @interface MainView : NSView <NSDraggingDestination>{
      BigFontView *_windowedTextView;
+    IBOutlet NSView *compositeView;
+    IBOutlet NSView *textView;
 }
 
 @property (weak) IBOutlet NSImageView *pubImage;

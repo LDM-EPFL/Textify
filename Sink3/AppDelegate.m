@@ -39,29 +39,23 @@
     NSData *fontSelected = [NSArchiver archivedDataWithRootObject:panelFont];
     [[NSUserDefaults standardUserDefaults] setValue:fontSelected forKey:@"fontSelected"];
 }
-
 - (unsigned int)validModesForFontPanel:(NSFontPanel *)fontPanel{
     return NSFontPanelFaceModeMask | NSFontPanelCollectionModeMask;// | NSFontPanelSizeModeMask;
 }
-
--(void)applicationDidFinishLaunching:(NSNotification *)notification{
+- (void)applicationDidFinishLaunching:(NSNotification *)notification{
     NSUserDefaults *preferences = [NSUserDefaults standardUserDefaults];
     NSString *file = [[NSBundle mainBundle] pathForResource:@"default_prefs" ofType:@"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:file];
     [preferences registerDefaults:dict];
-    [[AppDistributed sharedInstance] setNamespace:@"sinlab.ch" andApplicationID:@"subtitler"];
+    
+    [[AppDistributed sharedInstance] setNamespace:@"sinlab.ch" andApplicationID:[[NSUserDefaults standardUserDefaults] valueForKey:@"publishID"]];
     
 }
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////
 // APPLICATION
 ///////////////////////////////////////////////////////////////////////
-
-
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)application {
     return YES;
 }

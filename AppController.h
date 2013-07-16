@@ -10,6 +10,9 @@
 
 @interface AppController : NSView{
     CVDisplayLinkRef displayLink;
+    IBOutlet NSWindow *stageWindow;
+    IBOutlet NSWindow *controlWindow;
+    id eventMon;
 }
 - (void) startAnimation;
 - (void) stopAnimation;
