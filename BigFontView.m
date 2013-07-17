@@ -93,6 +93,8 @@
         fontColorShadow = [NSColor blackColor];
         
         f_fullscreenMode=false;
+        
+        [[AppCommon sharedInstance] setFontViewController:self];
 
     }
     return self;
@@ -148,15 +150,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 // Draw loop
 -(void)drawView{
-    
-    if ([[AppCommon sharedInstance] f_goFullscreen]){
-        [self goFullscreen];
-        [[AppCommon sharedInstance] setF_goFullscreen:FALSE];
-    }
-    if ([[AppCommon sharedInstance] f_goWindowed]){
-        [self goFullscreen];
-        [[AppCommon sharedInstance] setF_goWindowed:FALSE];
-    }
     
     [[AppCommon sharedInstance] setIsFullscreen:f_fullscreenMode];
     
@@ -395,9 +388,45 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 -(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
     
     if ( [sender draggingSource] != self ) {
-        self.droppedFileURL=[NSURL URLFromPasteboard: [sender draggingPasteboard]];
-        //[self loadTextFile];
         
+        
+        // Check extension... If this is a settings file, load the settings
+        NSPasteboard* pbrd = [sender draggingPasteboard];
+        NSArray *draggedFilePaths = [pbrd propertyListForType:NSFilenamesPboardType];
+        NSString *path=draggedFilePaths[0];
+        NSArray *parsedPath = [path componentsSeparatedByString:@"/"];
+        NSArray *parsedFilename = [parsedPath[[parsedPath count]-1] componentsSeparatedByString:@"."];
+        NSString* extension = parsedFilename[[parsedFilename count]-1];
+        if ([extension isEqualToString:@"settings"]){
+            NSMutableDictionary *savedSettings = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
+            NSLog(@"Loading settings file... %@ ",path);
+            
+            if (![savedSettings objectForKey:@"subtitler_settings_file"]) {
+                //not a subtitler settings file
+                NSBeep();
+                NSLog(@"Not a settings file!");
+                return false;
+            }else{
+            
+                
+                NSString *searchFor = @"apple";
+                NSRange range;
+                for (NSString* key in savedSettings) {
+                    range = [key rangeOfString:searchFor];
+                    NSString *firstTwoChars = [key substringWithRange:NSMakeRange(0, 2)];
+                    NSString *firstFiveChars = [key substringWithRange:NSMakeRange(0, 5)];
+                    if (range.location == NSNotFound && ![firstTwoChars isEqualToString:@"NS"] && ![firstTwoChars isEqualToString:@"QT"] && ![firstFiveChars isEqualToString:@"Apple"]){
+                        NSLog(@"%@",key);
+                        [[NSUserDefaults standardUserDefaults] setObject:[savedSettings objectForKey:key] forKey:key];
+                    }
+                }
+                return true;
+            }
+        }
+        
+        
+        // Else treat as a text file
+        self.droppedFileURL=[NSURL URLFromPasteboard: [sender draggingPasteboard]];
         return true;
     }
     

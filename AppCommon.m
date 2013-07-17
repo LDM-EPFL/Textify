@@ -21,8 +21,7 @@
 
 - (id)init{
     if (self = [super init]){
-        self.f_goFullscreen=false;
-        self.f_goWindowed=false;
+
         self.isFullscreen=false;
     }
     return self;

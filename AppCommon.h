@@ -8,13 +8,13 @@
 //////////////////////////////////////////////////////////
 //  Singleton used to store shared variables
 //////////////////////////////////////////////////////////
+@class BigFontView;
 @interface AppCommon : NSObject{}
 
 // Custom properties for this ap
-@property bool f_goWindowed;
-@property bool f_goFullscreen;
-@property bool isFullscreen;
 
+@property bool isFullscreen;
+@property BigFontView *fontViewController;
 
 + (AppCommon *)sharedInstance;
 

@@ -261,29 +261,10 @@ bool f_makeChildFront=true;
             if([event modifierFlags] & NSControlKeyMask){
                 
                 [[NSUserDefaults standardUserDefaults] setBool:![[NSUserDefaults standardUserDefaults] boolForKey:@"f_scaleText"] forKey:@"f_scaleText"];
-            
-                
-                /*
-                 
-                 NSDictionary *dict = [[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
-                 
-                 [myDict writeToFile:path atomically:YES]
-                 
-                 displaytext
-                 font
-                 fontcolor
-                 shadow
-                 shadowcolor
-                 gradient
-                 horiz or vert
-                 scale or not
-                [[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetX"],
-                [[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetY"],
-                [[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"],
-                [[NSUserDefaults standardUserDefaults] floatForKey:@"scaleFactor"],
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
-                */
             }
+            
+
+            
             break;
             
             
@@ -330,6 +311,11 @@ bool f_makeChildFront=true;
             break;
             
             
+            
+
+
+        
+        
         case NSLeftArrowFunctionKey:
             // SHIFT Left Arrow
             if([event modifierFlags] & NSShiftKeyMask){
