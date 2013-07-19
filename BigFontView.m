@@ -58,7 +58,7 @@
         
         // Displaylink
         [self setupDisplayLink];
-        //[NSTimer scheduledTimerWithTimeInterval:1/60 target:self selector:@selector(drawView) userInfo:nil repeats:YES];
+        
         	
 		// Look for changes in view size
 		// Note, -reshape will not be called automatically on size changes because NSView does not export it to override
@@ -151,6 +151,47 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 // Draw loop
 -(void)drawView{
     
+    NSString *displayText = self.displayString;
+    // Recalculate string if typing effect on
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffect"]){
+        if(_rangeMax <= [displayText length]){
+            NSRange range={0,_rangeMax};
+            displayText = [displayText substringWithRange:range];
+        }else{
+            if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectLoop"]){
+                _rangeMax=0;
+            }else{
+                _rangeMax=(int)[displayText length];
+                [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffect"];
+            }
+        }
+    }
+    
+    
+    
+    if(displayText == nil){
+        displayText=@" ";
+    }
+    
+    // Check origin
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_correctOrigin"]){
+        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_centerText"];
+    }
+    //Typing timer
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffect"]){
+        if(![typingTimer isValid]){
+            typingTimer = [NSTimer scheduledTimerWithTimeInterval:[[NSUserDefaults standardUserDefaults] floatForKey:@"typingRate"] target:self selector:@selector(incrementRange) userInfo:nil repeats:YES];
+            _rangeMax=0;
+        }
+    }else{
+        if([typingTimer isValid]){
+            [typingTimer invalidate];
+            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffectPause"];
+            _rangeMax=0;
+        }
+    }
+    
+    
     [[AppCommon sharedInstance] setIsFullscreen:f_fullscreenMode];
     
     // Push the state onto the stack
@@ -168,7 +209,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         [drawStringAttributes setValue:self.fontColor  forKey:NSForegroundColorAttributeName];
     
       
-        NSSize stringSize =  [self.displayString sizeWithAttributes:drawStringAttributes];
+        NSSize stringSize =  [displayText sizeWithAttributes:drawStringAttributes];
 
         
     
@@ -183,6 +224,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         }
     
         // Center the text
+        float adjustedHeight;
         if (self.f_centerText){
             [transformation translateXBy:displayRect.size.width/2 yBy:displayRect.size.height/2];
             
@@ -202,6 +244,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
             // This is a hardcoded visual correction, ideally should be line width of font
             // (good luck finding that)
             [transformation translateXBy:-1.0 yBy:-5.0];
+            
+            //Calculate the offset for origin correction
+            if (scaleBy != 0){
+                adjustedHeight=(displayRect.size.height/scaleBy)-stringSize.height;
+            }else{
+                adjustedHeight=(displayRect.size.height)-stringSize.height;
+            }
+            
+            //NSLog(@"%f",adjustedHeight);
+            
+            
             
         }
     
@@ -237,8 +290,19 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         }
     
       
-        // Global offset
-        [transformation translateXBy:self.global_offsetX yBy:self.global_offsetY];
+        // Correct the origin if requested
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"f_correctOrigin"]){
+            
+            //NSLog(@"Adjusting y:%f",adjustedHeight);
+            [transformation translateXBy:0.0 yBy:adjustedHeight];
+            // Global offset
+            [transformation translateXBy:self.global_offsetX yBy:self.global_offsetY];
+        }else{
+            // Global offset
+            [transformation translateXBy:self.global_offsetX yBy:self.global_offsetY];
+        }
+    
+    
     
     
         // Scroll the text
@@ -254,8 +318,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
             rolloverAt=scaledLineWidth/2 + displayWidth/2;
         
             // But scaling only changes the linewidth coordinates, so we divide to adjust
-            rolloverAt=rolloverAt/scaleBy;
-        
+            if (scaleBy != 0){
+                rolloverAt=rolloverAt/scaleBy;
+            }
         // Vertical scroll
         }else if (self.scrollDirection == VERTICAL){
             
@@ -263,8 +328,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
             rolloverAt=scaledLineHeight/2 + displayHeight/2;
             
             // But scaling only changes the linewidth coordinates, so we divide to adjust
+            if (scaleBy != 0){
             rolloverAt=rolloverAt/scaleBy;
-            
+            }
         }
     
         // We should scale the scrollstep as well
@@ -274,11 +340,11 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         // Make a unit that is 1 character
         float scrollUnit=1;
         if(stringSize.width){
-            scrollUnit = stringSize.width/displayString.length;
+            scrollUnit = stringSize.width/displayText.length;
         }
-
-        scrollUnit=scrollUnit/scaleBy;
-    
+        if (scaleBy != 0){
+            scrollUnit=scrollUnit/scaleBy;
+        }
         // Adjust for width of window
         scrollUnit = scrollUnit * (displayRect.size.width/858.0);
 
@@ -323,7 +389,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         [transformation concat];
     
         // NOW draw the text into the transformed view
-        [self.displayString drawAtPoint:NSMakePoint(0.0, 0.0) withAttributes:drawStringAttributes];
+        [displayText drawAtPoint:NSMakePoint(0.0, 0.0) withAttributes:drawStringAttributes];
         
     // Pop the stack
     [NSGraphicsContext restoreGraphicsState];
@@ -339,6 +405,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     
 
+}
+
+-(void)incrementRange{
+    
+    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectPause"]){
+        //NSLog(@"Going %d",_rangeMax);
+        _rangeMax++;
+    }
 }
 
 - (void)keyDown:(NSEvent *)event {
@@ -408,6 +482,12 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
                 return false;
             }else{
             
+                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetX"];
+                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetY"];
+                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
+                
+                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
+                
                 
                 NSString *searchFor = @"apple";
                 NSRange range;

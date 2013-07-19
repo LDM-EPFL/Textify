@@ -218,7 +218,7 @@ bool f_dockedMode=false;
                         // CMD+CTRL+ALT+R Reset display
                         }case 'R':case'r':{
                             
-                            
+                            [[[AppCommon sharedInstance] fontViewController] goWindowed];
                             [self resetWindows];
                             
                             

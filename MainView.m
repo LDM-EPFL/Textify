@@ -21,7 +21,7 @@ bool f_resetScrollPosition=false;
 bool f_makeChildFront=true;
 //NSString* DO_serverName=@"ch.sinlab";
 //NSConnection* DO_serverConnection;
-
+NSString *previousLoadString;
 -(void)updateState{
     
     /*
@@ -103,6 +103,12 @@ bool f_makeChildFront=true;
         NSError* error = nil;
         NSString* string = [NSString stringWithContentsOfURL:_windowedTextView.droppedFileURL  encoding:NSUTF8StringEncoding error:&error];
         
+        if(![string isEqualToString:previousLoadString]){
+            NSLog(@"Something changed!");
+            [_windowedTextView setRangeMax:0];
+        }
+        
+        previousLoadString = string;
         if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_stripLinebreaks"]){
             NSCharacterSet *charactersToRemove =
             [[ NSCharacterSet alphanumericCharacterSet ] invertedSet ];
@@ -215,9 +221,9 @@ bool f_makeChildFront=true;
 ///////////////////////////////////////////////////////////////////////
 - (void)keyDown:(NSEvent *)event{
     
-    float max_scrollRate = 50;
-    float min_scrollRate = -50;
-    float step_scrollRate = .09;
+    float max_scrollRate = 100;
+    float min_scrollRate = -100;
+    float step_scrollRate = .05;
     
     unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
     switch(key) {
@@ -272,15 +278,10 @@ bool f_makeChildFront=true;
         case 'r':
             if([event modifierFlags] & NSCommandKeyMask){
                 
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetX"];
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetY"];
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
-               
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
-                f_resetScrollPosition=true;
-                
+                [self resetText];
                
             }
+            break;
         
         // CMD +SHFT+R
         case 'R':
@@ -397,8 +398,8 @@ bool f_makeChildFront=true;
                     break;
                 }
                 float newScaleFactor = [[NSUserDefaults standardUserDefaults] floatForKey:@"scaleFactor"]+1;
-                if (newScaleFactor > 75){
-                    newScaleFactor=75;
+                if (newScaleFactor > 150){
+                    newScaleFactor=150;
                     NSBeep();
                     break;
                 }
@@ -429,6 +430,15 @@ bool f_makeChildFront=true;
 }
 
 
+-(void)resetText{
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetX"];
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetY"];
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
+    
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
+    f_resetScrollPosition=true;
+
+}
 
 
 

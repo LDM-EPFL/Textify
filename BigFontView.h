@@ -12,6 +12,7 @@
     CVDisplayLinkRef displayLink;
     NSSize original_size;
     bool f_fullscreenMode;
+    NSTimer *typingTimer;
     
 }
 
@@ -26,7 +27,7 @@ typedef enum scrollDirectionTypes{
     VERTICAL
 } ScrollDirection;
 
-
+@property int rangeMax;
 @property(atomic, copy)   NSURL   *droppedFileURL;
 @property(atomic, copy)   NSFont  *fontToUse;
 @property(atomic, strong) NSColor *backgroundColor;
