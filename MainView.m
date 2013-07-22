@@ -121,6 +121,9 @@ NSString *previousLoadString;
          [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"f_watchFile"];
         [[NSUserDefaults standardUserDefaults] setValue:string forKey:@"displayText"];
         
+    
+    }else{
+        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_watchFile"];
     }
     
     
