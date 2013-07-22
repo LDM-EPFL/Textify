@@ -118,7 +118,20 @@
                         [key isEqualToString:@"f_centerText"] ||
                         [key isEqualToString:@"f_overlay"] ||
                         [key isEqualToString:@"f_typingEffect"] ||
-                        [key isEqualToString:@"scrollDirection"]
+                        [key isEqualToString:@"scrollDirection"] ||
+                        
+                        [key isEqualToString:@"globalPosition_"] ||
+                        [key isEqualToString:@"globalPosition_"] ||
+                        [key isEqualToString:@"globalPosition_"] ||
+                        [key isEqualToString:@"globalPosition_"] ||
+                        [key isEqualToString:@"globalPosition_"] ||
+                        [key isEqualToString:@"globalPosition_"] ||
+                        [key isEqualToString:@"globalPosition_"] ||
+                        [key isEqualToString:@"globalPosition_"] ||
+                        [key isEqualToString:@"globalPosition_"] ||
+                        [key isEqualToString:@"overlayTransparencyVal"] ||
+                        [key isEqualToString:@"f_correctOrigin"] ||
+                        [key isEqualToString:@"f_typingEffectPause"] 
                         ){
                         //NSLog(@"%@",key);
                         [[NSUserDefaults standardUserDefaults] setObject:[savedSettings objectForKey:key] forKey:key];
