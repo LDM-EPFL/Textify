@@ -5,12 +5,8 @@
 //  Created by Andrew on 7/18/13.
 //  Copyright (c) 2013 Vox Fera. All rights reserved.
 //
-// Fixes NSLOG (removes timestamp)
-
 #import "PreviewView.h"
-#import "KinectView.h"
 #import "AppCommon.h"
-#import "KinectViewController.h"
 
 // Fixes NSLOG (removes timestamp)
 #define NSLog(FORMAT, ...) fprintf(stderr,"%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);

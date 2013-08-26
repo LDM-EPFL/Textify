@@ -33,18 +33,19 @@
 		493D643A17173FB700E51A6F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD83616BED1150012A5E1 /* OpenGL.framework */; };
 		493D643B1717404D00E51A6F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD7D316BBF0560012A5E1 /* AppKit.framework */; };
 		4956688417976E5600F5DEF2 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4956688317976E5600F5DEF2 /* PreviewView.m */; };
+		4969723F17CAAA2F0043E260 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4969723E17CAAA2F0043E260 /* Syphon.framework */; };
 		49781BA3179D61A500FBAFAE /* AppDistributed.m in Sources */ = {isa = PBXBuildFile; fileRef = 49781BA2179D61A500FBAFAE /* AppDistributed.m */; };
 		4987A38916C322C20035FB17 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4987A38816C322C20035FB17 /* Security.framework */; };
 		4988878417860563007F0413 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4988878317860563007F0413 /* MainView.m */; };
+		49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */; };
 		49BF395217842D910045361C /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BF395117842D910045361C /* AppController.m */; };
-		49C24D7E1795727D00F656BF /* OverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49C24D7D1795727D00F656BF /* OverlayView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		491BD82D16BECFC40012A5E1 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "libusb-1.0";
+			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
 			);
@@ -85,15 +86,16 @@
 		493D643617173E0000E51A6F /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4956688217976E5600F5DEF2 /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
 		4956688317976E5600F5DEF2 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
+		4969723E17CAAA2F0043E260 /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Syphon.framework; path = "../../SDK:Samples/Syphon SDK Public Beta 2/Syphon.framework"; sourceTree = "<group>"; };
 		49781BA1179D61A500FBAFAE /* AppDistributed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDistributed.h; path = ../PerformanceSpace/src/main/AppDistributed.h; sourceTree = "<group>"; };
 		49781BA2179D61A500FBAFAE /* AppDistributed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDistributed.m; path = ../PerformanceSpace/src/main/AppDistributed.m; sourceTree = "<group>"; };
 		4987A38816C322C20035FB17 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		4988878217860563007F0413 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		4988878317860563007F0413 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
+		49A3DAAA17CA52C70091FEFD /* NSView+snapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+snapshot.h"; sourceTree = "<group>"; };
+		49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+snapshot.m"; sourceTree = "<group>"; };
 		49BF395017842D910045361C /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		49BF395117842D910045361C /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
-		49C24D7C1795727D00F656BF /* OverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayView.h; sourceTree = "<group>"; };
-		49C24D7D1795727D00F656BF /* OverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OverlayView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				4987A38916C322C20035FB17 /* Security.framework in Frameworks */,
 				491BD83916BED11F0012A5E1 /* CoreMedia.framework in Frameworks */,
 				491BD83516BED10F0012A5E1 /* QuartzCore.framework in Frameworks */,
+				4969723F17CAAA2F0043E260 /* Syphon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,10 +175,10 @@
 			children = (
 				4907B3B3175FA3290042E1C8 /* BigFontView.h */,
 				4907B3B4175FA3290042E1C8 /* BigFontView.m */,
-				49C24D7C1795727D00F656BF /* OverlayView.h */,
-				49C24D7D1795727D00F656BF /* OverlayView.m */,
 				4988878217860563007F0413 /* MainView.h */,
 				4988878317860563007F0413 /* MainView.m */,
+				49A3DAAA17CA52C70091FEFD /* NSView+snapshot.h */,
+				49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */,
 			);
 			name = "Main Code";
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 		49D319951718A798001FE074 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4969723E17CAAA2F0043E260 /* Syphon.framework */,
 				493D642417173DC600E51A6F /* Accelerate.framework */,
 				491BD7D316BBF0560012A5E1 /* AppKit.framework */,
 				493D642E17173DE500E51A6F /* ApplicationServices.framework */,
@@ -275,11 +279,11 @@
 				49BF395217842D910045361C /* AppController.m in Sources */,
 				4988878417860563007F0413 /* MainView.m in Sources */,
 				4913DD79179053AA00667121 /* AppCommon.m in Sources */,
-				49C24D7E1795727D00F656BF /* OverlayView.m in Sources */,
 				4956688417976E5600F5DEF2 /* PreviewView.m in Sources */,
 				493684CF179D479A00BE8384 /* AppDelegate.m in Sources */,
 				493684D1179D47E800BE8384 /* main.m in Sources */,
 				49781BA3179D61A500FBAFAE /* AppDistributed.m in Sources */,
+				49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +396,11 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../SDK:Samples/Syphon SDK Public Beta 2\"",
+				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -423,6 +432,11 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../SDK:Samples/Syphon SDK Public Beta 2\"",
+				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

@@ -50,6 +50,7 @@
     
     [[AppDistributed sharedInstance] setNamespace:@"sinlab.ch" andApplicationID:[[NSUserDefaults standardUserDefaults] valueForKey:@"publishID"]];
     
+    
 }
 
 
