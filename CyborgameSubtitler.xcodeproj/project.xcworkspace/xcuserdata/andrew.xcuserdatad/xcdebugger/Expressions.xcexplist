@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[BigFontView drawView]:BigFontView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "syphonServer">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[BigFontView initWithFrame:]:BigFontView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "syphonServer">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "NSMakeRect [inlined]:NSGeometry.h">
+         <PersistentStrings>
+            <PersistentString
+               value = "screenShot">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[BigFontView syphonSend]:BigFontView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "glTex_floor">
+            </PersistentString>
+            <PersistentString
+               value = "openGLContext">
+            </PersistentString>
+            <PersistentString
+               value = "syphonServer">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[BigFontView createWindowTexture:mainDrawingContext:width:height:originX:originY:bounds:]:BigFontView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "bounds">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[BigFontView drawRect:]:BigFontView.m">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

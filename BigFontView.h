@@ -7,13 +7,18 @@
 //
 
 #import <Cocoa/Cocoa.h>
+@class  SyphonServer;
 
 @interface BigFontView : NSView {
     CVDisplayLinkRef displayLink;
     NSSize original_size;
     bool f_fullscreenMode;
     NSTimer *typingTimer;
-    
+    SyphonServer *syphonServer;
+    NSOpenGLContext *openGLContext;
+	NSOpenGLPixelFormat *pixelFormat;
+    GLuint glTex_floor;
+    GLuint texName;
 }
 
 - (void) startAnimation;

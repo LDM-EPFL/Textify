@@ -119,7 +119,9 @@ bool f_dockedMode=false;
     
     // Resize and align stage to this
     //newRect.size.width=newRect.size.width*2;
-    newFrame.size.height*=2;
+    newFrame.size.height=480;
+    newFrame.size.width=640;
+
     newFrame.origin.y-=controlWindow.frame.size.height+(newFrame.size.height/2);
     [stageWindow setFrame:newFrame display:YES];
     

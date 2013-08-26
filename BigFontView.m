@@ -9,6 +9,10 @@
 #import "BigFontView.h"
 #import "MainView.h"
 #import "AppCommon.h"
+#import "NSView+snapshot.h"
+#import <OpenGL/OpenGL.h>
+#import <OpenGL/glu.h>
+#import <Syphon/Syphon.h>
 
 @implementation BigFontView
 
@@ -48,24 +52,47 @@
 ///////////////////////////////////////////////////////////
 // NSView
 ///////////////////////////////////////////////////////////
-- (id)initWithFrame:(NSRect)frame{
-    self = [super initWithFrame:frame];
+- (id) initWithFrame:(NSRect)frameRect{
+	return [self initWithFrame:frameRect shareContext:nil];
+    
+}
+- (id) initWithFrame:(NSRect)frameRect shareContext:(NSOpenGLContext*)context{
     if (self) {
         
+        // Create a double-buffered view
+        NSOpenGLPixelFormatAttribute attribs[] =
+        {
+            kCGLPFAAccelerated,
+            kCGLPFANoRecovery,
+            kCGLPFADoubleBuffer,
+            kCGLPFAColorSize, 24,
+            kCGLPFADepthSize, 16,
+            0
+        };
+        pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
+        if (!pixelFormat){NSLog(@"No OpenGL pixel format");}
         
-        //Accept Drag and Drop
-        [self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
-        
-        // Displaylink
-        [self setupDisplayLink];
-        
-        	
-		// Look for changes in view size
-		// Note, -reshape will not be called automatically on size changes because NSView does not export it to override
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(reshape)
-													 name:NSViewGlobalFrameDidChangeNotification
-												   object:self];
+        // NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
+        openGLContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:context];
+        if (self = [super initWithFrame:frameRect]) {
+            [[self openGLContext] makeCurrentContext];
+            
+            // Synchronize buffer swaps with vertical refresh rate
+            GLint swapInt = 1;
+            [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
+            
+            [self setupDisplayLink];
+            
+            // Look for changes in view size
+            // Note, -reshape will not be called automatically on size changes because NSView does not export it to override
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(reshape)
+                                                         name:NSViewGlobalFrameDidChangeNotification
+                                                       object:self];
+            
+            //Drag and Drop Setup
+            [self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
+        }
         
         
         // Defaults
@@ -94,7 +121,15 @@
         
         f_fullscreenMode=false;
         
+        
+        
         [[AppCommon sharedInstance] setFontViewController:self];
+        
+        
+        [[self openGLContext] makeCurrentContext];
+        glLoadIdentity();
+        glGenTextures(1, &glTex_floor);
+
 
     }
     return self;
@@ -137,11 +172,165 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 }
 
 
+- (NSOpenGLContext*) openGLContext{return openGLContext;}
+
 - (void) drawRect:(NSRect)dirtyRect{
+    
     // If we're not animating, start
     if (!isAnimating) {[self startAnimation];}
+   
+    // Draw the view
     [self drawView];
+    
+
+    // Sreenshot (much faster than PDF)
+    // Used for preview and Syphon
+    [[AppCommon sharedInstance] setScreenShot:[self snapshot]];
+
+    // Send via Syphon
+    [self syphonSend];
+    
+   
 }
+
+-(void) syphonSend{
+    
+    // Set current context
+    [openGLContext makeCurrentContext];
+    
+    // Initialize Syphon
+    if (!syphonServer){
+        NSLog(@"Initializing Syphon Server...");
+        syphonServer = [[SyphonServer alloc] initWithName:nil context:[openGLContext CGLContextObj] options:nil];
+        if(!syphonServer){NSLog(@"Error initializing Syphon server!");}
+        
+    
+    // Send frame
+    }else{
+            NSImage *screenShot = [[AppCommon sharedInstance] screenShot];
+            [self loadTextureFromNSImage:screenShot];
+            if(syphonServer.hasClients){[syphonServer publishFrameTexture:glTex_floor
+                                                            textureTarget:GL_TEXTURE_2D
+                                                              imageRegion:NSMakeRect(0,0,screenShot.size.width,screenShot.size.height)
+                                                        textureDimensions:NSMakeSize(screenShot.size.width,screenShot.size.height)
+                                                                  flipped:NO];}
+    }
+
+}
+
+
+
+-(void)loadTextureFromNSImage:(NSImage*)floorTextureNSImage{
+    
+    
+    // If we are passed an empty image, just quit
+    if (floorTextureNSImage == nil){
+        //NSLog(@"LOADTEXTUREFROMNSIMAGE: Error: you called me with an empty image!");
+        return;
+    }
+    
+    
+    // We need to save and restore the pixel state
+    [self GLpushPixelState];
+    glEnable(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, glTex_floor);
+    
+    
+    
+    //  Aquire and flip the data
+    
+    if (![floorTextureNSImage isFlipped]) {
+        NSImage *drawImage = [[NSImage alloc] initWithSize:floorTextureNSImage.size];
+        NSAffineTransform *transform = [NSAffineTransform transform];
+        
+        [drawImage lockFocus];
+        
+        [transform translateXBy:0 yBy:floorTextureNSImage.size.height];
+        [transform scaleXBy:1 yBy:-1];
+        [transform concat];
+        
+        [floorTextureNSImage drawAtPoint:NSZeroPoint
+                                fromRect:(NSRect){NSZeroPoint, floorTextureNSImage.size}
+                               operation:NSCompositeCopy
+                                fraction:1];
+        
+        [drawImage unlockFocus];
+        
+        floorTextureNSImage = drawImage;
+    }
+    
+    NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithData:[floorTextureNSImage TIFFRepresentation]];
+    
+    
+    //  Now make a texture out of the bitmap data
+    // Set proper unpacking row length for bitmap.
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)[bitmap pixelsWide]);
+    
+    // Set byte aligned unpacking (needed for 3 byte per pixel bitmaps).
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    NSInteger samplesPerPixel = [bitmap samplesPerPixel];
+    
+    // Nonplanar, RGB 24 bit bitmap, or RGBA 32 bit bitmap.
+    if(![bitmap isPlanar] && (samplesPerPixel == 3 || samplesPerPixel == 4)) {
+        // Create one OpenGL texture
+        glTexImage2D(GL_TEXTURE_2D, 0,
+                     GL_RGBA,//samplesPerPixel == 4 ? GL_RGBA8 : GL_RGB8,
+                     (GLint)[bitmap pixelsWide],
+                     (GLint)[bitmap pixelsHigh],
+                     0,
+                     GL_RGBA,//samplesPerPixel == 4 ? GL_RGBA : GL_RGB,
+                     GL_UNSIGNED_BYTE,
+                     [bitmap bitmapData]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    }else{
+        [[NSException exceptionWithName:@"ImageFormat" reason:@"Unsupported image format" userInfo:nil] raise];
+    }
+    [self GLpopPixelState];
+}
+
+static GLint swapbytes, lsbfirst, rowlength, skiprows, skippixels, alignment;
+static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignment2;
+-(void)GLpushPixelState{
+    glGetIntegerv(GL_UNPACK_SWAP_BYTES, &swapbytes);
+    glGetIntegerv(GL_UNPACK_LSB_FIRST, &lsbfirst);
+    glGetIntegerv(GL_UNPACK_ROW_LENGTH, &rowlength);
+    glGetIntegerv(GL_UNPACK_SKIP_ROWS, &skiprows);
+    glGetIntegerv(GL_UNPACK_SKIP_PIXELS, &skippixels);
+    glGetIntegerv(GL_UNPACK_ALIGNMENT, &alignment);
+    glGetIntegerv(GL_PACK_SWAP_BYTES, &swapbytes2);
+    glGetIntegerv(GL_PACK_LSB_FIRST, &lsbfirst2);
+    glGetIntegerv(GL_PACK_ROW_LENGTH, &rowlength2);
+    glGetIntegerv(GL_PACK_SKIP_ROWS, &skiprows2);
+    glGetIntegerv(GL_PACK_SKIP_PIXELS, &skippixels2);
+    glGetIntegerv(GL_PACK_ALIGNMENT, &alignment2);
+}
+-(void)GLpopPixelState{
+    // Restore current pixel store state
+    glPixelStorei(GL_UNPACK_SWAP_BYTES, swapbytes);
+    glPixelStorei(GL_UNPACK_LSB_FIRST, lsbfirst);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, rowlength);
+    glPixelStorei(GL_UNPACK_SKIP_ROWS, skiprows);
+    glPixelStorei(GL_UNPACK_SKIP_PIXELS, skippixels);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, alignment);
+    
+    glPixelStorei(GL_PACK_SWAP_BYTES, swapbytes2);
+    glPixelStorei(GL_PACK_LSB_FIRST, lsbfirst2);
+    glPixelStorei(GL_PACK_ROW_LENGTH, rowlength2);
+    glPixelStorei(GL_PACK_SKIP_ROWS, skiprows2);
+    glPixelStorei(GL_PACK_SKIP_PIXELS, skippixels2);
+    glPixelStorei(GL_PACK_ALIGNMENT, alignment2);
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -150,6 +339,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 // Draw loop
 -(void)drawView{
+    
     
     NSString *displayText = self.displayString;
     // Recalculate string if typing effect on
@@ -397,14 +587,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     
     // Overlay
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_overlay"]){
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_overlay"]){}
 
-        
-        
-            }
     
-    
-
+   
 }
 
 -(void)incrementRange{
@@ -451,6 +637,74 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     // Call controller
     [[[MainView alloc] init] keyDown:event];
 
+}
+
+
+// Screencap code based on 002.vade.info
+-(GLuint) createWindowTexture:(CGLContextObj) internalContext
+           mainDrawingContext:(CGLContextObj) mainDrawingContext
+                        width:(NSInteger) width
+                       height:(NSInteger) height
+                      originX:(NSInteger) originX
+                      originY:(NSInteger) originY{
+    
+    CGLContextObj cgl_ctx = internalContext;
+    
+    
+    if (CGLSetCurrentContext(cgl_ctx) != kCGLNoError){
+        NSLog(@"CANNOT MAKE CURRENT CONTEXT");
+        return nil;
+    };
+    
+    // Make sure our context is valid
+    if(!cgl_ctx){
+        NSLog(@"INVALID CONTEXT");
+        return nil;
+    }
+    
+    
+    // Thread lock OpenGL Context
+    CGLLockContext(cgl_ctx);
+    
+    GLuint mTextureName;
+    GLenum theError = GL_NO_ERROR;
+    
+    // set up our texture storage for copying
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+    glPixelStorei(GL_PACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_PACK_SKIP_ROWS, 0);
+    glPixelStorei(GL_PACK_SKIP_PIXELS, 0);
+    
+    // Create and configure the texture - rectangluar coords
+    glGenTextures(1, &mTextureName);
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, mTextureName);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
+    // define our texture - we're allowd to supply a null pointer since we are letting the GPU handle texture storage.
+    glTexImage2D(GL_TEXTURE_RECTANGLE_ARB,0,GL_RGBA, (int)width,(int)height,0,GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, NULL);
+    
+    // read from the front buffer
+    glReadBuffer(GL_FRONT);
+    //	glBindTexture(GL_TEXTURE_RECTANGLE_ARB, mTextureName);
+    
+    // copy contents of a portion of the buffer to our texture
+    glCopyTexSubImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, 0, 0, (int)originX, (int)originY, (int)width, (int)height);
+    
+    // fin
+    glFlush();
+    
+    // Thread unlock
+    CGLUnlockContext(cgl_ctx);
+    
+    //Check for OpenGL errors
+    theError = glGetError();
+    if(theError) {
+        NSLog(@"v002ScreenCapture: OpenGL texture creation failed (error 0x%04X)", theError);
+        CGLUnlockContext(cgl_ctx); // Thread unlock
+        return 0;
+    }
+    
+    return mTextureName;
 }
 
 

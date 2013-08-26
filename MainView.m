@@ -8,6 +8,8 @@
 
 #import "MainView.h"
 #import "AppDistributed.h"
+
+#import "AppCommon.h"
 @implementation MainView
 
 
@@ -19,81 +21,27 @@
 // Called by timer
 bool f_resetScrollPosition=false;
 bool f_makeChildFront=true;
-//NSString* DO_serverName=@"ch.sinlab";
-//NSConnection* DO_serverConnection;
 NSString *previousLoadString;
+
+
+
+
+
+
+
+
+
+
 -(void)updateState{
-    
-    /*
-    // Window handling
-    if([self.window isKeyWindow]){
-        if(f_makeChildFront){
-            //[_windowedText orderFront:self];
-            f_makeChildFront=false;
-        }
-    }else{
-        f_makeChildFront=true;
-    }
-    
-    
-    // Snap child window to bottom of control window
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"f_pinDisplay"]){
-        float windowWidth=858;
-        float windowHeight=windowWidth/1.8;
-        int chromeGap=5;
-        NSRect windowed = _windowedTextView.frame;
-        
-        int windowX = windowed.origin.x;
-        int windowY = windowed.origin.y;
-        
-            windowX=self.window.frame.origin.x,
-            windowY=self.window.frame.origin.y-self.window.frame.size.height-(windowHeight/2)+chromeGap;
-            
-        NSRect newRect = NSMakeRect(windowX,
-                                    windowY,
-                                    windowWidth,
-                                    windowHeight);
-         
-        
-        [_windowedText setFrame:newRect display:YES];
-        // Keep in front
-
-        //[_windowedText orderFront:self];
-    }
-     */
 
     
-    
-    /*
-    // Make a "screenshot" to feed to network
-    NSRect visibleRect = [_windowedTextView visibleRect];
-    NSBitmapImageRep *imageRep = [_windowedTextView bitmapImageRepForCachingDisplayInRect:visibleRect];
-    [_windowedTextView cacheDisplayInRect:visibleRect toBitmapImageRep:imageRep];
-    NSSize windowSize=visibleRect.size;
-    visibleRect.size.height=visibleRect.size.height/3;
-    visibleRect.size.width=visibleRect.size.width/3;
-    NSImage *pubImage = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:windowSize];
-    [_pubImage setImage:pubImage];
-    [_pubImage setNeedsDisplay:YES];
-     */
-
-    
-    //NSImage *pubImage = [[NSImage alloc] initWithCGImage:[imageRep CGImage] size:windowSize];
-    
-    //NSImage *pubImage =[[NSImage alloc] initWithData:[compositeView dataWithPDFInsideRect:[compositeView bounds]]];
-    NSImage *pubImage =[[NSImage alloc] initWithData:[_windowedTextView dataWithPDFInsideRect:[_windowedTextView bounds]]];
-
-    [_pubImage setImage:pubImage];
+    [_pubImage setImage:[[AppCommon sharedInstance] screenShot]];
     [_pubImage setNeedsDisplay:YES];
     
     
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_publishImage"]){
-        
-        [[AppDistributed sharedInstance] updateObjectNamed:@"liveFeed" withObject:[pubImage TIFFRepresentation] withInfo:@"NSData: TIFF representation of an image"];
-
-    }
     
+
+
     [[NSUserDefaults standardUserDefaults] setValue:[_windowedTextView.droppedFileURL absoluteString] forKey:@"externalFilename"];
     if(_windowedTextView.droppedFileURL && [[NSUserDefaults standardUserDefaults] boolForKey:@"f_watchFile"]){
         
@@ -182,7 +130,7 @@ NSString *previousLoadString;
 
 -(void) awakeFromNib{
     //Accept Drag and Drop
-    [self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
+    //[self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
     
     // Timer to poll external file
     NSLog(@"Launching timer...");
@@ -201,21 +149,7 @@ NSString *previousLoadString;
     [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"f_scrollPause"];
     [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"f_watchFile"];
 
-    /*
-    // Set up DO server
-    //DO_serverConnection=[[NSConnection alloc] init];
-    
-    DO_serverConnection = [NSConnection connectionWithReceivePort:[NSPort port] sendPort:nil];
-    if (DO_serverConnection){
-        NSLog(@"Sending image objects via:%@",DO_serverName);
-        [DO_serverConnection setRootObject:@"Hello"];
-        [DO_serverConnection registerName:DO_serverName];
-    }else{
-        NSLog(@"Failed to create server %@, name in use?",DO_serverName);
-        DO_serverConnection=nil;
-    }
-     */
-    
+       
 }
 
 

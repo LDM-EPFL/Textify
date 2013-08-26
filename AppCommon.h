@@ -8,11 +8,15 @@
 //////////////////////////////////////////////////////////
 //  Singleton used to store shared variables
 //////////////////////////////////////////////////////////
+
+#import <Cocoa/Cocoa.h>
 @class BigFontView;
+
 @interface AppCommon : NSObject{}
 
 // Custom properties for this ap
 
+@property NSImage * screenShot;
 @property bool isFullscreen;
 @property BigFontView *fontViewController;
 
