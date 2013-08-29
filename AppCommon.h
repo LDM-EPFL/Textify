@@ -10,17 +10,17 @@
 //////////////////////////////////////////////////////////
 
 #import <Cocoa/Cocoa.h>
+#import "CWLSynthesizeSingleton.h"
 @class BigFontView;
 
 @interface AppCommon : NSObject{}
+CWL_DECLARE_SINGLETON_FOR_CLASS(AppCommon)
 
 // Custom properties for this ap
-
 @property NSImage * screenShot;
 @property bool isFullscreen;
 @property BigFontView *fontViewController;
-
-+ (AppCommon *)sharedInstance;
+@property NSWindow* mainWindow;
 
 
 

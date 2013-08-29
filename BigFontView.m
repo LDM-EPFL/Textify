@@ -13,33 +13,9 @@
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/glu.h>
 #import <Syphon/Syphon.h>
+#import "AppController.h"
 
 @implementation BigFontView
-
-					
-
-@synthesize fontToUse;
-@synthesize backgroundColor;
-@synthesize backgroundColor2;
-@synthesize fontColor;
-@synthesize fontColorShadow;
-@synthesize displayString;
-@synthesize f_autoScale;
-@synthesize f_centerText;
-@synthesize f_drawShadow;
-@synthesize f_flipText;
-@synthesize f_mirrorText;
-@synthesize f_scrollPause;
-@synthesize scaleTextType;
-@synthesize scrollDirection;
-@synthesize gradientAngle;
-@synthesize scaleFactor;
-@synthesize global_offsetX;
-@synthesize global_offsetY;
-@synthesize scrollRate;
-@synthesize scrollPosition;
-@synthesize droppedFileURL;
-@synthesize position;
 
 - (BOOL) acceptsFirstResponder{return YES;}
 - (BOOL) resignFirstResponder{return YES;}
@@ -95,35 +71,14 @@
         }
         
         
-        // Defaults
-        fontToUse=[NSFont fontWithName:@"Helvetica" size:20];
-        f_autoScale = false;
-        f_centerText = true;
-        f_drawShadow = true;
-        f_flipText = false;
-        f_mirrorText = false;
-        f_scrollPause = false;
-        gradientAngle=45;
-        scaleFactor=1.0;
-        global_offsetX = 0.0;
-        global_offsetY = 0.0;
-        scrollRate = 0.0;
-        scaleTextType = 0;
-        scrollDirection = 0;
-        displayString =  @"";
-        scrollRate = 0.0;
-        scrollPosition=0.0;
-        
-        backgroundColor = [NSColor whiteColor];
-        backgroundColor2 = [NSColor blackColor];
-        fontColor = [NSColor blackColor];
-        fontColorShadow = [NSColor blackColor];
         
         f_fullscreenMode=false;
         
+   
+        [self stopTimer];
+        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffect"];
         
-        
-        [[AppCommon sharedInstance] setFontViewController:self];
+        [[AppCommon sharedAppCommon] setFontViewController:self];
         
         
         [[self openGLContext] makeCurrentContext];
@@ -179,21 +134,39 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     // If we're not animating, start
     if (!isAnimating) {[self startAnimation];}
    
-    // Draw the view
-    [self drawView];
     
+   
+    // Draw the view into an NSImage context (so we can set the resolution)
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"outputResolution"] == 0){
+        renderDimensions = NSMakeSize(320, 240);
+    }else   if ([[NSUserDefaults standardUserDefaults] integerForKey:@"outputResolution"] == 1){
+        renderDimensions = NSMakeSize(640, 480);
+    }else   if ([[NSUserDefaults standardUserDefaults] integerForKey:@"outputResolution"] == 2){
+        renderDimensions = NSMakeSize(1024, 768);
+    }
+     NSImage *drawIntoImage = [[NSImage alloc] initWithSize:renderDimensions];
+    [drawIntoImage lockFocus];
+    [self drawViewOfSize:renderDimensions];
+    [drawIntoImage unlockFocus];
+    [self syphonSendImage:drawIntoImage];
 
-    // Sreenshot (much faster than PDF)
-    // Used for preview and Syphon
-    [[AppCommon sharedInstance] setScreenShot:[self snapshot]];
-
-    // Send via Syphon
-    [self syphonSend];
+    // Resize to fit preview area and draw
+    NSSize newSize = NSMakeSize(self.frame.size.width, self.frame.size.height);
+    [drawIntoImage setSize: newSize];
+    [[NSColor blackColor] set];
     
+    [self lockFocus];
+    [NSBezierPath fillRect:self.frame];
+    [drawIntoImage drawAtPoint:NSZeroPoint fromRect:self.frame operation:NSCompositeCopy fraction:1];
+    [self unlockFocus];
    
 }
 
 -(void) syphonSend{
+    [self syphonSendImage:[[AppCommon sharedAppCommon] screenShot]];
+}
+-(void) syphonSendImage:(NSImage*)Image{
+
     
     // Set current context
     [openGLContext makeCurrentContext];
@@ -207,7 +180,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     // Send frame
     }else{
-            NSImage *screenShot = [[AppCommon sharedInstance] screenShot];
+            NSImage *screenShot = Image;
             [self loadTextureFromNSImage:screenShot];
             if(syphonServer.hasClients){[syphonServer publishFrameTexture:glTex_floor
                                                             textureTarget:GL_TEXTURE_2D
@@ -217,8 +190,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     }
 
 }
-
-
 
 -(void)loadTextureFromNSImage:(NSImage*)floorTextureNSImage{
     
@@ -239,19 +210,19 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     
     //  Aquire and flip the data
-    
+    NSSize imageSize = floorTextureNSImage.size;
     if (![floorTextureNSImage isFlipped]) {
-        NSImage *drawImage = [[NSImage alloc] initWithSize:floorTextureNSImage.size];
+        NSImage *drawImage = [[NSImage alloc] initWithSize:imageSize];
         NSAffineTransform *transform = [NSAffineTransform transform];
         
         [drawImage lockFocus];
         
-        [transform translateXBy:0 yBy:floorTextureNSImage.size.height];
+        [transform translateXBy:0 yBy:imageSize.height];
         [transform scaleXBy:1 yBy:-1];
         [transform concat];
         
         [floorTextureNSImage drawAtPoint:NSZeroPoint
-                                fromRect:(NSRect){NSZeroPoint, floorTextureNSImage.size}
+                                fromRect:(NSRect){NSZeroPoint, imageSize}
                                operation:NSCompositeCopy
                                 fraction:1];
         
@@ -338,65 +309,56 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
 ///////////////////////////////////////////////////////////////////////
 
 // Draw loop
--(void)drawView{
+-(void)drawViewOfSize:(NSSize)renderSize{
     
     
-    NSString *displayText = self.displayString;
+    NSString *displayText =[[NSUserDefaults standardUserDefaults] valueForKey:@"displayText"];
     // Recalculate string if typing effect on
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffect"]){
-        if(_rangeMax <= [displayText length]){
             NSRange range={0,_rangeMax};
-            displayText = [displayText substringWithRange:range];
+        
+        if(range.length > [displayText length]){
+            _rangeMax=0;
         }else{
-            if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectLoop"]){
-                _rangeMax=0;
-            }else{
-                _rangeMax=(int)[displayText length];
-                [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffect"];
-            }
+            displayText = [displayText substringWithRange:range];
         }
+        
     }
     
+    // At least one space
+    if(!displayText){displayText=@" ";}
     
-    
-    if(displayText == nil){
-        displayText=@" ";
-    }
+    // Are we in fullsreen mode or not?
+    [[AppCommon sharedAppCommon] setIsFullscreen:f_fullscreenMode];
     
     // Check origin
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_correctOrigin"]){
         [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_centerText"];
     }
+    
     //Typing timer
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffect"]){
         if(![typingTimer isValid]){
-            typingTimer = [NSTimer scheduledTimerWithTimeInterval:[[NSUserDefaults standardUserDefaults] floatForKey:@"typingRate"] target:self selector:@selector(incrementRange) userInfo:nil repeats:YES];
-            _rangeMax=0;
+            [self startTimer];
         }
     }else{
         if([typingTimer isValid]){
-            [typingTimer invalidate];
-            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffectPause"];
-            _rangeMax=0;
+            [self stopTimer];
         }
     }
     
-    
-    [[AppCommon sharedInstance] setIsFullscreen:f_fullscreenMode];
+ 
     
     // Push the state onto the stack
     [NSGraphicsContext saveGraphicsState];
     
     // Actually display the text
-    NSRect displayRect = self.frame;
     NSAffineTransform* transformation = [NSAffineTransform transform];
 
-        // Not sure what this does
-        //[[[self window] graphicsContext] setShouldAntialias:YES];
-
         NSMutableDictionary *drawStringAttributes = [[NSMutableDictionary alloc] init];
-        [drawStringAttributes setObject:self.fontToUse forKey:NSFontAttributeName];
-        [drawStringAttributes setValue:self.fontColor  forKey:NSForegroundColorAttributeName];
+        [drawStringAttributes setObject:(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]]
+                                 forKey:NSFontAttributeName];
+        [drawStringAttributes setValue:(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFont"]]  forKey:NSForegroundColorAttributeName];
     
       
         NSSize stringSize =  [displayText sizeWithAttributes:drawStringAttributes];
@@ -404,19 +366,33 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         
     
         // If autoscaling, pick the scale that fills the render window
-        float scaleBy = self.scaleFactor;
-        if (self.f_autoScale){
-            if (self.scaleTextType == 0){
-                scaleBy=displayRect.size.height/stringSize.height;
+        float scaleBy = [[NSUserDefaults standardUserDefaults] floatForKey:@"scaleFactor"];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"f_autoScale"]){
+            if ([[NSUserDefaults standardUserDefaults] integerForKey:@"scaleTextType"] == 0){
+                scaleBy=renderSize.height/stringSize.height;
             }else{
-                scaleBy=displayRect.size.width/stringSize.width;
+                scaleBy=renderSize.width/stringSize.width;
             }
         }
     
+    
+        //Text alignment
+        BOOL f_centerText=false;
+        BOOL f_correctOrigin=false;
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:@"textAlignment"] == 0){
+            f_centerText=true;
+            f_correctOrigin=false;
+        }else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"textAlignment"] == 1){
+            f_centerText=false;
+            f_correctOrigin=false;
+        }else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"textAlignment"] == 2){
+            f_centerText=false;
+            f_correctOrigin=true;
+        }
         // Center the text
         float adjustedHeight;
-        if (self.f_centerText){
-            [transformation translateXBy:displayRect.size.width/2 yBy:displayRect.size.height/2];
+        if (f_centerText){
+            [transformation translateXBy:renderSize.width/2 yBy:renderSize.height/2];
             
             // Apply the scaling
             [transformation scaleXBy:scaleBy yBy:scaleBy];
@@ -437,27 +413,28 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
             
             //Calculate the offset for origin correction
             if (scaleBy != 0){
-                adjustedHeight=(displayRect.size.height/scaleBy)-stringSize.height;
+                adjustedHeight=(renderSize.height/scaleBy)-stringSize.height;
             }else{
-                adjustedHeight=(displayRect.size.height)-stringSize.height;
+                adjustedHeight=(renderSize.height)-stringSize.height;
             }
-            
-            //NSLog(@"%f",adjustedHeight);
-            
-            
-            
         }
     
     
         // Gradient fill background
-        NSGradient *backgroundGradient = [[NSGradient alloc] initWithStartingColor:self.backgroundColor endingColor:self.backgroundColor2];
-        [backgroundGradient drawInRect:displayRect angle:self.gradientAngle];
+        if(![[NSUserDefaults standardUserDefaults] boolForKey:@"f_transparentBackground"]){
+            
+            NSColor* backgroundColor = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground"]];
+            NSColor* backgroundColor2 = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground2"]];
+        
+            NSGradient *backgroundGradient = [[NSGradient alloc] initWithStartingColor:backgroundColor endingColor:backgroundColor2];
+            [backgroundGradient drawInRect:NSMakeRect(0,0,renderSize.width,renderSize.height) angle:[[NSUserDefaults standardUserDefaults] floatForKey:@"gradientAngle"]];
 
+        }
     
         // Add dropshadow if requested
-        if (self.f_drawShadow){
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"f_drawShadow"]){
             NSShadow *stringShadow = [[NSShadow alloc] init];
-            [stringShadow setShadowColor:self.fontColorShadow];
+            [stringShadow setShadowColor:(NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFontShadow"]]];
             NSSize shadowSize;
             shadowSize.width = 2;
             shadowSize.height = -2;
@@ -468,28 +445,28 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
             
     
         //Flip
-        if (self.f_flipText){
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"f_flipText"]){
             [transformation scaleXBy:1.0 yBy:-1.0];
             [transformation translateXBy:1.0 yBy:-stringSize.height];
         }
         
         //Mirror
-        if (self.f_mirrorText){
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"f_mirrorText"]){
             [transformation scaleXBy:-1.0 yBy:1.0];
             [transformation translateXBy:-stringSize.width yBy:1.0];
         }
     
-      
+    
         // Correct the origin if requested
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"f_correctOrigin"]){
+        if (f_correctOrigin){
             
             //NSLog(@"Adjusting y:%f",adjustedHeight);
             [transformation translateXBy:0.0 yBy:adjustedHeight];
             // Global offset
-            [transformation translateXBy:self.global_offsetX yBy:self.global_offsetY];
+            [transformation translateXBy:[[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetX"] yBy:[[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetY"]];
         }else{
             // Global offset
-            [transformation translateXBy:self.global_offsetX yBy:self.global_offsetY];
+            [transformation translateXBy:[[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetX"] yBy:[[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetY"]];
         }
     
     
@@ -498,12 +475,12 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         // Scroll the text
         float scaledLineWidth = stringSize.width*scaleBy;
         float scaledLineHeight = stringSize.height*scaleBy;
-        float displayWidth = displayRect.size.width;
-        float displayHeight = displayRect.size.height;
+        float displayWidth = renderSize.width;
+        float displayHeight =renderSize.height;
         float rolloverAt;
     
         // Horizontal scroll
-        if (self.scrollDirection == HORIZONTAL){
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:@"scrollDirection"] == HORIZONTAL){
             // We rollover at half the line width plus half the display width
             rolloverAt=scaledLineWidth/2 + displayWidth/2;
         
@@ -512,14 +489,13 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
                 rolloverAt=rolloverAt/scaleBy;
             }
         // Vertical scroll
-        }else if (self.scrollDirection == VERTICAL){
-            
-            // We rollover at half the line width plus half the display width
-            rolloverAt=scaledLineHeight/2 + displayHeight/2;
-            
-            // But scaling only changes the linewidth coordinates, so we divide to adjust
-            if (scaleBy != 0){
-            rolloverAt=rolloverAt/scaleBy;
+        }else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"scrollDirection"] == VERTICAL){
+                // We rollover at half the line width plus half the display width
+                rolloverAt=scaledLineHeight/2 + displayHeight/2;
+                
+                // But scaling only changes the linewidth coordinates, so we divide to adjust
+                if (scaleBy != 0){
+                rolloverAt=rolloverAt/scaleBy;
             }
         }
     
@@ -536,42 +512,35 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
             scrollUnit=scrollUnit/scaleBy;
         }
         // Adjust for width of window
-        scrollUnit = scrollUnit * (displayRect.size.width/858.0);
+        scrollUnit = scrollUnit * (renderSize.width/858.0);
 
-        // Adjust for height of type
-        //scrollUnit = scrollUnit + (scaledLineHeight/.01);
-
-        // Scale the unit
-        //scrollUnit = scrollUnit/scaleBy;
-        //scrollUnit=scrollUnit/100;
+        
     
         // Multiply it by the rate
-        scrollUnit = scrollUnit*self.scrollRate;
-    
-        // Adjust for width of window
-        //scrollUnit = scrollUnit * (displayRect.size.width/858.0);
-        //NSLog(@"%f:%f",scrollUnit, self.scrollPosition);
+        scrollUnit = scrollUnit*[[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"];
     
     
         // Scroll if not paused
-        if (!self.f_scrollPause){
-            self.scrollPosition=self.scrollPosition+scrollUnit;
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"f_scrollPause"]){
+             
+             [[NSUserDefaults standardUserDefaults] setFloat:[[NSUserDefaults standardUserDefaults] floatForKey:@"scrollPosition"]+scrollUnit forKey:@"scrollPosition"];
+            
            // If we are off the screen, wrap
-            if (abs(self.scrollPosition ) > rolloverAt){
+            if (abs([[NSUserDefaults standardUserDefaults] floatForKey:@"scrollPosition"]) > rolloverAt){
                 if (scrollUnit < 0){
-                    self.scrollPosition  = rolloverAt;
+                    [[NSUserDefaults standardUserDefaults] setFloat:rolloverAt forKey:@"scrollPosition"];
                 }else{
-                    self.scrollPosition  = -1*rolloverAt;
+                    [[NSUserDefaults standardUserDefaults] setFloat:-1*rolloverAt forKey:@"scrollPosition"];                    
                 }
             }
         }
     
         
         // Apply scroll offset
-        if (self.scrollDirection == HORIZONTAL){
-            [transformation translateXBy:self.scrollPosition  yBy:1.0];
-        }else if (self.scrollDirection == VERTICAL){
-            [transformation translateXBy:1.0 yBy:self.scrollPosition];
+        if ([[NSUserDefaults standardUserDefaults] integerForKey:@"scrollDirection"] == HORIZONTAL){
+            [transformation translateXBy:[[NSUserDefaults standardUserDefaults] floatForKey:@"scrollPosition"] yBy:1.0];
+        }else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"scrollDirection"] == VERTICAL){
+            [transformation translateXBy:1.0 yBy:[[NSUserDefaults standardUserDefaults] floatForKey:@"scrollPosition"]];
         }
     
 
@@ -584,25 +553,63 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     // Pop the stack
     [NSGraphicsContext restoreGraphicsState];
     
-    
-    
-    // Overlay
-    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_overlay"]){}
-
-    
-   
 }
 
+
+// Typing timer
 -(void)incrementRange{
     
-    if(![[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectPause"]){
-        //NSLog(@"Going %d",_rangeMax);
+    // Exit if paused
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectPause"]){return;}
+    
+    
+    // Stop timer if we are out of range
+    if(_rangeMax >= [(NSString*)[[NSUserDefaults standardUserDefaults] valueForKey:@"displayText"] length]){
+        if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectLoop"]){
+            _rangeMax=0;
+        }else{
+            //[[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffect"];
+        }
+        return;
+    }
+    
+    // Add some "humanity" to the typing (microdelay)
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectHumanize"]){
+        
+        // If we're out of range
+        if(_rangeMax+1 >= [(NSString*)[[NSUserDefaults standardUserDefaults] valueForKey:@"displayText"] length]){
+            _rangeMax++;
+            return;
+        }else{
+            
+            // What char are we going to type next?
+            NSString* nextChar=@"x";
+            NSRange range={_rangeMax+1,1};
+            nextChar=[[[NSUserDefaults standardUserDefaults] valueForKey:@"displayText"] substringWithRange:range];
+           
+           // If it's uppercase or punctuation, introduce a delay
+            if([[NSCharacterSet uppercaseLetterCharacterSet] characterIsMember:nextChar] ||
+               [[NSCharacterSet punctuationCharacterSet] characterIsMember:nextChar]){
+                
+                if(arc4random() % 2 == 1){_rangeMax++;}
+                
+            // If it's whitespace, introduce a slightly longer delay
+            }else if([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:nextChar]){
+        
+                if(arc4random() % 5 == 1){_rangeMax++;}
+            
+            // No delay
+            }else{ _rangeMax++;}
+        }
+        
+    // No microdelay
+    }else{
         _rangeMax++;
     }
 }
 
+// Key handler
 - (void)keyDown:(NSEvent *)event {
-        NSLog(@"Key event...");
         unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
         switch(key) {
                 
@@ -639,6 +646,26 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
 
 }
 
+- (void) stopTimer{
+    
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffectPause"];
+    _rangeMax=0;
+    NSLog(@"STOP timer");
+    [typingTimer invalidate];
+}
+
+- (void) startTimer{
+    
+    
+    float timerFires=1/[[NSUserDefaults standardUserDefaults] floatForKey:@"typingRate"];
+    NSLog(@"START Timer: %f",timerFires);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        typingTimer = [NSTimer scheduledTimerWithTimeInterval:timerFires target:self selector:@selector(incrementRange) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:typingTimer forMode:NSDefaultRunLoopMode];
+    });
+    _rangeMax=0;
+    
+}
 
 // Screencap code based on 002.vade.info
 -(GLuint) createWindowTexture:(CGLContextObj) internalContext
@@ -713,61 +740,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
 ///////////////////////////////////////////////////////////////////////
 -(NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {return NSDragOperationCopy;}
 -(BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender {return YES;}
--(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
-    
-    if ( [sender draggingSource] != self ) {
-        
-        
-        // Check extension... If this is a settings file, load the settings
-        NSPasteboard* pbrd = [sender draggingPasteboard];
-        NSArray *draggedFilePaths = [pbrd propertyListForType:NSFilenamesPboardType];
-        NSString *path=draggedFilePaths[0];
-        NSArray *parsedPath = [path componentsSeparatedByString:@"/"];
-        NSArray *parsedFilename = [parsedPath[[parsedPath count]-1] componentsSeparatedByString:@"."];
-        NSString* extension = parsedFilename[[parsedFilename count]-1];
-        if ([extension isEqualToString:@"settings"]){
-            NSMutableDictionary *savedSettings = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
-            NSLog(@"Loading settings file... %@ ",path);
-            
-            if (![savedSettings objectForKey:@"subtitler_settings_file"]) {
-                //not a subtitler settings file
-                NSBeep();
-                NSLog(@"Not a settings file!");
-                return false;
-            }else{
-            
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetX"];
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetY"];
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
-                
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
-                
-                
-                NSString *searchFor = @"apple";
-                NSRange range;
-                for (NSString* key in savedSettings) {
-                    range = [key rangeOfString:searchFor];
-                    NSString *firstTwoChars = [key substringWithRange:NSMakeRange(0, 2)];
-                    NSString *firstFiveChars = [key substringWithRange:NSMakeRange(0, 5)];
-                    if (range.location == NSNotFound && ![firstTwoChars isEqualToString:@"NS"] && ![firstTwoChars isEqualToString:@"QT"] && ![firstFiveChars isEqualToString:@"Apple"]){
-                        NSLog(@"%@",key);
-                        [[NSUserDefaults standardUserDefaults] setObject:[savedSettings objectForKey:key] forKey:key];
-                    }
-                }
-                return true;
-            }
-        }
-        
-        
-        // Else treat as a text file
-        self.droppedFileURL=[NSURL URLFromPasteboard: [sender draggingPasteboard]];
-        return true;
-    }
-    
-    return false;
-    
-}
-
+-(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {return [AppController performDragOperation:sender];}
 
 ///////////////////////////////////////////////////////////////////////
 // Fullscreen
@@ -779,11 +752,16 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         return;
     }
     
-    NSLog(@"Going full...");
+   
+    //Hide cursor
+    [NSCursor hide];
     
+    // Switch resolution
+    [AppController lowerResolution];
+        
     NSRect frame = [self.window frame];
     original_size = frame.size;
-    self.position = frame.origin;
+    //self.position = frame.origin;
     
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
                              [NSNumber numberWithBool:NO],NSFullScreenModeAllScreens,
@@ -792,45 +770,25 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     
     [self enterFullScreenMode:[NSScreen mainScreen] withOptions:options];
 
-    f_fullscreenMode=true;
-}
-- (void)goFullscreen2{
-    
-    return;
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-                             [NSNumber numberWithBool:NO],NSFullScreenModeAllScreens,
-                             nil];
-    
-    NSRect frame = [self.window frame];
-    
-    /*
-    self.position = frame.origin;
-    [[self.window] setFrame:NSMakeRect(self.position.x, self.position.y, NSHeight(frame)) display:YES];
-    */
-    
-    
-    NSPoint pos;
-    pos.x=0;
-    pos.y=0;
-    [self.window setFrameOrigin:pos];
-    
-    [self enterFullScreenMode:[NSScreen mainScreen] withOptions:options];
-    
-    frame = [self.window frame];
-    frame.size.width *= 2;
-    [self.window setContentSize:frame.size];
-    
     f_fullscreenMode=true;
 }
 - (void)goWindowed{
     
     if(!f_fullscreenMode){return;}
+    
+    // Restore resolution
+    [AppController restoreResolution];
+
+    // Exit fullscreen mode
     [self exitFullScreenModeWithOptions:nil];
     [self.window makeFirstResponder:self];
     
+    //Hide cursor
+    [NSCursor unhide];
+    
+    
     f_fullscreenMode=false;
 }
-
 
 
 

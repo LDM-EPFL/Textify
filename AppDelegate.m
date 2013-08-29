@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "AppDistributed.h"
+#import "AppController.h"
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -23,8 +24,8 @@
 
 - (IBAction)FontButton:(id)sender {
     
-    //NSFont *fontToUse=(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]];
-    NSFont* fontToUse=[NSFont fontWithName:@"Helvetica" size:20];
+    NSFont *fontToUse=(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]];
+    //NSFont* fontToUse=[NSFont fontWithName:@"Helvetica" size:20];
     NSFontManager * fontManager = [NSFontManager sharedFontManager];
     [fontManager setTarget:self];
     [fontManager setSelectedFont:fontToUse isMultiple:NO];
@@ -48,11 +49,15 @@
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:file];
     [preferences registerDefaults:dict];
     
-    [[AppDistributed sharedInstance] setNamespace:@"sinlab.ch" andApplicationID:[[NSUserDefaults standardUserDefaults] valueForKey:@"publishID"]];
+    // Replaced with Syphon
+    //[[AppDistributed sharedInstance] setNamespace:@"sinlab.ch" andApplicationID:[[NSUserDefaults standardUserDefaults] valueForKey:@"publishID"]];
     
     
 }
 
+-(void)applicationWillTerminate:(NSNotification *)notification{
+    [AppController restoreResolution];
+}
 
 ///////////////////////////////////////////////////////////////////////
 // APPLICATION

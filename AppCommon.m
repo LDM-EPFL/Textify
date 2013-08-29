@@ -10,18 +10,10 @@
 
 @implementation AppCommon
 
-+ (AppCommon*)sharedInstance {
-    static AppCommon *sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
-}
+CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(AppCommon);
 
 - (id)init{
     if (self = [super init]){
-
         self.isFullscreen=false;
     }
     return self;

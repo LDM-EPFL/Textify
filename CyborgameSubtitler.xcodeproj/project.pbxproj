@@ -13,7 +13,6 @@
 		491BD7EA16BBF0570012A5E1 /* SinK3.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 491BD7E816BBF0570012A5E1 /* SinK3.xcdatamodeld */; };
 		491BD83516BED10F0012A5E1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD83416BED10F0012A5E1 /* QuartzCore.framework */; };
 		491BD83916BED11F0012A5E1 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD83816BED11F0012A5E1 /* CoreMedia.framework */; };
-		493684CC179D471B00BE8384 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 493684CB179D471B00BE8384 /* icon.icns */; };
 		493684CF179D479A00BE8384 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 493684CD179D479A00BE8384 /* AppDelegate.m */; };
 		493684D1179D47E800BE8384 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 493684D0179D47E800BE8384 /* main.m */; };
 		493684D6179D480100BE8384 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 493684D2179D480100BE8384 /* Credits.rtf */; };
@@ -37,8 +36,14 @@
 		49781BA3179D61A500FBAFAE /* AppDistributed.m in Sources */ = {isa = PBXBuildFile; fileRef = 49781BA2179D61A500FBAFAE /* AppDistributed.m */; };
 		4987A38916C322C20035FB17 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4987A38816C322C20035FB17 /* Security.framework */; };
 		4988878417860563007F0413 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4988878317860563007F0413 /* MainView.m */; };
+		498F2D8417CE141200A38674 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 498F2D8317CE141200A38674 /* icon.icns */; };
+		498F2D8A17CE1B8500A38674 /* SCRATCH in Resources */ = {isa = PBXBuildFile; fileRef = 498F2D8917CE1B8500A38674 /* SCRATCH */; };
+		498F2D8D17CE2A8300A38674 /* NSTextView_NoDrag.m in Sources */ = {isa = PBXBuildFile; fileRef = 498F2D8C17CE2A8300A38674 /* NSTextView_NoDrag.m */; };
+		498F2D9017CE2B2300A38674 /* NSTextView_DragOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 498F2D8F17CE2B2200A38674 /* NSTextView_DragOverride.m */; };
 		49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */; };
+		49BD02D117CEBF4B00CF064E /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 49BD02D017CEBF4B00CF064E /* Assets */; };
 		49BF395217842D910045361C /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BF395117842D910045361C /* AppController.m */; };
+		49CF9AA117CBEBF600449D9B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4969723E17CAAA2F0043E260 /* Syphon.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +53,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				49CF9AA117CBEBF600449D9B /* Syphon.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +73,6 @@
 		491BD83416BED10F0012A5E1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		491BD83616BED1150012A5E1 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		491BD83816BED11F0012A5E1 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		493684CB179D471B00BE8384 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		493684CD179D479A00BE8384 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		493684CE179D479A00BE8384 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		493684D0179D47E800BE8384 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
@@ -92,8 +97,16 @@
 		4987A38816C322C20035FB17 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		4988878217860563007F0413 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		4988878317860563007F0413 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
+		498F2D8317CE141200A38674 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = SOURCE_ROOT; };
+		498F2D8817CE16D800A38674 /* CWLSynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWLSynthesizeSingleton.h; sourceTree = SOURCE_ROOT; };
+		498F2D8917CE1B8500A38674 /* SCRATCH */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SCRATCH; sourceTree = "<group>"; };
+		498F2D8B17CE2A8300A38674 /* NSTextView_NoDrag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_NoDrag.h; sourceTree = SOURCE_ROOT; };
+		498F2D8C17CE2A8300A38674 /* NSTextView_NoDrag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTextView_NoDrag.m; sourceTree = SOURCE_ROOT; };
+		498F2D8E17CE2B2200A38674 /* NSTextView_DragOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_DragOverride.h; sourceTree = SOURCE_ROOT; };
+		498F2D8F17CE2B2200A38674 /* NSTextView_DragOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTextView_DragOverride.m; sourceTree = SOURCE_ROOT; };
 		49A3DAAA17CA52C70091FEFD /* NSView+snapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+snapshot.h"; sourceTree = "<group>"; };
 		49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+snapshot.m"; sourceTree = "<group>"; };
+		49BD02D017CEBF4B00CF064E /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		49BF395017842D910045361C /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		49BF395117842D910045361C /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -130,19 +143,13 @@
 		491BD7C116BBF0560012A5E1 = {
 			isa = PBXGroup;
 			children = (
-				493684CB179D471B00BE8384 /* icon.icns */,
-				49781BA1179D61A500FBAFAE /* AppDistributed.h */,
-				49781BA2179D61A500FBAFAE /* AppDistributed.m */,
-				4913DD77179053AA00667121 /* AppCommon.h */,
-				4913DD78179053AA00667121 /* AppCommon.m */,
-				493684CD179D479A00BE8384 /* AppDelegate.m */,
-				493684CE179D479A00BE8384 /* AppDelegate.h */,
-				49BF395017842D910045361C /* AppController.h */,
+				498F2D8917CE1B8500A38674 /* SCRATCH */,
+				498F2D8217CE13CE00A38674 /* App */,
 				4956688217976E5600F5DEF2 /* PreviewView.h */,
 				4956688317976E5600F5DEF2 /* PreviewView.m */,
-				49BF395117842D910045361C /* AppController.m */,
 				491E3FDE171729B300DB7734 /* Main Code */,
 				491BD7D716BBF0560012A5E1 /* Resources */,
+				49BD02D017CEBF4B00CF064E /* Assets */,
 				49D319951718A798001FE074 /* Frameworks */,
 				491BD7CD16BBF0560012A5E1 /* Products */,
 			);
@@ -159,7 +166,13 @@
 		491BD7D716BBF0560012A5E1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				498F2D8817CE16D800A38674 /* CWLSynthesizeSingleton.h */,
 				493684DA179D48D600BE8384 /* MainMenu.xib */,
+				498F2D8B17CE2A8300A38674 /* NSTextView_NoDrag.h */,
+				498F2D8E17CE2B2200A38674 /* NSTextView_DragOverride.h */,
+				498F2D8F17CE2B2200A38674 /* NSTextView_DragOverride.m */,
+				498F2D8C17CE2A8300A38674 /* NSTextView_NoDrag.m */,
+				498F2D8317CE141200A38674 /* icon.icns */,
 				493684D2179D480100BE8384 /* Credits.rtf */,
 				493684D8179D480800BE8384 /* CyborgameSubtitler-Info.plist */,
 				493684D4179D480100BE8384 /* InfoPlist.strings */,
@@ -181,6 +194,21 @@
 				49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */,
 			);
 			name = "Main Code";
+			sourceTree = "<group>";
+		};
+		498F2D8217CE13CE00A38674 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				493684CE179D479A00BE8384 /* AppDelegate.h */,
+				49BF395017842D910045361C /* AppController.h */,
+				49BF395117842D910045361C /* AppController.m */,
+				49781BA1179D61A500FBAFAE /* AppDistributed.h */,
+				49781BA2179D61A500FBAFAE /* AppDistributed.m */,
+				4913DD77179053AA00667121 /* AppCommon.h */,
+				4913DD78179053AA00667121 /* AppCommon.m */,
+				493684CD179D479A00BE8384 /* AppDelegate.m */,
+			);
+			name = App;
 			sourceTree = "<group>";
 		};
 		49D319951718A798001FE074 /* Frameworks */ = {
@@ -260,10 +288,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				493684CC179D471B00BE8384 /* icon.icns in Resources */,
 				493684D6179D480100BE8384 /* Credits.rtf in Resources */,
 				493684D7179D480100BE8384 /* InfoPlist.strings in Resources */,
 				493684DC179D48D600BE8384 /* MainMenu.xib in Resources */,
+				498F2D8417CE141200A38674 /* icon.icns in Resources */,
+				498F2D8A17CE1B8500A38674 /* SCRATCH in Resources */,
+				49BD02D117CEBF4B00CF064E /* Assets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +314,8 @@
 				493684D1179D47E800BE8384 /* main.m in Sources */,
 				49781BA3179D61A500FBAFAE /* AppDistributed.m in Sources */,
 				49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */,
+				498F2D8D17CE2A8300A38674 /* NSTextView_NoDrag.m in Sources */,
+				498F2D9017CE2B2300A38674 /* NSTextView_DragOverride.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

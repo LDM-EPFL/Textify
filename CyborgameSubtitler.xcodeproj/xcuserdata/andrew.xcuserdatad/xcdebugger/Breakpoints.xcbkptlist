@@ -8,12 +8,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
+         timestampString = "399431533.583703"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "528"
-         endingLineNumber = "528"
-         landmarkName = "-drawView"
+         startingLineNumber = "504"
+         endingLineNumber = "504"
+         landmarkName = "-drawViewOfSize:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -21,12 +21,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
+         timestampString = "399431533.583703"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "535"
-         endingLineNumber = "535"
-         landmarkName = "-drawView"
+         startingLineNumber = "511"
+         endingLineNumber = "511"
+         landmarkName = "-drawViewOfSize:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "AppController.m"
-         timestampString = "395714260.064494"
+         timestampString = "399398936.254075"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "101"
-         endingLineNumber = "101"
+         startingLineNumber = "139"
+         endingLineNumber = "139"
          landmarkName = "-resetWindows"
          landmarkType = "5">
       </FileBreakpoint>
@@ -47,38 +47,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "AppController.m"
-         timestampString = "399146610.843182"
+         timestampString = "399398936.254075"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "200"
-         endingLineNumber = "200"
+         startingLineNumber = "238"
+         endingLineNumber = "238"
          landmarkName = "-globalKeyboardHandler"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "721"
-         endingLineNumber = "721"
-         landmarkName = "-performDragOperation:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "748"
-         endingLineNumber = "748"
-         landmarkName = "-performDragOperation:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -86,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "MainView.m"
-         timestampString = "399139927.727469"
+         timestampString = "399427959.601424"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "391"
-         endingLineNumber = "391"
+         startingLineNumber = "308"
+         endingLineNumber = "308"
          landmarkName = "-reloadFile"
          landmarkType = "5">
       </FileBreakpoint>
@@ -99,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "MainView.m"
-         timestampString = "399139927.727469"
+         timestampString = "399427959.601424"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "414"
-         endingLineNumber = "414"
+         startingLineNumber = "331"
+         endingLineNumber = "331"
          landmarkName = "-loadTextFile"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,37 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
+         timestampString = "399431533.583703"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "445"
-         endingLineNumber = "445"
-         landmarkName = "-drawView"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "378"
-         endingLineNumber = "378"
-         landmarkName = "-drawView"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "654"
-         endingLineNumber = "654"
+         startingLineNumber = "681"
+         endingLineNumber = "681"
          landmarkName = "-createWindowTexture:mainDrawingContext:width:height:originX:originY:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -151,11 +99,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
+         timestampString = "399431533.583703"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "673"
-         endingLineNumber = "673"
+         startingLineNumber = "700"
+         endingLineNumber = "700"
          landmarkName = "-createWindowTexture:mainDrawingContext:width:height:originX:originY:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -164,12 +112,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
+         timestampString = "399431533.583703"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "605"
-         endingLineNumber = "605"
-         landmarkName = "-keyDown:"
+         startingLineNumber = "183"
+         endingLineNumber = "183"
+         landmarkName = "-syphonSendImage:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "AppController.m"
+         timestampString = "399427314.862217"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "424"
+         endingLineNumber = "424"
+         landmarkName = "+performDragOperation:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -177,25 +138,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
+         timestampString = "399423490.187809"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "210"
-         endingLineNumber = "210"
-         landmarkName = "-syphonSend"
+         startingLineNumber = "150"
+         endingLineNumber = "150"
+         landmarkName = "-drawRect:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "BigFontView.m"
-         timestampString = "399222946.25068"
+         filePath = "AppController.m"
+         timestampString = "399427314.862217"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "223"
-         endingLineNumber = "223"
-         landmarkName = "-loadTextureFromNSImage:"
+         startingLineNumber = "441"
+         endingLineNumber = "441"
+         landmarkName = "+performDragOperation:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

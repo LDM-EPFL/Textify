@@ -1,3 +1,5 @@
+//FIXME: Why is appcontroller a view??
+
 //
 //  AppController.m
 //  CyborgameSubtitler
@@ -11,6 +13,19 @@
 #import "AppCommon.h"
 #import "BigFontView.h"
 @implementation AppController
+
+
+// For resolution switch
+static int fullscreen_width;
+static int fullscreen_height;
+static int fullscreen_rate;
+static int fullscreen_depth;
+
+static int currentScreen_width;
+static int currentScreen_height;
+static int currentScreen_rate;
+static int currentScreen_depth;
+static BOOL allowResolutionChange;
 
 ///////////////////////////////////////////////////////////
 // NSView
@@ -32,8 +47,7 @@
     return self;
 }
 -(void) initCommon{
-    
-    
+
     // Displaylink
     [self setupDisplayLink];
     
@@ -44,10 +58,19 @@
                                                  name:NSViewGlobalFrameDidChangeNotification
                                                object:self];
 }
-- (void) drawRect:(NSRect)dirtyRect{
-    [self drawView];
-}
+- (void) drawRect:(NSRect)dirtyRect{[self drawView];}
 
+- (IBAction)resetScrollSettings:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_scrollPause"];
+
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetX"];
+
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetY"];
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
+    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
+    
+}
 
 ///////////////////////////////////////////////////////////
 // Displaylink
@@ -95,6 +118,22 @@ bool f_dockedMode=false;
 -(void)awakeFromNib{
     //Global keyboard handler
     [self globalKeyboardHandler];
+    [[AppCommon sharedAppCommon] setMainWindow:controlWindow];
+    
+    
+    // When we switch to fullscreen, change resolution to this
+    allowResolutionChange=FALSE;
+    fullscreen_width=640;
+    fullscreen_height=480;
+    fullscreen_rate=60;
+    fullscreen_depth=32;
+    
+    // Init default restore
+    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
+    currentScreen_width = (int)CGDisplayModeGetWidth(currentMode);
+    currentScreen_height =(int)CGDisplayModeGetHeight(currentMode);
+    currentScreen_rate = CGDisplayModeGetRefreshRate(currentMode);
+    currentScreen_depth =32;
 }
 
 -(void)resetWindows{
@@ -170,7 +209,7 @@ bool f_dockedMode=false;
                             break;
                         
                             
-                            // CMD+CTRL+ALT+leftArrow Put the stageview on the display to the left/right/above/below of where it is now
+                    // CMD+CTRL+ALT+leftArrow Put the stageview on the display to the left/right/above/below of where it is now
                     }case NSLeftArrowFunctionKey:case NSRightArrowFunctionKey:case NSUpArrowFunctionKey:case NSDownArrowFunctionKey:{
                         [stageWindow makeKeyAndOrderFront:self];
                         BOOL destinationFound=false;
@@ -199,7 +238,7 @@ bool f_dockedMode=false;
                                     
                                     // Request fullscreen for non-control windows
                                     if (foundScreen.frame.origin.x == controlWindow.screen.frame.origin.x && foundScreen.frame.origin.y == controlWindow.screen.frame.origin.y){
-                                        [[[AppCommon sharedInstance] fontViewController] goWindowed];
+                                        [[[AppCommon sharedAppCommon] fontViewController] goWindowed];
                                         [self resetWindows];
                                     }else{
                                         //Move the window
@@ -207,7 +246,7 @@ bool f_dockedMode=false;
                                         [stageWindow setFrameOrigin:foundScreen.frame.origin];
                                         [stageWindow center];
                                         destinationFound=true;
-                                        [[[AppCommon sharedInstance] fontViewController] goFullscreen];
+                                        [[[AppCommon sharedAppCommon] fontViewController] goFullscreen];
                                     }
                                     
                                     
@@ -220,7 +259,7 @@ bool f_dockedMode=false;
                         // CMD+CTRL+ALT+R Reset display
                         }case 'R':case'r':{
                             
-                            [[[AppCommon sharedInstance] fontViewController] goWindowed];
+                            [[[AppCommon sharedAppCommon] fontViewController] goWindowed];
                             [self resetWindows];
                             
                             
@@ -265,9 +304,9 @@ bool f_dockedMode=false;
                     
                     // CMD + s
                     }case 's':case'S':{
-                        NSLog(@"Saving...");
-                 
+                                        
                         [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"subtitler_settings_file"];
+                        [[NSUserDefaults standardUserDefaults] setValue:[(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]] familyName] forKey:@"fontRequested"];
                         [[NSUserDefaults standardUserDefaults] synchronize];
                         
                         
@@ -278,8 +317,18 @@ bool f_dockedMode=false;
                         NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
                         NSNumber *timeStampObj = [NSNumber numberWithDouble: timeStamp];
                         NSString *fileName=[[NSString alloc] initWithFormat:@"%@/%@_SUB.settings",basePath,timeStampObj];
-                        NSLog(@"Dumping to: %@", fileName);
-                        [settings writeToFile:fileName atomically:YES];
+                        //NSLog(@"Saving: %@", fileName);
+                        
+                        
+                        NSMutableDictionary* cleanSettings=[[NSMutableDictionary alloc] init];
+                        for (NSString* key in settings) {
+                            if([AppController allowedKey:key]){
+                                [cleanSettings setObject:[settings objectForKey:key] forKey:key];
+                            }
+                        }
+                        
+                        
+                        [cleanSettings writeToFile:fileName atomically:YES];
 
                         
                         break;
@@ -297,7 +346,7 @@ bool f_dockedMode=false;
                         break;
                         
                                             
-                        // Unhandled... just forward the event
+                    // Unhandled... just forward the event
                     }default:{
                         return theEvent;
                         break;
@@ -310,6 +359,229 @@ bool f_dockedMode=false;
     };
     
     eventMon = [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask handler:monitorHandler];
+}
+
+
+// Pop up an alert
++(void)alertUser:(NSString*)alertTitle info:(NSString*)alertMessage{
+    //NSRunAlertPanel(alertTitle, alertMessage, @"Ok",nil,nil);
+    [self alertUserOnWindow:[[AppCommon sharedAppCommon] mainWindow]
+                 alertTitle:alertTitle
+                       info:alertMessage];
+}
+
+// Model alert on a sheet
++(void)alertUserOnWindow:(NSWindow*)displayWindow alertTitle:(NSString*)alertTitle info:(NSString*)alertMessage{
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert addButtonWithTitle:@"OK"];
+    [alert setMessageText:alertTitle];
+    [alert setInformativeText:alertMessage];
+    [alert setAlertStyle:NSWarningAlertStyle];
+    [alert beginSheetModalForWindow:displayWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+}
+
+
+// Create a safe temporary working location
+// Thx http://www.cocoawithlove.com/2009/07/temporary-files-and-folders-in-cocoa.html
++(NSString*)createTempWorkingFolder{
+    NSString *tempDirectoryTemplate =
+    [NSTemporaryDirectory() stringByAppendingPathComponent:@"edu.olin.daVinci.XXXXXX"];
+    const char *tempDirectoryTemplateCString =
+    [tempDirectoryTemplate fileSystemRepresentation];
+    char *tempDirectoryNameCString =
+    (char *)malloc(strlen(tempDirectoryTemplateCString) + 1);
+    strcpy(tempDirectoryNameCString, tempDirectoryTemplateCString);
+    
+    char *result = mkdtemp(tempDirectoryNameCString);
+    // handle directory creation failure
+    if (!result){
+        [self alertUser:@"FATAL!" info:@"Serious error, cannot create working directory"];
+    }
+    
+    NSString *tempDirectoryPath =
+    [[NSFileManager defaultManager]
+     stringWithFileSystemRepresentation:tempDirectoryNameCString
+     length:strlen(result)];
+    free(tempDirectoryNameCString);
+    
+    return [NSString stringWithFormat:@"%@/",tempDirectoryPath];
+}
+
+
+// Accept drag and drop
++(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
+
+    // Check extension... If this is a settings file, load the settings
+    NSPasteboard* pbrd = [sender draggingPasteboard];
+    NSArray *draggedFilePaths = [pbrd propertyListForType:NSFilenamesPboardType];
+    NSString *path=draggedFilePaths[0];
+    NSArray *parsedPath = [path componentsSeparatedByString:@"/"];
+    NSArray *parsedFilename = [parsedPath[[parsedPath count]-1] componentsSeparatedByString:@"."];
+    NSString* extension = parsedFilename[[parsedFilename count]-1];
+    
+    // Treat everything except .settings as a text file
+    if (![extension isEqualToString:@"settings"]){
+        [[NSUserDefaults standardUserDefaults] setValue:[[NSURL URLFromPasteboard: [sender draggingPasteboard]] absoluteString] forKey:@"externalFilename"];
+        [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"f_watchFile"];
+        return true;
+    }else{
+        
+        NSMutableDictionary *savedSettings = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
+        //NSLog(@"Loading settings file... %@ ",path);
+        
+        // Check to make sure this is a subtitler settings file
+        if (![savedSettings objectForKey:@"subtitler_settings_file"]) {
+            NSBeep();
+            NSLog(@"Not a settings file!");
+            return false;
+            
+        // Ok, update the system with the settings
+        }else{
+            
+            // Reset a few things
+            [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
+            [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
+            [[[AppCommon sharedAppCommon] fontViewController] stopTimer];
+            
+            // Some junk in here to support old settings files
+            BOOL fontCheckPerformed=FALSE;
+            for (NSString* key in savedSettings) {
+                if([self allowedKey:key]){
+                    
+                    // Check if font is available
+                    if ([key isEqualToString:@"fontRequested"]){
+                        fontCheckPerformed=TRUE;
+                        NSArray *fonts = [[NSFontManager sharedFontManager] availableFontFamilies];
+                        NSString* fontRequested = [savedSettings objectForKey:key];
+                        if(![fonts containsObject:fontRequested]){
+                            [AppController alertUser:@"Font not available!" info:[NSString stringWithFormat:@"'%@' will be replaced with system font.",fontRequested]];
+                        }
+                    }
+
+                    
+                    [[NSUserDefaults standardUserDefaults] setObject:[savedSettings objectForKey:key] forKey:key];
+                }
+            }
+            
+            if(!fontCheckPerformed){
+                 [AppController alertUser:@"Warning!" info:[NSString stringWithFormat:@"You have loaded an older settings file.\n I can't promise it will work correctly."]];
+            }
+            
+            return true;
+        }
+        
+    }
+    return NO;
+}
+
+// UGH! This is NOT the way to do this, but I don't want to break existing settings files
++(BOOL)allowedKey:(NSString*)key{
+    return (
+        [key isEqualToString:@"global_translateX"] ||
+        [key isEqualToString:@"global_translateY"] ||
+            
+        [key isEqualToString:@"global_offsetX"] ||
+        [key isEqualToString:@"global_offsetY"] ||
+            
+        [key isEqualToString:@"colorBackground2"] ||
+        
+        [key isEqualToString:@"fontSelected"] ||
+        [key isEqualToString:@"scrollSpeed"] ||
+        [key isEqualToString:@"colorFont"] ||
+        [key isEqualToString:@"f_scrollReverse"] ||
+        [key isEqualToString:@"colorBackground"] ||
+        
+        [key isEqualToString:@"gradientAngle"] ||
+        [key isEqualToString:@"publishID"] ||
+        [key isEqualToString:@"displayText"] ||
+        
+        [key isEqualToString:@"f_flipText"] ||
+        [key isEqualToString:@"textFile"] ||
+        [key isEqualToString:@"f_publishImage"] ||
+        [key isEqualToString:@"f_mirrorText"] ||
+        
+        [key isEqualToString:@"f_scroll"] ||
+        [key isEqualToString:@"f_centerTextv"] ||
+        [key isEqualToString:@"scrollRate"] ||
+        [key isEqualToString:@"f_scrollPause"] ||
+        [key isEqualToString:@"f_watchFile"] ||
+        [key isEqualToString:@"scaleFactor"] ||
+        [key isEqualToString:@"colorFontShadow"] ||
+        [key isEqualToString:@"f_scaleTextType"] ||
+        [key isEqualToString:@"f_scaleText"] ||
+        [key isEqualToString:@"f_autoScale"] ||
+        [key isEqualToString:@"f_drawShadow"] ||
+        [key isEqualToString:@"positionX"] ||
+        [key isEqualToString:@"positionY"] ||
+        [key isEqualToString:@"positionZ"] ||
+        [key isEqualToString:@"scaleTextType"] ||
+        [key isEqualToString:@"f_stripLinebreaks"] ||
+        [key isEqualToString:@"typingRate"] ||
+        [key isEqualToString:@"f_centerText"] ||
+            
+        [key isEqualToString:@"f_typingEffect"] ||
+        [key isEqualToString:@"f_typingEffectPause"] ||
+        [key isEqualToString:@"typingRate"] ||
+        [key isEqualToString:@"f_typingEffectLoop"] ||
+        [key isEqualToString:@"f_typingEffectHumanize"] ||
+        [key isEqualToString:@"outputResolution"] ||
+        [key isEqualToString:@"f_transparentBackground"] ||
+            
+            
+        [key isEqualToString:@"globalPosition_0"] ||
+        [key isEqualToString:@"globalPosition_1"] ||
+        [key isEqualToString:@"globalPosition_2"] ||
+        [key isEqualToString:@"globalPosition_3"] ||
+        [key isEqualToString:@"globalPosition_4"] ||
+        [key isEqualToString:@"globalPosition_5"] ||
+        [key isEqualToString:@"globalPosition_6"] ||
+        [key isEqualToString:@"globalPosition_7"] ||
+        [key isEqualToString:@"globalPosition_8"] ||
+        [key isEqualToString:@"globalPosition_9"] ||
+        [key isEqualToString:@"overlayTransparencyVal"] ||
+        [key isEqualToString:@"f_correctOrigin"] ||
+        
+        [key isEqualToString:@"textAlignment"] ||
+        [key isEqualToString:@"fontRequested"] ||
+        [key isEqualToString:@"subtitler_settings_file"] ||
+        
+            
+        [key isEqualToString:@"scrollDirection"]
+        );
+}
+
+
++(void)lowerResolution{
+    NSLog(@"Fullscreen at %ix%i...",fullscreen_width,fullscreen_height);
+    [self changeResolutionHeight:fullscreen_height width:fullscreen_width rate:fullscreen_rate depth:fullscreen_depth];
+}
++(void)restoreResolution{
+    [self changeResolutionHeight:currentScreen_height width:currentScreen_width rate:currentScreen_rate depth:currentScreen_depth];
+}
++(void)changeResolutionHeight:(int)height width:(int)width rate:(int)rate depth:(int)depth{
+    NSLog(@"ERROR: RESOLUTION CHANGING DISABLED!"); return;
+    /*
+    if (!allowResolutionChange){return;}
+    // Store current settings so we can switch back to them when we exit fullscreen
+    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
+    currentScreen_width = (int)CGDisplayModeGetWidth(currentMode);
+    currentScreen_height =(int)CGDisplayModeGetHeight(currentMode);
+    currentScreen_rate = CGDisplayModeGetRefreshRate(currentMode);
+    currentScreen_depth =32;
+    
+    CGDisplayCapture( kCGDirectMainDisplay );
+    CFDictionaryRef    displayMode;
+    displayMode = CGDisplayBestModeForParametersAndRefreshRate(
+                                                               kCGDirectMainDisplay,
+                                                               depth,
+                                                               width,
+                                                               height,
+                                                               rate,
+                                                               NULL
+                                                               );
+    CGDisplaySwitchToMode( kCGDirectMainDisplay, displayMode );
+    CGDisplayRelease ( kCGDirectMainDisplay );
+    */
 }
 
 

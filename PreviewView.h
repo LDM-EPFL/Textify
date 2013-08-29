@@ -8,6 +8,5 @@
 
 #import <Cocoa/Cocoa.h>
 @class KinectView;
-@interface PreviewView : NSImageView <NSDraggingDestination> {
-   }
+@interface PreviewView : NSImageView <NSDraggingDestination> {}
 @end

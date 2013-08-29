@@ -33,27 +33,23 @@ NSString *previousLoadString;
 
 
 -(void)updateState{
-
-    
-    [_pubImage setImage:[[AppCommon sharedInstance] screenShot]];
+    [_pubImage setImage:[[AppCommon sharedAppCommon] screenShot]];
     [_pubImage setNeedsDisplay:YES];
     
     
-    
-
-
-    [[NSUserDefaults standardUserDefaults] setValue:[_windowedTextView.droppedFileURL absoluteString] forKey:@"externalFilename"];
-    if(_windowedTextView.droppedFileURL && [[NSUserDefaults standardUserDefaults] boolForKey:@"f_watchFile"]){
-        
-        
-        //NSLog(@"I should load %@",[_windowedTextView.droppedFileURL absoluteString]);
-        
+    if([[[NSUserDefaults standardUserDefaults] valueForKey:@"externalFilename"] length] !=0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"f_watchFile"]){
+                
         NSError* error = nil;
-        NSString* string = [NSString stringWithContentsOfURL:_windowedTextView.droppedFileURL  encoding:NSUTF8StringEncoding error:&error];
+         NSURL *url = [[NSURL alloc] initWithString:[[NSUserDefaults standardUserDefaults] valueForKey:@"externalFilename"]];
+        NSString* string = [NSString stringWithContentsOfURL:url  encoding:NSUTF8StringEncoding error:&error];
         
         if(![string isEqualToString:previousLoadString]){
             NSLog(@"Something changed!");
-            [_windowedTextView setRangeMax:0];
+            [_windowedTextView stopTimer];
+            if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffect"]){
+                [_windowedTextView startTimer];
+            }
+    
         }
         
         previousLoadString = string;
@@ -74,58 +70,6 @@ NSString *previousLoadString;
         [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_watchFile"];
     }
     
-    
-    
-    // Synchronize view and UI
-    if(f_resetScrollPosition){
-        NSLog(@"Reset scroll position...");
-        _windowedTextView.scrollPosition = 0.0;
-        f_resetScrollPosition=false;
-    }
-    _windowedTextView.f_flipText = [[NSUserDefaults standardUserDefaults] boolForKey:@"f_flipText"];
-    _windowedTextView.f_autoScale = [[NSUserDefaults standardUserDefaults] boolForKey:@"f_autoScale"];
-    _windowedTextView.f_centerText = [[NSUserDefaults standardUserDefaults] boolForKey:@"f_centerText"];
-    _windowedTextView.f_drawShadow = [[NSUserDefaults standardUserDefaults] boolForKey:@"f_drawShadow"];
-    _windowedTextView.f_flipText = [[NSUserDefaults standardUserDefaults] boolForKey:@"f_flipText"];
-    _windowedTextView.f_mirrorText = [[NSUserDefaults standardUserDefaults] boolForKey:@"f_mirrorText"];
-    _windowedTextView.f_scrollPause = [[NSUserDefaults standardUserDefaults] boolForKey:@"f_scrollPause"];
-    
-    
-    _windowedTextView.gradientAngle=[[NSUserDefaults standardUserDefaults] floatForKey:@"gradientAngle"];
-    _windowedTextView.scaleFactor = [[NSUserDefaults standardUserDefaults] floatForKey:@"scaleFactor"];
-    
-    _windowedTextView.global_offsetX = [[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetX"];
-    _windowedTextView.global_offsetY = [[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetY"];
-    _windowedTextView.scrollRate = [[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"];
-    _windowedTextView.scaleTextType = [[NSUserDefaults standardUserDefaults] integerForKey:@"scaleTextType"];
-    _windowedTextView.scrollDirection = [[NSUserDefaults standardUserDefaults] integerForKey:@"scrollDirection"];
-    
-    _windowedTextView.displayString = [[NSUserDefaults standardUserDefaults] valueForKey:@"displayText"];
-    _windowedTextView.scrollRate = [[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"];
-    
-    
-    @try {
-        _windowedTextView.fontToUse = (NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]];
-        _windowedTextView.backgroundColor = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground"]];
-        _windowedTextView.backgroundColor2 = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground2"]];
-        _windowedTextView.fontColor = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFont"]];
-        _windowedTextView.fontColorShadow = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFontShadow"]];
-        
-    }@catch (NSException *exception) {
-        NSLog(@"Failed loading fonts and colors from userprefs, setting defaults...");
-        
-        [[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:[NSFont fontWithName:@"Helvetica" size:20]] forKey:@"fontSelected"];
-        [[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:_windowedTextView.backgroundColor] forKey:@"colorBackground"];
-        
-        [[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:_windowedTextView.backgroundColor2] forKey:@"colorBackground2"];
-        [[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:_windowedTextView.fontColor] forKey:@"colorFont"];
-        [[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:_windowedTextView.backgroundColor] forKey:@"colorFontShadow"];
-    }
-    
-    
-    
-    
-    
 }
 
 -(void) awakeFromNib{
@@ -139,8 +83,8 @@ NSString *previousLoadString;
     
     // Bring other window front
     [self.window makeKeyAndOrderFront:self];
-    
-    
+
+    /*
     // Defaults
     //[[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"displayText"];
     [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textFile"];
@@ -148,7 +92,7 @@ NSString *previousLoadString;
     [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetY"];
     [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"f_scrollPause"];
     [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"f_watchFile"];
-
+*/
        
 }
 
@@ -214,9 +158,7 @@ NSString *previousLoadString;
         // CMD+r
         case 'r':
             if([event modifierFlags] & NSCommandKeyMask){
-                
-                [self resetText];
-               
+                NSBeep();
             }
             break;
         
@@ -225,22 +167,7 @@ NSString *previousLoadString;
             
             // CMD R
             if([event modifierFlags] & NSCommandKeyMask){
-                
-                NSLog(@"%f,%f,%f,%f,%f,%f",
-                [[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetX"],
-                [[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetY"],
-                [[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"],
-                [[NSUserDefaults standardUserDefaults] floatForKey:@"scaleFactor"],
-                [[NSUserDefaults standardUserDefaults] floatForKey:@"scrollPosition"],
-                      _windowedTextView.scrollPosition);
-                
-                
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetX"];
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetY"];
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
-                [[NSUserDefaults standardUserDefaults] setFloat:1.0 forKey:@"scaleFactor"];
-                [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
-                f_resetScrollPosition=true;
+                NSBeep();
             }
         break;
             
@@ -366,16 +293,6 @@ NSString *previousLoadString;
     //[[self nextResponder] keyDown:event];
 }
 
-
--(void)resetText{
-    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetX"];
-    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"global_offsetY"];
-    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
-    
-    [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
-    f_resetScrollPosition=true;
-
-}
 
 
 
