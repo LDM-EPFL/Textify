@@ -21,8 +21,7 @@ CWL_DECLARE_SINGLETON_FOR_CLASS(AppCommon)
 @property bool isFullscreen;
 @property BigFontView *fontViewController;
 @property NSWindow* mainWindow;
-
-
+@property NSMutableDictionary *midiMappings;
 
 
 @end

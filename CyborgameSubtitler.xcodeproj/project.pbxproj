@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4907B3B5175FA3290042E1C8 /* BigFontView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4907B3B4175FA3290042E1C8 /* BigFontView.m */; };
-		4913DD79179053AA00667121 /* AppCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4913DD78179053AA00667121 /* AppCommon.m */; };
 		491BD7D116BBF0560012A5E1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD7D016BBF0560012A5E1 /* Cocoa.framework */; };
 		491BD7EA16BBF0570012A5E1 /* SinK3.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 491BD7E816BBF0570012A5E1 /* SinK3.xcdatamodeld */; };
 		491BD83516BED10F0012A5E1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD83416BED10F0012A5E1 /* QuartzCore.framework */; };
@@ -31,6 +30,10 @@
 		493D643917173E1800E51A6F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD7D516BBF0560012A5E1 /* Foundation.framework */; };
 		493D643A17173FB700E51A6F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD83616BED1150012A5E1 /* OpenGL.framework */; };
 		493D643B1717404D00E51A6F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD7D316BBF0560012A5E1 /* AppKit.framework */; };
+		495367A517CF5BD3005EE119 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495367A417CF5BD3005EE119 /* CoreMIDI.framework */; };
+		495367A917CF5BF8005EE119 /* MIDIController.m in Sources */ = {isa = PBXBuildFile; fileRef = 495367A717CF5BF8005EE119 /* MIDIController.m */; };
+		495367AA17CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 495367A817CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist */; };
+		495367AE17CF5C90005EE119 /* AppCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 495367AD17CF5C90005EE119 /* AppCommon.m */; };
 		4956688417976E5600F5DEF2 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4956688317976E5600F5DEF2 /* PreviewView.m */; };
 		4969723F17CAAA2F0043E260 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4969723E17CAAA2F0043E260 /* Syphon.framework */; };
 		49781BA3179D61A500FBAFAE /* AppDistributed.m in Sources */ = {isa = PBXBuildFile; fileRef = 49781BA2179D61A500FBAFAE /* AppDistributed.m */; };
@@ -62,8 +65,6 @@
 /* Begin PBXFileReference section */
 		4907B3B3175FA3290042E1C8 /* BigFontView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigFontView.h; sourceTree = "<group>"; };
 		4907B3B4175FA3290042E1C8 /* BigFontView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigFontView.m; sourceTree = "<group>"; };
-		4913DD77179053AA00667121 /* AppCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCommon.h; sourceTree = "<group>"; };
-		4913DD78179053AA00667121 /* AppCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCommon.m; sourceTree = "<group>"; };
 		491BD7CC16BBF0560012A5E1 /* CyborgameSubtitler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CyborgameSubtitler.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		491BD7D016BBF0560012A5E1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		491BD7D316BBF0560012A5E1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -89,6 +90,12 @@
 		493D643217173DF200E51A6F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		493D643417173DFA00E51A6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		493D643617173E0000E51A6F /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		495367A417CF5BD3005EE119 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreMIDI.framework; sourceTree = DEVELOPER_DIR; };
+		495367A617CF5BF8005EE119 /* MIDIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIDIController.h; sourceTree = "<group>"; };
+		495367A717CF5BF8005EE119 /* MIDIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MIDIController.m; sourceTree = "<group>"; };
+		495367A817CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = midimap_korgNanoKontrol2.plist; sourceTree = "<group>"; };
+		495367AC17CF5C90005EE119 /* AppCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCommon.h; sourceTree = "<group>"; };
+		495367AD17CF5C90005EE119 /* AppCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCommon.m; sourceTree = "<group>"; };
 		4956688217976E5600F5DEF2 /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
 		4956688317976E5600F5DEF2 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		4969723E17CAAA2F0043E260 /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Syphon.framework; path = "../../SDK:Samples/Syphon SDK Public Beta 2/Syphon.framework"; sourceTree = "<group>"; };
@@ -116,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				495367A517CF5BD3005EE119 /* CoreMIDI.framework in Frameworks */,
 				493D643917173E1800E51A6F /* Foundation.framework in Frameworks */,
 				493D643B1717404D00E51A6F /* AppKit.framework in Frameworks */,
 				493D643A17173FB700E51A6F /* OpenGL.framework in Frameworks */,
@@ -143,7 +151,9 @@
 		491BD7C116BBF0560012A5E1 = {
 			isa = PBXGroup;
 			children = (
+				495367A417CF5BD3005EE119 /* CoreMIDI.framework */,
 				498F2D8917CE1B8500A38674 /* SCRATCH */,
+				495367AB17CF5C02005EE119 /* MIDI */,
 				498F2D8217CE13CE00A38674 /* App */,
 				4956688217976E5600F5DEF2 /* PreviewView.h */,
 				4956688317976E5600F5DEF2 /* PreviewView.m */,
@@ -196,16 +206,26 @@
 			name = "Main Code";
 			sourceTree = "<group>";
 		};
+		495367AB17CF5C02005EE119 /* MIDI */ = {
+			isa = PBXGroup;
+			children = (
+				495367A617CF5BF8005EE119 /* MIDIController.h */,
+				495367A717CF5BF8005EE119 /* MIDIController.m */,
+				495367A817CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist */,
+			);
+			name = MIDI;
+			sourceTree = "<group>";
+		};
 		498F2D8217CE13CE00A38674 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				493684CE179D479A00BE8384 /* AppDelegate.h */,
+				495367AC17CF5C90005EE119 /* AppCommon.h */,
+				495367AD17CF5C90005EE119 /* AppCommon.m */,
 				49BF395017842D910045361C /* AppController.h */,
 				49BF395117842D910045361C /* AppController.m */,
 				49781BA1179D61A500FBAFAE /* AppDistributed.h */,
 				49781BA2179D61A500FBAFAE /* AppDistributed.m */,
-				4913DD77179053AA00667121 /* AppCommon.h */,
-				4913DD78179053AA00667121 /* AppCommon.m */,
 				493684CD179D479A00BE8384 /* AppDelegate.m */,
 			);
 			name = App;
@@ -294,6 +314,7 @@
 				498F2D8417CE141200A38674 /* icon.icns in Resources */,
 				498F2D8A17CE1B8500A38674 /* SCRATCH in Resources */,
 				49BD02D117CEBF4B00CF064E /* Assets in Resources */,
+				495367AA17CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,7 +329,6 @@
 				4907B3B5175FA3290042E1C8 /* BigFontView.m in Sources */,
 				49BF395217842D910045361C /* AppController.m in Sources */,
 				4988878417860563007F0413 /* MainView.m in Sources */,
-				4913DD79179053AA00667121 /* AppCommon.m in Sources */,
 				4956688417976E5600F5DEF2 /* PreviewView.m in Sources */,
 				493684CF179D479A00BE8384 /* AppDelegate.m in Sources */,
 				493684D1179D47E800BE8384 /* main.m in Sources */,
@@ -316,6 +336,8 @@
 				49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */,
 				498F2D8D17CE2A8300A38674 /* NSTextView_NoDrag.m in Sources */,
 				498F2D9017CE2B2300A38674 /* NSTextView_DragOverride.m in Sources */,
+				495367A917CF5BF8005EE119 /* MIDIController.m in Sources */,
+				495367AE17CF5C90005EE119 /* AppCommon.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

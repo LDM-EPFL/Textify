@@ -96,9 +96,12 @@
 // Displaylink
 ///////////////////////////////////////////////////////////
 static bool isAnimating=false;
-static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext){
-    CVReturn result = [(__bridge BigFontView*)displayLinkContext getFrameForTime:outputTime];
-    return result;
+static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [(__bridge BigFontView*)displayLinkContext setNeedsDisplay:YES];
+    });
+    return kCVReturnSuccess;
 }
 - (void) setupDisplayLink{
 	// Create a display link capable of being used with all active displays
@@ -106,19 +109,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	
 	// Set the renderer output callback function
 	CVDisplayLinkSetOutputCallback(displayLink, &MyDisplayLinkCallback, (__bridge void *)(self));
-}
-- (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime{
     
-    @autoreleasepool {
-        [self display];
-    }
     
-    return kCVReturnSuccess;
 }
+
 - (void) startAnimation{
     isAnimating=true;
-	if (displayLink && !CVDisplayLinkIsRunning(displayLink))
+	if (displayLink && !CVDisplayLinkIsRunning(displayLink)){
 		CVDisplayLinkStart(displayLink);
+    }
+    
+
 }
 - (void) stopAnimation{
     isAnimating=false;
@@ -143,6 +144,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         renderDimensions = NSMakeSize(640, 480);
     }else   if ([[NSUserDefaults standardUserDefaults] integerForKey:@"outputResolution"] == 2){
         renderDimensions = NSMakeSize(1024, 768);
+    }else   if ([[NSUserDefaults standardUserDefaults] integerForKey:@"outputResolution"] == 3){
+        CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
+        renderDimensions = NSMakeSize((int)CGDisplayModeGetWidth(currentMode)
+                                      , (int)CGDisplayModeGetHeight(currentMode));
     }
      NSImage *drawIntoImage = [[NSImage alloc] initWithSize:renderDimensions];
     [drawIntoImage lockFocus];
@@ -558,7 +563,6 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
 
 // Typing timer
 -(void)incrementRange{
-    
     // Exit if paused
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectPause"]){return;}
     
@@ -661,7 +665,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     NSLog(@"START Timer: %f",timerFires);
     dispatch_async(dispatch_get_main_queue(), ^{
         typingTimer = [NSTimer scheduledTimerWithTimeInterval:timerFires target:self selector:@selector(incrementRange) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:typingTimer forMode:NSDefaultRunLoopMode];
+        [[NSRunLoop currentRunLoop] addTimer:typingTimer forMode:NSEventTrackingRunLoopMode];
     });
     _rangeMax=0;
     

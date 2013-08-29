@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "AppDistributed.h"
 #import "AppController.h"
+#import "MIDIController.h"
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -52,6 +53,8 @@
     // Replaced with Syphon
     //[[AppDistributed sharedInstance] setNamespace:@"sinlab.ch" andApplicationID:[[NSUserDefaults standardUserDefaults] valueForKey:@"publishID"]];
     
+    // MIDI controller
+    midiController = [[MIDIController alloc] init];
     
 }
 

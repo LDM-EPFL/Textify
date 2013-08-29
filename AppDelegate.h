@@ -8,9 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import <CoreVideo/CoreVideo.h>
+@class MIDIController;
 
-
-@interface AppDelegate : NSObject <NSApplicationDelegate>{}
+@interface AppDelegate : NSObject <NSApplicationDelegate>{
+ MIDIController *midiController;
+}
 
 
 // Auto generated getter/setters
