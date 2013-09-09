@@ -19,6 +19,8 @@ CWL_DECLARE_SINGLETON_FOR_CLASS(AppCommon)
 // Custom properties for this ap
 @property NSImage * screenShot;
 @property bool isFullscreen;
+@property bool externalModeAvailable;
+@property bool slicerModeAvailable;
 @property BigFontView *fontViewController;
 @property NSWindow* mainWindow;
 @property NSMutableDictionary *midiMappings;

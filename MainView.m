@@ -7,7 +7,9 @@
 //
 
 #import "MainView.h"
-#import "AppDistributed.h"
+#import "AppDelegate.h"
+#import "TextSlice.h"
+#import "AppController.h"
 
 #import "AppCommon.h"
 @implementation MainView
@@ -25,59 +27,11 @@ NSString *previousLoadString;
 
 
 
-
-
-
-
-
-
-
--(void)updateState{
-    [_pubImage setImage:[[AppCommon sharedAppCommon] screenShot]];
-    [_pubImage setNeedsDisplay:YES];
-    
-    
-    if([[[NSUserDefaults standardUserDefaults] valueForKey:@"externalFilename"] length] !=0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"f_watchFile"]){
-                
-        NSError* error = nil;
-         NSURL *url = [[NSURL alloc] initWithString:[[NSUserDefaults standardUserDefaults] valueForKey:@"externalFilename"]];
-        NSString* string = [NSString stringWithContentsOfURL:url  encoding:NSUTF8StringEncoding error:&error];
-        
-        if(![string isEqualToString:previousLoadString]){
-            NSLog(@"Something changed!");
-            [_windowedTextView stopTimer];
-            if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffect"]){
-                [_windowedTextView startTimer];
-            }
-    
-        }
-        
-        previousLoadString = string;
-        if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_stripLinebreaks"]){
-            NSCharacterSet *charactersToRemove =
-            [[ NSCharacterSet alphanumericCharacterSet ] invertedSet ];
-            
-            string =
-            [[ string componentsSeparatedByCharactersInSet:charactersToRemove ]
-             componentsJoinedByString:@" " ];
-        }
-        
-         [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"f_watchFile"];
-        [[NSUserDefaults standardUserDefaults] setValue:string forKey:@"displayText"];
-        
-    
-    }else{
-        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_watchFile"];
-    }
-    
-}
-
 -(void) awakeFromNib{
     //Accept Drag and Drop
     //[self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
     
     // Timer to poll external file
-    NSLog(@"Launching timer...");
     NSTimer* pollFile = [NSTimer scheduledTimerWithTimeInterval:1/2 target:self selector:@selector(updateState) userInfo:nil repeats:YES];
     [[NSRunLoop mainRunLoop] addTimer:pollFile forMode:NSRunLoopCommonModes];
     
@@ -101,6 +55,9 @@ NSString *previousLoadString;
 // Keyboard handling
 ///////////////////////////////////////////////////////////////////////
 - (void)keyDown:(NSEvent *)event{
+    
+    NSLog(@"Keyboard shortcuts disabled...");
+    return;
     
     float max_scrollRate = 100;
     float min_scrollRate = -100;

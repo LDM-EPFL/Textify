@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "491BD7CB16BBF0560012A5E1"
-               BuildableName = "CyborgameSubtitler.app"
-               BlueprintName = "CyborgameSubtitler"
-               ReferencedContainer = "container:CyborgameSubtitler.xcodeproj">
+               BuildableName = "Textify.app"
+               BlueprintName = "Textify"
+               ReferencedContainer = "container:Textify.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "491BD7CB16BBF0560012A5E1"
-            BuildableName = "CyborgameSubtitler.app"
-            BlueprintName = "CyborgameSubtitler"
-            ReferencedContainer = "container:CyborgameSubtitler.xcodeproj">
+            BuildableName = "Textify.app"
+            BlueprintName = "Textify"
+            ReferencedContainer = "container:Textify.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "491BD7CB16BBF0560012A5E1"
-            BuildableName = "CyborgameSubtitler.app"
-            BlueprintName = "CyborgameSubtitler"
-            ReferencedContainer = "container:CyborgameSubtitler.xcodeproj">
+            BuildableName = "Textify.app"
+            BlueprintName = "Textify"
+            ReferencedContainer = "container:Textify.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "491BD7CB16BBF0560012A5E1"
-            BuildableName = "CyborgameSubtitler.app"
-            BlueprintName = "CyborgameSubtitler"
-            ReferencedContainer = "container:CyborgameSubtitler.xcodeproj">
+            BuildableName = "Textify.app"
+            BlueprintName = "Textify"
+            ReferencedContainer = "container:Textify.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

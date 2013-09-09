@@ -9,7 +9,6 @@
 //
 
 #import "AppController.h"
-#import "AppDistributed.h"
 #import "AppCommon.h"
 #import "BigFontView.h"
 @implementation AppController
@@ -26,6 +25,9 @@ static int currentScreen_height;
 static int currentScreen_rate;
 static int currentScreen_depth;
 static BOOL allowResolutionChange;
+
+#define fequal(a,b) (fabs((a) - (b)) < FLT_EPSILON)
+#define fequalzero(a) (fabs(a) < FLT_EPSILON)
 
 ///////////////////////////////////////////////////////////
 // NSView
@@ -173,7 +175,8 @@ bool f_dockedMode=false;
 // Be careful with this, it is truly global (will capture even if in a textbox, for example)
 -(void)globalKeyboardHandler{
     
-    
+    NSLog(@"Global keyboard shortcuts disabled...");
+    return;
     
     // Global keyboard handler.
     NSEvent * (^monitorHandler)(NSEvent *);
@@ -215,8 +218,9 @@ bool f_dockedMode=false;
                         BOOL destinationFound=false;
                         for(NSScreen *foundScreen in [NSScreen screens]){
                             // Skip the screen we're on
-                            if   (!(foundScreen.frame.origin.x == stageWindow.screen.frame.origin.x
-                                    && foundScreen.frame.origin.y == stageWindow.screen.frame.origin.y)){
+                            
+                            if   (!(fequal(foundScreen.frame.origin.x,stageWindow.screen.frame.origin.x)
+                                    && fequal(foundScreen.frame.origin.y,stageWindow.screen.frame.origin.y))){
                                 
                                 // Locate the screen that is above/below/left/right of me
                                 if(
@@ -237,7 +241,8 @@ bool f_dockedMode=false;
                                     
                                     
                                     // Request fullscreen for non-control windows
-                                    if (foundScreen.frame.origin.x == controlWindow.screen.frame.origin.x && foundScreen.frame.origin.y == controlWindow.screen.frame.origin.y){
+                                    if (fequal(foundScreen.frame.origin.x,controlWindow.screen.frame.origin.x)
+                                        && fequal(foundScreen.frame.origin.y,controlWindow.screen.frame.origin.y)){
                                         [[[AppCommon sharedAppCommon] fontViewController] goWindowed];
                                         [self resetWindows];
                                     }else{
@@ -422,7 +427,9 @@ bool f_dockedMode=false;
     // Treat everything except .settings as a text file
     if (![extension isEqualToString:@"settings"]){
         [[NSUserDefaults standardUserDefaults] setValue:[[NSURL URLFromPasteboard: [sender draggingPasteboard]] absoluteString] forKey:@"externalFilename"];
+        [[NSUserDefaults standardUserDefaults] setValue:[[[NSUserDefaults standardUserDefaults] valueForKey:@"externalFilename"] lastPathComponent] forKey:@"externalFilenameWithoutPath"];
         [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"f_watchFile"];
+        [[NSUserDefaults standardUserDefaults] setInteger:2 forKey:@"inputSource"];
         return true;
     }else{
         
@@ -477,6 +484,9 @@ bool f_dockedMode=false;
 // UGH! This is NOT the way to do this, but I don't want to break existing settings files
 +(BOOL)allowedKey:(NSString*)key{
     return (
+            
+        [key isEqualToString:@"externalFilename"] ||
+            
         [key isEqualToString:@"global_translateX"] ||
         [key isEqualToString:@"global_translateY"] ||
             
@@ -499,12 +509,13 @@ bool f_dockedMode=false;
         [key isEqualToString:@"textFile"] ||
         [key isEqualToString:@"f_publishImage"] ||
         [key isEqualToString:@"f_mirrorText"] ||
-        
+
+        [key isEqualToString:@"f_lockScrollOptions"] ||
         [key isEqualToString:@"f_scroll"] ||
         [key isEqualToString:@"f_centerTextv"] ||
         [key isEqualToString:@"scrollRate"] ||
         [key isEqualToString:@"f_scrollPause"] ||
-        [key isEqualToString:@"f_watchFile"] ||
+        //[key isEqualToString:@"f_watchFile"] ||
         [key isEqualToString:@"scaleFactor"] ||
         [key isEqualToString:@"colorFontShadow"] ||
         [key isEqualToString:@"f_scaleTextType"] ||
@@ -527,6 +538,10 @@ bool f_dockedMode=false;
         [key isEqualToString:@"outputResolution"] ||
         [key isEqualToString:@"f_transparentBackground"] ||
             
+            
+        [key isEqualToString:@"inputSource"] ||
+         [key isEqualToString:@"textSliceFilename"] ||
+         [key isEqualToString:@"textSliceFilenameWithoutPath"] ||            
             
         [key isEqualToString:@"globalPosition_0"] ||
         [key isEqualToString:@"globalPosition_1"] ||

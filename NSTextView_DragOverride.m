@@ -11,5 +11,14 @@
 
 @implementation NSTextView_DragOverride
 
+/*
+-(void)awakeFromNib{
+    NSLog(@"hello");
+    [[self textContainer] setContainerSize:NSMakeSize(FLT_MAX, FLT_MAX)];
+    [[self textContainer] setWidthTracksTextView:NO];
+    [self setHorizontallyResizable:YES];
+}
+ */
+
 -(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {return [AppController performDragOperation:sender];}
 @end

@@ -35,17 +35,18 @@
 		495367AA17CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 495367A817CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist */; };
 		495367AE17CF5C90005EE119 /* AppCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 495367AD17CF5C90005EE119 /* AppCommon.m */; };
 		4956688417976E5600F5DEF2 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4956688317976E5600F5DEF2 /* PreviewView.m */; };
+		4964FDE317DCB49D0092E542 /* textify.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4964FDE217DCB49D0092E542 /* textify.icns */; };
 		4969723F17CAAA2F0043E260 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4969723E17CAAA2F0043E260 /* Syphon.framework */; };
-		49781BA3179D61A500FBAFAE /* AppDistributed.m in Sources */ = {isa = PBXBuildFile; fileRef = 49781BA2179D61A500FBAFAE /* AppDistributed.m */; };
 		4987A38916C322C20035FB17 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4987A38816C322C20035FB17 /* Security.framework */; };
 		4988878417860563007F0413 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4988878317860563007F0413 /* MainView.m */; };
-		498F2D8417CE141200A38674 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 498F2D8317CE141200A38674 /* icon.icns */; };
+		498DA26D17DB78D80060F022 /* TextSliceScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA26C17DB78D80060F022 /* TextSliceScrollView.m */; };
 		498F2D8A17CE1B8500A38674 /* SCRATCH in Resources */ = {isa = PBXBuildFile; fileRef = 498F2D8917CE1B8500A38674 /* SCRATCH */; };
 		498F2D8D17CE2A8300A38674 /* NSTextView_NoDrag.m in Sources */ = {isa = PBXBuildFile; fileRef = 498F2D8C17CE2A8300A38674 /* NSTextView_NoDrag.m */; };
 		498F2D9017CE2B2300A38674 /* NSTextView_DragOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 498F2D8F17CE2B2200A38674 /* NSTextView_DragOverride.m */; };
 		49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */; };
 		49BD02D117CEBF4B00CF064E /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 49BD02D017CEBF4B00CF064E /* Assets */; };
 		49BF395217842D910045361C /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BF395117842D910045361C /* AppController.m */; };
+		49CCB37317DB28E5009925EF /* TextSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CCB37217DB28E5009925EF /* TextSlice.m */; };
 		49CF9AA117CBEBF600449D9B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4969723E17CAAA2F0043E260 /* Syphon.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,7 +66,7 @@
 /* Begin PBXFileReference section */
 		4907B3B3175FA3290042E1C8 /* BigFontView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BigFontView.h; sourceTree = "<group>"; };
 		4907B3B4175FA3290042E1C8 /* BigFontView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BigFontView.m; sourceTree = "<group>"; };
-		491BD7CC16BBF0560012A5E1 /* CyborgameSubtitler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CyborgameSubtitler.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		491BD7CC16BBF0560012A5E1 /* Textify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Textify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		491BD7D016BBF0560012A5E1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		491BD7D316BBF0560012A5E1 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		491BD7D416BBF0560012A5E1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -79,7 +80,6 @@
 		493684D0179D47E800BE8384 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		493684D3179D480100BE8384 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = SOURCE_ROOT; };
 		493684D5179D480100BE8384 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
-		493684D8179D480800BE8384 /* CyborgameSubtitler-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CyborgameSubtitler-Info.plist"; sourceTree = SOURCE_ROOT; };
 		493684DB179D48D600BE8384 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = SOURCE_ROOT; };
 		493D642417173DC600E51A6F /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
 		493D642617173DCD00E51A6F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
@@ -98,13 +98,14 @@
 		495367AD17CF5C90005EE119 /* AppCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCommon.m; sourceTree = "<group>"; };
 		4956688217976E5600F5DEF2 /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
 		4956688317976E5600F5DEF2 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
+		4964FDE217DCB49D0092E542 /* textify.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = textify.icns; sourceTree = "<group>"; };
 		4969723E17CAAA2F0043E260 /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Syphon.framework; path = "../../SDK:Samples/Syphon SDK Public Beta 2/Syphon.framework"; sourceTree = "<group>"; };
-		49781BA1179D61A500FBAFAE /* AppDistributed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDistributed.h; path = ../PerformanceSpace/src/main/AppDistributed.h; sourceTree = "<group>"; };
-		49781BA2179D61A500FBAFAE /* AppDistributed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDistributed.m; path = ../PerformanceSpace/src/main/AppDistributed.m; sourceTree = "<group>"; };
 		4987A38816C322C20035FB17 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		4988878217860563007F0413 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		4988878317860563007F0413 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
-		498F2D8317CE141200A38674 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = SOURCE_ROOT; };
+		498DA26A17DB71A50060F022 /* Textify-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Textify-Info.plist"; sourceTree = SOURCE_ROOT; };
+		498DA26B17DB78D80060F022 /* TextSliceScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSliceScrollView.h; sourceTree = SOURCE_ROOT; };
+		498DA26C17DB78D80060F022 /* TextSliceScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSliceScrollView.m; sourceTree = SOURCE_ROOT; };
 		498F2D8817CE16D800A38674 /* CWLSynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWLSynthesizeSingleton.h; sourceTree = SOURCE_ROOT; };
 		498F2D8917CE1B8500A38674 /* SCRATCH */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SCRATCH; sourceTree = "<group>"; };
 		498F2D8B17CE2A8300A38674 /* NSTextView_NoDrag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_NoDrag.h; sourceTree = SOURCE_ROOT; };
@@ -116,6 +117,8 @@
 		49BD02D017CEBF4B00CF064E /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		49BF395017842D910045361C /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		49BF395117842D910045361C /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
+		49CCB37117DB28E5009925EF /* TextSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSlice.h; sourceTree = SOURCE_ROOT; };
+		49CCB37217DB28E5009925EF /* TextSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSlice.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,7 +154,7 @@
 		491BD7C116BBF0560012A5E1 = {
 			isa = PBXGroup;
 			children = (
-				495367A417CF5BD3005EE119 /* CoreMIDI.framework */,
+				4964FDE217DCB49D0092E542 /* textify.icns */,
 				498F2D8917CE1B8500A38674 /* SCRATCH */,
 				495367AB17CF5C02005EE119 /* MIDI */,
 				498F2D8217CE13CE00A38674 /* App */,
@@ -168,7 +171,7 @@
 		491BD7CD16BBF0560012A5E1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				491BD7CC16BBF0560012A5E1 /* CyborgameSubtitler.app */,
+				491BD7CC16BBF0560012A5E1 /* Textify.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -178,13 +181,16 @@
 			children = (
 				498F2D8817CE16D800A38674 /* CWLSynthesizeSingleton.h */,
 				493684DA179D48D600BE8384 /* MainMenu.xib */,
+				498DA26B17DB78D80060F022 /* TextSliceScrollView.h */,
+				498DA26C17DB78D80060F022 /* TextSliceScrollView.m */,
+				49CCB37117DB28E5009925EF /* TextSlice.h */,
+				49CCB37217DB28E5009925EF /* TextSlice.m */,
 				498F2D8B17CE2A8300A38674 /* NSTextView_NoDrag.h */,
 				498F2D8E17CE2B2200A38674 /* NSTextView_DragOverride.h */,
 				498F2D8F17CE2B2200A38674 /* NSTextView_DragOverride.m */,
 				498F2D8C17CE2A8300A38674 /* NSTextView_NoDrag.m */,
-				498F2D8317CE141200A38674 /* icon.icns */,
 				493684D2179D480100BE8384 /* Credits.rtf */,
-				493684D8179D480800BE8384 /* CyborgameSubtitler-Info.plist */,
+				498DA26A17DB71A50060F022 /* Textify-Info.plist */,
 				493684D4179D480100BE8384 /* InfoPlist.strings */,
 				493684D0179D47E800BE8384 /* main.m */,
 				491BD7E816BBF0570012A5E1 /* SinK3.xcdatamodeld */,
@@ -220,13 +226,11 @@
 			isa = PBXGroup;
 			children = (
 				493684CE179D479A00BE8384 /* AppDelegate.h */,
+				493684CD179D479A00BE8384 /* AppDelegate.m */,
 				495367AC17CF5C90005EE119 /* AppCommon.h */,
 				495367AD17CF5C90005EE119 /* AppCommon.m */,
 				49BF395017842D910045361C /* AppController.h */,
 				49BF395117842D910045361C /* AppController.m */,
-				49781BA1179D61A500FBAFAE /* AppDistributed.h */,
-				49781BA2179D61A500FBAFAE /* AppDistributed.m */,
-				493684CD179D479A00BE8384 /* AppDelegate.m */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -234,6 +238,7 @@
 		49D319951718A798001FE074 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				495367A417CF5BD3005EE119 /* CoreMIDI.framework */,
 				4969723E17CAAA2F0043E260 /* Syphon.framework */,
 				493D642417173DC600E51A6F /* Accelerate.framework */,
 				491BD7D316BBF0560012A5E1 /* AppKit.framework */,
@@ -259,9 +264,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		491BD7CB16BBF0560012A5E1 /* CyborgameSubtitler */ = {
+		491BD7CB16BBF0560012A5E1 /* Textify */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 491BD7ED16BBF0570012A5E1 /* Build configuration list for PBXNativeTarget "CyborgameSubtitler" */;
+			buildConfigurationList = 491BD7ED16BBF0570012A5E1 /* Build configuration list for PBXNativeTarget "Textify" */;
 			buildPhases = (
 				491BD7C816BBF0560012A5E1 /* Sources */,
 				491BD7C916BBF0560012A5E1 /* Frameworks */,
@@ -272,9 +277,9 @@
 			);
 			dependencies = (
 			);
-			name = CyborgameSubtitler;
+			name = Textify;
 			productName = SinK3;
-			productReference = 491BD7CC16BBF0560012A5E1 /* CyborgameSubtitler.app */;
+			productReference = 491BD7CC16BBF0560012A5E1 /* Textify.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -286,7 +291,7 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Vox Fera";
 			};
-			buildConfigurationList = 491BD7C616BBF0560012A5E1 /* Build configuration list for PBXProject "CyborgameSubtitler" */;
+			buildConfigurationList = 491BD7C616BBF0560012A5E1 /* Build configuration list for PBXProject "Textify" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -298,7 +303,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				491BD7CB16BBF0560012A5E1 /* CyborgameSubtitler */,
+				491BD7CB16BBF0560012A5E1 /* Textify */,
 			);
 		};
 /* End PBXProject section */
@@ -311,10 +316,10 @@
 				493684D6179D480100BE8384 /* Credits.rtf in Resources */,
 				493684D7179D480100BE8384 /* InfoPlist.strings in Resources */,
 				493684DC179D48D600BE8384 /* MainMenu.xib in Resources */,
-				498F2D8417CE141200A38674 /* icon.icns in Resources */,
 				498F2D8A17CE1B8500A38674 /* SCRATCH in Resources */,
 				49BD02D117CEBF4B00CF064E /* Assets in Resources */,
 				495367AA17CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist in Resources */,
+				4964FDE317DCB49D0092E542 /* textify.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,12 +337,13 @@
 				4956688417976E5600F5DEF2 /* PreviewView.m in Sources */,
 				493684CF179D479A00BE8384 /* AppDelegate.m in Sources */,
 				493684D1179D47E800BE8384 /* main.m in Sources */,
-				49781BA3179D61A500FBAFAE /* AppDistributed.m in Sources */,
 				49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */,
 				498F2D8D17CE2A8300A38674 /* NSTextView_NoDrag.m in Sources */,
 				498F2D9017CE2B2300A38674 /* NSTextView_DragOverride.m in Sources */,
 				495367A917CF5BF8005EE119 /* MIDIController.m in Sources */,
 				495367AE17CF5C90005EE119 /* AppCommon.m in Sources */,
+				49CCB37317DB28E5009925EF /* TextSlice.m in Sources */,
+				498DA26D17DB78D80060F022 /* TextSliceScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,7 +470,7 @@
 					/usr/local/include,
 					/opt/local/include/,
 				);
-				INFOPLIST_FILE = "CyborgameSubtitler-Info.plist";
+				INFOPLIST_FILE = "Textify-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
@@ -472,8 +478,9 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = CyborgameSubtitler;
+				PRODUCT_NAME = Textify;
 				SDKROOT = macosx10.8;
+				WARNING_CFLAGS = "-Wfloat-equal";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -495,7 +502,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "CyborgameSubtitler-Info.plist";
+				INFOPLIST_FILE = "Textify-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
@@ -503,8 +510,9 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = CyborgameSubtitler;
+				PRODUCT_NAME = Textify;
 				SDKROOT = macosx10.8;
+				WARNING_CFLAGS = "-Wfloat-equal";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = "";
 			};
@@ -513,7 +521,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		491BD7C616BBF0560012A5E1 /* Build configuration list for PBXProject "CyborgameSubtitler" */ = {
+		491BD7C616BBF0560012A5E1 /* Build configuration list for PBXProject "Textify" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				491BD7EB16BBF0570012A5E1 /* Debug */,
@@ -522,7 +530,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		491BD7ED16BBF0570012A5E1 /* Build configuration list for PBXNativeTarget "CyborgameSubtitler" */ = {
+		491BD7ED16BBF0570012A5E1 /* Build configuration list for PBXNativeTarget "Textify" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				491BD7EE16BBF0570012A5E1 /* Debug */,

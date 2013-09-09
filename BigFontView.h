@@ -15,12 +15,15 @@
 	NSOpenGLPixelFormat *pixelFormat;
     SyphonServer *syphonServer;
     
+    double currentTimerRate;
+    
     NSSize original_size;
     bool f_fullscreenMode;
     NSTimer *typingTimer;
     GLuint glTex_floor;
     GLuint texName;
     NSSize renderDimensions;
+    NSString* previousLoadString;
 }
 
 - (void) startAnimation;
@@ -28,7 +31,8 @@
 - (void) goFullscreen;
 - (void) goWindowed;
 - (void) stopTimer;
-- (void) startTimer;
+- (void) resetTimer;
+
 
 typedef enum scrollDirectionTypes{
     HORIZONTAL,

@@ -10,15 +10,19 @@
 #import <CoreVideo/CoreVideo.h>
 @class MIDIController;
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>{
- MIDIController *midiController;
+@interface AppDelegate : NSObject <NSApplicationDelegate,NSTabViewDelegate>{
+    MIDIController *midiController;
+    __strong NSArrayController *_slicedText;
 }
 
-
++(void)saveSliceFile;
++(void)loadSliceFileFromPath:(NSString*)path;
 // Auto generated getter/setters
+@property (strong) IBOutlet NSCollectionView *slicedTextCollection;
 @property (assign) IBOutlet NSWindow *window;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
+@property  (strong) IBOutlet NSArrayController *slicedText;
 @end

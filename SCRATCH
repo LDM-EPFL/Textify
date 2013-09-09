@@ -1,3 +1,5 @@
+representedObject.displayText
+
 -(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
     
     if ( [sender draggingSource] != self ) {
