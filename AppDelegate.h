@@ -8,11 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 #import <CoreVideo/CoreVideo.h>
-@class MIDIController;
+@class FRMIDIInput;
+@class FRMIDIConfigController;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate,NSTabViewDelegate>{
-    MIDIController *midiController;
     __strong NSArrayController *_slicedText;
+    
+    // MIDI
+    FRMIDIInput *midiInput;
+    
+     IBOutlet NSWindow *prefsWindow;
 }
 
 +(void)saveSliceFile;
@@ -25,4 +30,8 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @property  (strong) IBOutlet NSArrayController *slicedText;
+
+@property (weak) IBOutlet FRMIDIConfigController *midiConfigController;
+@property (unsafe_unretained) IBOutlet NSProgressIndicator *progressBar;
+@property (unsafe_unretained) IBOutlet NSButton *cancelLoad;
 @end

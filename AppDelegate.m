@@ -8,7 +8,8 @@
 
 #import "AppDelegate.h"
 #import "AppController.h"
-#import "MIDIController.h"
+#import "FRAppCommon.h"
+#import "FRMIDIInput.h"
 #import "TextSlice.h"
 
 /////////////////////////////////////////////////////////////////////////
@@ -22,6 +23,11 @@
 @synthesize managedObjectContext = _managedObjectContext;
 
 //////////////////////////////////////////////////////////////////////
+
+- (IBAction)launchPreferences:(id)sender {
+    [prefsWindow makeKeyAndOrderFront:self];
+    [prefsWindow center];
+}
 
 - (IBAction)FontButton:(id)sender {
     
@@ -50,11 +56,12 @@
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:file];
     [preferences registerDefaults:dict];
     
-    // Replaced with Syphon
-    //[[AppDistributed sharedInstance] setNamespace:@"sinlab.ch" andApplicationID:[[NSUserDefaults standardUserDefaults] valueForKey:@"publishID"]];
-    
     // MIDI controller
-    //midiController = [[MIDIController alloc] init];
+    [[FRAppCommon sharedFRAppCommon] setMidiConfigController:_midiConfigController];
+     midiInput = [[FRMIDIInput alloc] init];
+    
+    [_cancelLoad setHidden:TRUE];
+    [_progressBar setHidden:TRUE];
 
 }
 
@@ -69,14 +76,14 @@
          int selectionIndex = (int)[[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedTextCollection] selectionIndexes] firstIndex];        int arrayCount = (int)[[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects] count];
         if(selectionIndex < 0 || arrayCount < selectionIndex || arrayCount==0){
             [AppController alertUser:@"Text Slicer Mode" info:@"To activate, drag a text file onto the TextSlicer to the right."];
-           
             return NO;
         }
-    }else if (requestedIndex == 2){
-        [self ensmallen];
+    }else if (requestedIndex == 2){        
         if([[[NSUserDefaults standardUserDefaults] valueForKey:@"externalFilename"] length] ==0){
             [AppController alertUser:@"External File Mode" info:@"To activate, drag a text file onto the display below."];
             return NO;
+        }else{
+            [self ensmallen];
         }
     }
     
@@ -156,17 +163,17 @@
 }
 
 +(void)loadSliceFileFromPath:(NSString*)path{
-    // Clear the array
-    NSRange range = NSMakeRange(0, [[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects] count]);
-    [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+
     
-    [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] rearrangeObjects];
+    //[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] rearrangeObjects];
     
     // Split the file on newlines
     NSString *contents = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     NSArray *splitContents = [contents componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]];
     
     // Grab the blocks between newlines (we do it this way so it should work with all kinds of newlines)
+   
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     NSString *blockAggregator;
     for(NSString* textChunk in splitContents){
         
@@ -204,6 +211,8 @@
             }
         }
     }
+    //});
+    
     [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedTextCollection] setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]];
 }
 - (IBAction)watchfile_clear:(id)sender {

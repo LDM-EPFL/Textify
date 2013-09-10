@@ -11,7 +11,7 @@
 #import "TextSlice.h"
 #import "AppController.h"
 
-#import "AppCommon.h"
+#import "FRAppCommon.h"
 @implementation MainView
 
 

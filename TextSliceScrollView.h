@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface TextSliceScrollView : NSScrollView <NSDraggingDestination>{}
+@interface TextSliceScrollView : NSScrollView <NSDraggingDestination>{
+}
 
 @end

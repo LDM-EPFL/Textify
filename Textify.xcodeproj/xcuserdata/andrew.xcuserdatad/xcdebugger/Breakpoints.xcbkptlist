@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "400375408.002538"
+         timestampString = "400462566.802729"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "622"
-         endingLineNumber = "622"
+         startingLineNumber = "623"
+         endingLineNumber = "623"
          landmarkName = "-drawViewOfSize:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "400375408.002538"
+         timestampString = "400462566.802729"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "629"
-         endingLineNumber = "629"
+         startingLineNumber = "630"
+         endingLineNumber = "630"
          landmarkName = "-drawViewOfSize:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -56,7 +56,7 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "MainView.m"
@@ -86,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "400375408.002538"
+         timestampString = "400462566.802729"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "840"
-         endingLineNumber = "840"
+         startingLineNumber = "839"
+         endingLineNumber = "839"
          landmarkName = "-createWindowTexture:mainDrawingContext:width:height:originX:originY:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -99,11 +99,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "400375408.002538"
+         timestampString = "400462566.802729"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "859"
-         endingLineNumber = "859"
+         startingLineNumber = "858"
+         endingLineNumber = "858"
          landmarkName = "-createWindowTexture:mainDrawingContext:width:height:originX:originY:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -164,11 +164,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "400375408.002538"
+         timestampString = "400462566.802729"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "475"
-         endingLineNumber = "475"
+         startingLineNumber = "476"
+         endingLineNumber = "476"
          landmarkName = "-drawViewOfSize:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -190,11 +190,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "400375408.002538"
+         timestampString = "400462566.802729"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "806"
-         endingLineNumber = "806"
+         startingLineNumber = "805"
+         endingLineNumber = "805"
          landmarkName = "-resetTimer"
          landmarkType = "5">
       </FileBreakpoint>
@@ -216,11 +216,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BigFontView.m"
-         timestampString = "400375408.002538"
+         timestampString = "400462566.802729"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "749"
-         endingLineNumber = "749"
+         startingLineNumber = "748"
+         endingLineNumber = "748"
          landmarkName = "-incrementRange"
          landmarkType = "5">
       </FileBreakpoint>
@@ -255,12 +255,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "AppDelegate.m"
-         timestampString = "400375138.381854"
+         timestampString = "400463461.119372"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "63"
-         endingLineNumber = "63"
+         startingLineNumber = "70"
+         endingLineNumber = "70"
          landmarkName = "-tabView:shouldSelectTabViewItem:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "AppDelegate.m"
+         timestampString = "400463937.755415"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "167"
+         endingLineNumber = "167"
+         landmarkName = "+loadSliceFileFromPath:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

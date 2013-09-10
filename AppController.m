@@ -9,7 +9,7 @@
 //
 
 #import "AppController.h"
-#import "AppCommon.h"
+#import "FRAppCommon.h"
 #import "BigFontView.h"
 @implementation AppController
 
@@ -120,7 +120,7 @@ bool f_dockedMode=false;
 -(void)awakeFromNib{
     //Global keyboard handler
     [self globalKeyboardHandler];
-    [[AppCommon sharedAppCommon] setMainWindow:controlWindow];
+    [[FRAppCommon sharedFRAppCommon] setMainWindow:controlWindow];
     
     
     // When we switch to fullscreen, change resolution to this
@@ -243,7 +243,7 @@ bool f_dockedMode=false;
                                     // Request fullscreen for non-control windows
                                     if (fequal(foundScreen.frame.origin.x,controlWindow.screen.frame.origin.x)
                                         && fequal(foundScreen.frame.origin.y,controlWindow.screen.frame.origin.y)){
-                                        [[[AppCommon sharedAppCommon] fontViewController] goWindowed];
+                                        [[[FRAppCommon sharedFRAppCommon] fontViewController] goWindowed];
                                         [self resetWindows];
                                     }else{
                                         //Move the window
@@ -251,7 +251,7 @@ bool f_dockedMode=false;
                                         [stageWindow setFrameOrigin:foundScreen.frame.origin];
                                         [stageWindow center];
                                         destinationFound=true;
-                                        [[[AppCommon sharedAppCommon] fontViewController] goFullscreen];
+                                        [[[FRAppCommon sharedFRAppCommon] fontViewController] goFullscreen];
                                     }
                                     
                                     
@@ -264,7 +264,7 @@ bool f_dockedMode=false;
                         // CMD+CTRL+ALT+R Reset display
                         }case 'R':case'r':{
                             
-                            [[[AppCommon sharedAppCommon] fontViewController] goWindowed];
+                            [[[FRAppCommon sharedFRAppCommon] fontViewController] goWindowed];
                             [self resetWindows];
                             
                             
@@ -370,7 +370,7 @@ bool f_dockedMode=false;
 // Pop up an alert
 +(void)alertUser:(NSString*)alertTitle info:(NSString*)alertMessage{
     //NSRunAlertPanel(alertTitle, alertMessage, @"Ok",nil,nil);
-    [self alertUserOnWindow:[[AppCommon sharedAppCommon] mainWindow]
+    [self alertUserOnWindow:[[FRAppCommon sharedFRAppCommon] mainWindow]
                  alertTitle:alertTitle
                        info:alertMessage];
 }
@@ -448,7 +448,7 @@ bool f_dockedMode=false;
             // Reset a few things
             [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
             [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
-            [[[AppCommon sharedAppCommon] fontViewController] stopTimer];
+            [[[FRAppCommon sharedFRAppCommon] fontViewController] stopTimer];
             
             // Some junk in here to support old settings files
             BOOL fontCheckPerformed=FALSE;

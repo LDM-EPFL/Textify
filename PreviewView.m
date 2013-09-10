@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Vox Fera. All rights reserved.
 //
 #import "PreviewView.h"
-#import "AppCommon.h"
+#import "FRAppCommon.h"
 #import "AppController.h"
 
 // Fixes NSLOG (removes timestamp)

@@ -51,8 +51,20 @@
     
     // Is this a txt file?
     if ([extension isEqualToString:@"txt"]){
-      
-        [AppDelegate loadSliceFileFromPath:path];
+        
+        [[(AppDelegate *)[[NSApplication sharedApplication] delegate] cancelLoad] setHidden:FALSE];
+        [[(AppDelegate *)[[NSApplication sharedApplication] delegate] progressBar] setHidden:FALSE];
+
+        // Clear the array
+        NSRange range = NSMakeRange(0, [[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects] count]);
+        [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+        
+        
+            [AppDelegate loadSliceFileFromPath:path];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[(AppDelegate *)[[NSApplication sharedApplication] delegate] cancelLoad] setHidden:TRUE];
+                [[(AppDelegate *)[[NSApplication sharedApplication] delegate] progressBar] setHidden:TRUE];
+            });
 
         
         

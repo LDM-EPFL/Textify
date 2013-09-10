@@ -1,23 +1,28 @@
 //
 //  MIDIController.m
-//  PerformanceSpace
+//  SyMix
 //
 //  Created by Andrew on 7/25/13.
 //  Copyright (c) 2013 Vox Fera. All rights reserved.
 //
-#import "AppCommon.h"
-#import "MIDIController.h"
+#import "FRAppCommon.h"
+#import "FRMIDIInput.h"
+#import "FRMIDIConfigController.h"
+#import "FRMIDIMapping.h"
+#import "FRMIDIPublishedMethods.h"
 #include <CoreMIDI/CoreMIDI.h>
 
 // Fixes NSLOG (removes timestamp)
 #define NSLog(FORMAT, ...) fprintf(stderr,"%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
 
 
-@implementation MIDIController
+@implementation FRMIDIInput
 
 // Init
 - (id)init{
     if (self = [super init]){
+        
+        //NSLog(@"Init MIDIINPUT");
         NSError *error = nil;
         OSStatus result = 0;
         
@@ -27,11 +32,8 @@
             NSLog(@"MIDI: Error creating MIDI client");
            //%s - %s", GetMacOSStatusErrorString(result), GetMacOSStatusCommentString(result));
         }else{
-            NSLog(@"MIDI: Client Created");
+           // NSLog(@"MIDI: Client Created");
         }
-        
-        
-        
         
         error=nil;
         result = MIDIInputPortCreate(midiClient, CFSTR("Input"), midiInputCallback, NULL, &inputPort);
@@ -39,38 +41,129 @@
         if(result != noErr){
             NSLog(@"MIDI: FAILED! %@",error);
         }else{
-            NSLog(@"MIDI: Input Port Created");
+            //NSLog(@"MIDI: Input Port Created");
         }
         
         
         // List available devices
         //[self listDevices];
         
-        // Load MIDI configuration files
-        NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSBundle mainBundle] resourcePath] error:nil];
-        NSArray *plistFiles = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.plist'"]];
-        midiMappings=[[NSMutableDictionary alloc] init];
-        for(NSString* filename in plistFiles){
-            if ([filename rangeOfString:@"midimap"].location != NSNotFound) {
-                
-                NSString *configFileWithPath=[[NSString alloc] initWithFormat:@"%@/%@",[[NSBundle mainBundle] resourcePath],filename];
-                NSMutableDictionary* thisConfig = [[NSMutableDictionary alloc] initWithContentsOfFile:configFileWithPath];
-                
-                
-                [midiMappings setObject:thisConfig forKey:[thisConfig valueForKey:@"MIDISourceName"]];
-
-                // Try and attach device
-                [self connectToDeviceNamed:[thisConfig valueForKey:@"MIDISourceName"]];
-            }
-        }
+        // Loads the mappings from the XML on disk
+        [self reloadMidiMappings];
         
+        // Initializes the controller for the GUI that configures the MIDI
+        [[[FRAppCommon sharedFRAppCommon] midiConfigController] setMidiInput:self];
+        [[[FRAppCommon sharedFRAppCommon] midiConfigController] initializeMappings];
     
-        // Put settings in AppCommon -  We do this so we can access it via the C style callback below... kindof lame I know
-        [[AppCommon sharedAppCommon] setMidiMappings:midiMappings];
+    }        
+    return self;
+}
+
+
+// Load MIDI configuration files
+-(void)reloadMidiMappings{
     
+    
+    // Files should be in Application Support directory, but this lets us ship with defaults
+    NSArray *directory;
+    NSArray *plistFiles;
+    
+    // First look in App Support
+    NSArray *paths = NSSearchPathForDirectoriesInDomains
+    (NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationDirectory =  [paths objectAtIndex:0];
+    NSString *appName = [[NSProcessInfo processInfo] processName];
+    applicationDirectory = [NSString stringWithFormat:@"%@/%@",applicationDirectory,appName];
+    directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:applicationDirectory error:nil];
+    plistFiles = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.plist'"]];
+   
+    
+    // Not there? Read from bundle and save to app support
+    if ([plistFiles count] == 0){
+         NSLog(@"FRMIDI: Loading default MIDI configs from bundle (first time run?)");
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        [fileManager createDirectoryAtPath:applicationDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+        directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSBundle mainBundle] resourcePath] error:nil];
+        plistFiles = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.plist'"]];
     }
     
-    return self;
+    // Still can't find? Uh-oh
+    if ([plistFiles count] == 0){
+        NSLog(@"FRMIDI: Cannot locate any midi configuration files (in bundle or otherwise). I give up!");
+        return;
+    }
+    
+    
+    
+    
+    midiMappings=[[NSMutableDictionary alloc] init];
+    for(NSString* filename in plistFiles){
+        if ([filename rangeOfString:@"midimap"].location != NSNotFound) {
+            
+            NSString *configFileWithPath=[[NSString alloc] initWithFormat:@"%@/%@",[[NSBundle mainBundle] resourcePath],filename];
+            
+            NSMutableDictionary* thisConfig = [[NSMutableDictionary alloc] initWithContentsOfFile:configFileWithPath];
+            [thisConfig setValue:configFileWithPath forKey:@"filename"];
+            
+            [midiMappings setObject:thisConfig forKey:[thisConfig valueForKey:@"MIDISourceName"]];
+            
+            // Try and attach device
+            [self connectToDeviceNamed:[thisConfig valueForKey:@"MIDISourceName"]];
+        }
+    }
+    
+    // Make a lookup by method (used by mapping GUI)
+    int count=0;
+    NSMutableDictionary *settingsByMethod=[[NSMutableDictionary alloc] init];
+    for (NSString* controller in midiMappings){
+        //NSLog(@"%@",controller);
+        for (NSString* channel in [[midiMappings valueForKey:controller] valueForKey:@"CHANNEL"]){
+            for (NSString* messageType in [[[midiMappings valueForKey:controller] valueForKey:@"CHANNEL"] valueForKey:channel]){
+                //NSLog(@"%@:%@",channel,messageType);
+                
+                for (NSString* signalID in [[[[midiMappings valueForKey:controller] valueForKey:@"CHANNEL"] valueForKey:channel] valueForKey:messageType]){
+                    NSDictionary* aMapping = [[[[[midiMappings valueForKey:controller] valueForKey:@"CHANNEL"] valueForKey:channel] valueForKey:messageType] valueForKey:signalID];
+                    count++;
+                    [settingsByMethod setValue:[NSString stringWithFormat:@"%@/%@/%@/%@",controller, channel, messageType, signalID] forKey:[aMapping valueForKey:@"function"][0]];
+                    
+                }
+            }
+        }
+    }
+    
+    // Put settings and map in singleton so we can access it via the C style callback below...
+    [[FRAppCommon sharedFRAppCommon] setMidiMappings:midiMappings];
+    [[FRAppCommon sharedFRAppCommon] setMidiMappings_byMethod:settingsByMethod];
+
+    // Saves out a copy of the settings
+    [self saveSettingsToConfigFile];
+}
+
+// Save MIDI configuration files
+-(void)saveSettingsToConfigFile{
+    
+    // Save settings files in application support directory
+    NSArray *paths = NSSearchPathForDirectoriesInDomains
+    (NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationDirectory =  [paths objectAtIndex:0];
+    NSString *appName = [[NSProcessInfo processInfo] processName];
+    applicationDirectory = [NSString stringWithFormat:@"%@/%@",applicationDirectory,appName];
+    
+    
+    NSMutableDictionary* allTheSettings =[[FRAppCommon sharedFRAppCommon] midiMappings];
+    for(NSString* deviceName in allTheSettings){
+        NSMutableDictionary* settingsForDevice = [allTheSettings valueForKey:deviceName];
+        NSString* filename=[NSString stringWithFormat:@"%@/%@",applicationDirectory,[[settingsForDevice valueForKey:@"filename"] lastPathComponent]];
+        
+        // Temporarily remove the filename (so it doesn't get recorded to disk)
+        [settingsForDevice removeObjectForKey:@"filename"];
+        
+        // Save the file 
+        //NSLog(@"Saving: %@",filename);
+        [settingsForDevice writeToFile:filename atomically: YES];
+        [settingsForDevice setValue:filename forKey:@"filename"];
+    }
+    
 }
 
 // List all the devices
@@ -93,9 +186,7 @@
         if(entity){
             NSArray *nameOfDevice = [(__bridge NSDictionary *)entity valueForKey:@"name"];
             if([nameOfDevice count] > 0){
-                
                 NSString* deviceName = nameOfDevice[0];
-                                                               
                 NSLog(@"MIDI: Channel %i : Found %@",i,deviceName);
             }
         }
@@ -104,10 +195,8 @@
 
 // Make a connection
 -(void)connectToDeviceNamed:(NSString*)deviceNameToConnect{
-    
-    ItemCount numOfDevices = MIDIGetNumberOfDevices();
-    
-    for (int i = 0; i < numOfDevices; i++) {
+
+    for (int i = 0; i < MIDIGetNumberOfDevices(); i++) {
         MIDIDeviceRef midiDevicesOnChannel = MIDIGetDevice(i);
         
         // Get properties list
@@ -120,8 +209,6 @@
         
         // I cannot really believe this is the right way to do this, but it seems to work...
         if(entity){
-            
-
             OSStatus result;
             NSError * error;
             NSArray *nameOfDevice = [(__bridge NSDictionary *)entity valueForKey:@"name"];
@@ -134,15 +221,9 @@
                 NSArray *thisID = [(NSDictionary *)sources[0] valueForKey:@"uniqueID"];
                 deviceID = (MIDIUniqueID)[(NSNumber *)thisID[0] integerValue];
             }
-            
-            
-            
-            
+
             if([nameOfDevice count] > 0 && [idOfDevice count] > 0){
-                
                 NSString* deviceName = nameOfDevice[0];
-                
-                
                 if ([deviceName isEqualToString:deviceNameToConnect]){
                     MIDIObjectRef endPoint;
                     MIDIObjectType foundObj;
@@ -158,11 +239,6 @@
                             NSLog(@"MIDI: CONNECT FAILED! %@",error);
                         }
                     }
-                                        
-                    
-                    
-                    
-                                        
                 }
             }
         }
@@ -173,7 +249,7 @@
 // based on http://comelearncocoawithme.blogspot.ch/2011/08/reading-from-external-controllers-with.html
 #define SYSEX_LENGTH 1024
 static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *srcRef){
-
+    
     @autoreleasepool {
     
         
@@ -251,7 +327,7 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                         
                         // Note OFF
                         case 0x80:
-                            [MIDIController handleMappingForDeviceNamed:deviceName
+                            [FRMIDIInput handleMappingForDeviceNamed:deviceName
                                                             MessageType:@"NOTE_OFF"
                                                               onChannel:[NSString stringWithFormat:@"%i",messageChannel]
                                                                signalID:[NSString stringWithFormat:@"%i",signalID]
@@ -260,7 +336,7 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                         
                         // Note ON
                         case 0x90:
-                            [MIDIController handleMappingForDeviceNamed:deviceName
+                            [FRMIDIInput handleMappingForDeviceNamed:deviceName
                                                             MessageType:@"NOTE_ON"
                                                               onChannel:[NSString stringWithFormat:@"%i",messageChannel]
                                                                signalID:[NSString stringWithFormat:@"%i",signalID]
@@ -269,7 +345,7 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                        
                         // CONTROL
                         case 0xB0:
-                            [MIDIController handleMappingForDeviceNamed:deviceName
+                            [FRMIDIInput handleMappingForDeviceNamed:deviceName
                                                             MessageType:@"CONTROL"
                                                               onChannel:[NSString stringWithFormat:@"%i",messageChannel]
                                                                signalID:[NSString stringWithFormat:@"%i",signalID]
@@ -311,24 +387,31 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
         }
     }
 }
+
 // Callback helper
-+(void)handleMappingForDeviceNamed:(NSString*)deviceName MessageType:(NSString*)messageType onChannel:(NSString*)channel signalID:(NSString*)signalID value:(NSString*)value{
++(void)handleMappingForDeviceNamed:(NSString*)deviceName
+                       MessageType:(NSString*)messageType
+                         onChannel:(NSString*)channel
+                          signalID:(NSString*)signalID
+                             value:(NSString*)value{
     
     // We can't access "self" from within this callback, so we use this copy of settings
-    NSDictionary* midiMap = [[AppCommon sharedAppCommon] midiMappings];
+    NSDictionary* midiMap = [[FRAppCommon sharedFRAppCommon] midiMappings];
     midiMap = [midiMap valueForKey:deviceName];
 
     
     // Look to see if we have a mapping for this
     NSMutableDictionary *mapping = [[[[midiMap valueForKey:@"CHANNEL"] valueForKey:channel] valueForKey:messageType] valueForKey:signalID];
     
-    // YES! Do it...
-    if(mapping){
+    
+    // If we have a mapping and the midi config panel isn't open, try and do it!
+    if(mapping &&
+       !([[[FRAppCommon sharedFRAppCommon] midiConfigController] settingsWindowOpen])){
         for(NSDictionary *thisAction in mapping){
-            
+                        
             // Make sure the method is available
             SEL method = NSSelectorFromString([thisAction valueForKey:@"function"]);
-            if([MIDIController respondsToSelector:method]){
+            if([FRMIDIPublishedMethods respondsToSelector:method]){
                 
                 NSString* logic = [thisAction valueForKey:@"logic"];
                 int valueToCompare = [[thisAction valueForKey:@"valmatch"] intValue];
@@ -339,15 +422,15 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                 if ([logic length] > 0){
                     if ([logic isEqualToString:@"EQ"]){
                         if (incomingValue == valueToCompare){
-                            [MIDIController performSelector:method withObject:value];
+                            [FRMIDIPublishedMethods performSelector:method withObject:value];
                         }
                     }else if ([logic isEqualToString:@"GT"]){
                         if (incomingValue > valueToCompare){
-                            [MIDIController performSelector:method withObject:value];
+                            [FRMIDIPublishedMethods performSelector:method withObject:value];
                         }
                     }else if ([logic isEqualToString:@"LT"]){
                         if (incomingValue < valueToCompare){
-                            [MIDIController performSelector:method withObject:value];
+                            [FRMIDIPublishedMethods performSelector:method withObject:value];
                         }
                     }else{
                         NSLog(@"MIDI: Invalid logic %@ specified in mapping!", logic);
@@ -355,27 +438,25 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                     
                 // No logic, just pass through
                 }else{
-                    [MIDIController performSelector:method withObject:value];
+                    [FRMIDIPublishedMethods performSelector:method withObject:value];
                 }
                 
-                
-                
             }else{
-                NSLog(@"MIDI: Invalid method %@ specified in mapping!", NSStringFromSelector(method));
+                NSLog(@"MIDI: Invalid method '%@' specified in mapping!", NSStringFromSelector(method));
             }
             
             
             
         }
     }
-
-}
-
-
-// Custom functions ///////////////////////////////////////////////////////////////////////////////////////////
-// Everything after here is custom to this application. These are the functions which are allowed in the midi mapping plists
-+ (void) adjust_fontSize:(NSString*)value{
-    [[NSUserDefaults standardUserDefaults] setFloat:[value floatValue] forKey:@"scaleFactor"];
+    
+    // And also pass callback to controller
+    [[[FRAppCommon sharedFRAppCommon] midiConfigController] incomingMidiMessage:deviceName
+                                                                  onChannel:channel
+                                                                messageType:messageType
+                                                                   signalID:signalID
+                                                                      value:value
+                                                                      mappingExists:(mapping?YES:NO)];
 }
 
 

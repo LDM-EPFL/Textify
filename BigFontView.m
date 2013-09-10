@@ -8,7 +8,7 @@
 
 #import "BigFontView.h"
 #import "MainView.h"
-#import "AppCommon.h"
+#import "FRAppCommon.h"
 #import "NSView+snapshot.h"
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/glu.h>
@@ -82,7 +82,7 @@
         [self stopTimer];
         [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffect"];
         
-        [[AppCommon sharedAppCommon] setFontViewController:self];
+        [[FRAppCommon sharedFRAppCommon] setFontViewController:self];
         
         
         [[self openGLContext] makeCurrentContext];
@@ -204,7 +204,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 }
 
 -(void) syphonSend{
-    [self syphonSendImage:[[AppCommon sharedAppCommon] screenShot]];
+    [self syphonSendImage:[[FRAppCommon sharedFRAppCommon] screenShot]];
 }
 -(void) syphonSendImage:(NSImage*)Image{
 
@@ -354,7 +354,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     // Input text can come from three different sources...
     
     // What input mode?
-    AppDelegate* appDelegate = [[NSApplication sharedApplication] delegate];
+    AppDelegate* appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
     int sliceSelectionIndex = (int)[[(NSCollectionView*)[appDelegate slicedTextCollection] selectionIndexes] firstIndex];
     
     // 0=manual
@@ -366,6 +366,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
             NSString* string = thisSlice.displayText;
             if(![previousLoadString isEqualToString:string]){
                 [[NSUserDefaults standardUserDefaults] setValue:string forKey:@"displayText"];
+                [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffectPause"];
                 [self setRangeMax:0];
             }
             previousLoadString = string;
@@ -427,7 +428,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     if(!displayText){displayText=@" ";}
     
     // Are we in fullsreen mode or not?
-    [[AppCommon sharedAppCommon] setIsFullscreen:f_fullscreenMode];
+    [[FRAppCommon sharedFRAppCommon] setIsFullscreen:f_fullscreenMode];
     
     // Check origin
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_correctOrigin"]){
@@ -740,12 +741,10 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         }
 
         // What char are we going to type next?
-        
         NSRange range={_rangeMax,1};
         NSString* thisChar=[[[NSUserDefaults standardUserDefaults] valueForKey:@"displayText"] substringWithRange:range];
 
-        if ([thisChar isEqualToString:@"\n"]){
-            
+        if ([thisChar isEqualToString:@"\n"]){            
             [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"f_typingEffectPause"];
         }
     }

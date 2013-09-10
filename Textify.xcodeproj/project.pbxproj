@@ -31,18 +31,22 @@
 		493D643A17173FB700E51A6F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD83616BED1150012A5E1 /* OpenGL.framework */; };
 		493D643B1717404D00E51A6F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD7D316BBF0560012A5E1 /* AppKit.framework */; };
 		495367A517CF5BD3005EE119 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495367A417CF5BD3005EE119 /* CoreMIDI.framework */; };
-		495367A917CF5BF8005EE119 /* MIDIController.m in Sources */ = {isa = PBXBuildFile; fileRef = 495367A717CF5BF8005EE119 /* MIDIController.m */; };
-		495367AA17CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 495367A817CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist */; };
-		495367AE17CF5C90005EE119 /* AppCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 495367AD17CF5C90005EE119 /* AppCommon.m */; };
 		4956688417976E5600F5DEF2 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4956688317976E5600F5DEF2 /* PreviewView.m */; };
 		4964FDE317DCB49D0092E542 /* textify.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4964FDE217DCB49D0092E542 /* textify.icns */; };
 		4969723F17CAAA2F0043E260 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4969723E17CAAA2F0043E260 /* Syphon.framework */; };
 		4987A38916C322C20035FB17 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4987A38816C322C20035FB17 /* Security.framework */; };
 		4988878417860563007F0413 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4988878317860563007F0413 /* MainView.m */; };
 		498DA26D17DB78D80060F022 /* TextSliceScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA26C17DB78D80060F022 /* TextSliceScrollView.m */; };
-		498F2D8A17CE1B8500A38674 /* SCRATCH in Resources */ = {isa = PBXBuildFile; fileRef = 498F2D8917CE1B8500A38674 /* SCRATCH */; };
 		498F2D8D17CE2A8300A38674 /* NSTextView_NoDrag.m in Sources */ = {isa = PBXBuildFile; fileRef = 498F2D8C17CE2A8300A38674 /* NSTextView_NoDrag.m */; };
 		498F2D9017CE2B2300A38674 /* NSTextView_DragOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 498F2D8F17CE2B2200A38674 /* NSTextView_DragOverride.m */; };
+		499AE6E417DE7CE20055B9F0 /* FRAppCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 499AE6E317DE7CE20055B9F0 /* FRAppCommon.m */; };
+		499AE6F017DE7CF00055B9F0 /* FRMIDIConfigController.m in Sources */ = {isa = PBXBuildFile; fileRef = 499AE6E617DE7CEF0055B9F0 /* FRMIDIConfigController.m */; };
+		499AE6F117DE7CF00055B9F0 /* FRMIDIInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 499AE6E817DE7CEF0055B9F0 /* FRMIDIInput.m */; };
+		499AE6F217DE7CF00055B9F0 /* FRMIDIMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 499AE6EA17DE7CEF0055B9F0 /* FRMIDIMapping.m */; };
+		499AE6F317DE7CF00055B9F0 /* FRMIDIPublishedMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 499AE6EC17DE7CF00055B9F0 /* FRMIDIPublishedMethods.m */; };
+		499AE6F417DE7CF00055B9F0 /* midimap_korgNanoKontrol2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 499AE6ED17DE7CF00055B9F0 /* midimap_korgNanoKontrol2.plist */; };
+		499AE6F517DE7CF00055B9F0 /* midimap_korgNanoPad.plist in Resources */ = {isa = PBXBuildFile; fileRef = 499AE6EE17DE7CF00055B9F0 /* midimap_korgNanoPad.plist */; };
+		499AE6F617DE7CF00055B9F0 /* midimap_vestaxSpin.plist in Resources */ = {isa = PBXBuildFile; fileRef = 499AE6EF17DE7CF00055B9F0 /* midimap_vestaxSpin.plist */; };
 		49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */; };
 		49BD02D117CEBF4B00CF064E /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 49BD02D017CEBF4B00CF064E /* Assets */; };
 		49BF395217842D910045361C /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BF395117842D910045361C /* AppController.m */; };
@@ -91,11 +95,6 @@
 		493D643417173DFA00E51A6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		493D643617173E0000E51A6F /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		495367A417CF5BD3005EE119 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreMIDI.framework; sourceTree = DEVELOPER_DIR; };
-		495367A617CF5BF8005EE119 /* MIDIController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIDIController.h; sourceTree = "<group>"; };
-		495367A717CF5BF8005EE119 /* MIDIController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MIDIController.m; sourceTree = "<group>"; };
-		495367A817CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = midimap_korgNanoKontrol2.plist; sourceTree = "<group>"; };
-		495367AC17CF5C90005EE119 /* AppCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppCommon.h; sourceTree = "<group>"; };
-		495367AD17CF5C90005EE119 /* AppCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppCommon.m; sourceTree = "<group>"; };
 		4956688217976E5600F5DEF2 /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
 		4956688317976E5600F5DEF2 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		4964FDE217DCB49D0092E542 /* textify.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = textify.icns; sourceTree = "<group>"; };
@@ -106,12 +105,26 @@
 		498DA26A17DB71A50060F022 /* Textify-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Textify-Info.plist"; sourceTree = SOURCE_ROOT; };
 		498DA26B17DB78D80060F022 /* TextSliceScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSliceScrollView.h; sourceTree = SOURCE_ROOT; };
 		498DA26C17DB78D80060F022 /* TextSliceScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSliceScrollView.m; sourceTree = SOURCE_ROOT; };
-		498F2D8817CE16D800A38674 /* CWLSynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWLSynthesizeSingleton.h; sourceTree = SOURCE_ROOT; };
-		498F2D8917CE1B8500A38674 /* SCRATCH */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SCRATCH; sourceTree = "<group>"; };
 		498F2D8B17CE2A8300A38674 /* NSTextView_NoDrag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_NoDrag.h; sourceTree = SOURCE_ROOT; };
 		498F2D8C17CE2A8300A38674 /* NSTextView_NoDrag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTextView_NoDrag.m; sourceTree = SOURCE_ROOT; };
 		498F2D8E17CE2B2200A38674 /* NSTextView_DragOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_DragOverride.h; sourceTree = SOURCE_ROOT; };
 		498F2D8F17CE2B2200A38674 /* NSTextView_DragOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTextView_DragOverride.m; sourceTree = SOURCE_ROOT; };
+		499AE6E117DE7CE20055B9F0 /* CWLSynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CWLSynthesizeSingleton.h; path = FR/FRCore/CWLSynthesizeSingleton.h; sourceTree = "<group>"; };
+		499AE6E217DE7CE20055B9F0 /* FRAppCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRAppCommon.h; path = FR/FRCore/FRAppCommon.h; sourceTree = "<group>"; };
+		499AE6E317DE7CE20055B9F0 /* FRAppCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRAppCommon.m; path = FR/FRCore/FRAppCommon.m; sourceTree = "<group>"; };
+		499AE6E517DE7CEF0055B9F0 /* FRMIDIConfigController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRMIDIConfigController.h; path = FR/FRMIDIController/FRMIDIConfigController.h; sourceTree = "<group>"; };
+		499AE6E617DE7CEF0055B9F0 /* FRMIDIConfigController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRMIDIConfigController.m; path = FR/FRMIDIController/FRMIDIConfigController.m; sourceTree = "<group>"; };
+		499AE6E717DE7CEF0055B9F0 /* FRMIDIInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRMIDIInput.h; path = FR/FRMIDIController/FRMIDIInput.h; sourceTree = "<group>"; };
+		499AE6E817DE7CEF0055B9F0 /* FRMIDIInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRMIDIInput.m; path = FR/FRMIDIController/FRMIDIInput.m; sourceTree = "<group>"; };
+		499AE6E917DE7CEF0055B9F0 /* FRMIDIMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRMIDIMapping.h; path = FR/FRMIDIController/FRMIDIMapping.h; sourceTree = "<group>"; };
+		499AE6EA17DE7CEF0055B9F0 /* FRMIDIMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRMIDIMapping.m; path = FR/FRMIDIController/FRMIDIMapping.m; sourceTree = "<group>"; };
+		499AE6EB17DE7CEF0055B9F0 /* FRMIDIPublishedMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRMIDIPublishedMethods.h; path = FR/FRMIDIController/FRMIDIPublishedMethods.h; sourceTree = "<group>"; };
+		499AE6EC17DE7CF00055B9F0 /* FRMIDIPublishedMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRMIDIPublishedMethods.m; path = FR/FRMIDIController/FRMIDIPublishedMethods.m; sourceTree = "<group>"; };
+		499AE6ED17DE7CF00055B9F0 /* midimap_korgNanoKontrol2.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = midimap_korgNanoKontrol2.plist; path = FR/FRMIDIController/midimap_korgNanoKontrol2.plist; sourceTree = "<group>"; };
+		499AE6EE17DE7CF00055B9F0 /* midimap_korgNanoPad.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = midimap_korgNanoPad.plist; path = FR/FRMIDIController/midimap_korgNanoPad.plist; sourceTree = "<group>"; };
+		499AE6EF17DE7CF00055B9F0 /* midimap_vestaxSpin.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = midimap_vestaxSpin.plist; path = FR/FRMIDIController/midimap_vestaxSpin.plist; sourceTree = "<group>"; };
+		499AE6F717DE7CF80055B9F0 /* NSView+snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSView+snapshot.h"; path = "FR/FRUtil/NSView+snapshot.h"; sourceTree = "<group>"; };
+		499AE6F817DE7CF80055B9F0 /* NSView+snapshot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSView+snapshot.m"; path = "FR/FRUtil/NSView+snapshot.m"; sourceTree = "<group>"; };
 		49A3DAAA17CA52C70091FEFD /* NSView+snapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+snapshot.h"; sourceTree = "<group>"; };
 		49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+snapshot.m"; sourceTree = "<group>"; };
 		49BD02D017CEBF4B00CF064E /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
@@ -154,9 +167,8 @@
 		491BD7C116BBF0560012A5E1 = {
 			isa = PBXGroup;
 			children = (
+				499AE6DD17DE7CA80055B9F0 /* FRApp */,
 				4964FDE217DCB49D0092E542 /* textify.icns */,
-				498F2D8917CE1B8500A38674 /* SCRATCH */,
-				495367AB17CF5C02005EE119 /* MIDI */,
 				498F2D8217CE13CE00A38674 /* App */,
 				4956688217976E5600F5DEF2 /* PreviewView.h */,
 				4956688317976E5600F5DEF2 /* PreviewView.m */,
@@ -179,7 +191,6 @@
 		491BD7D716BBF0560012A5E1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				498F2D8817CE16D800A38674 /* CWLSynthesizeSingleton.h */,
 				493684DA179D48D600BE8384 /* MainMenu.xib */,
 				498DA26B17DB78D80060F022 /* TextSliceScrollView.h */,
 				498DA26C17DB78D80060F022 /* TextSliceScrollView.m */,
@@ -212,27 +223,62 @@
 			name = "Main Code";
 			sourceTree = "<group>";
 		};
-		495367AB17CF5C02005EE119 /* MIDI */ = {
-			isa = PBXGroup;
-			children = (
-				495367A617CF5BF8005EE119 /* MIDIController.h */,
-				495367A717CF5BF8005EE119 /* MIDIController.m */,
-				495367A817CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist */,
-			);
-			name = MIDI;
-			sourceTree = "<group>";
-		};
 		498F2D8217CE13CE00A38674 /* App */ = {
 			isa = PBXGroup;
 			children = (
 				493684CE179D479A00BE8384 /* AppDelegate.h */,
 				493684CD179D479A00BE8384 /* AppDelegate.m */,
-				495367AC17CF5C90005EE119 /* AppCommon.h */,
-				495367AD17CF5C90005EE119 /* AppCommon.m */,
 				49BF395017842D910045361C /* AppController.h */,
 				49BF395117842D910045361C /* AppController.m */,
 			);
 			name = App;
+			sourceTree = "<group>";
+		};
+		499AE6DD17DE7CA80055B9F0 /* FRApp */ = {
+			isa = PBXGroup;
+			children = (
+				499AE6E017DE7CC20055B9F0 /* FRUtil */,
+				499AE6DF17DE7CB90055B9F0 /* FRMIDIController */,
+				499AE6DE17DE7CAF0055B9F0 /* FRCore */,
+			);
+			name = FRApp;
+			sourceTree = "<group>";
+		};
+		499AE6DE17DE7CAF0055B9F0 /* FRCore */ = {
+			isa = PBXGroup;
+			children = (
+				499AE6E117DE7CE20055B9F0 /* CWLSynthesizeSingleton.h */,
+				499AE6E217DE7CE20055B9F0 /* FRAppCommon.h */,
+				499AE6E317DE7CE20055B9F0 /* FRAppCommon.m */,
+			);
+			name = FRCore;
+			sourceTree = "<group>";
+		};
+		499AE6DF17DE7CB90055B9F0 /* FRMIDIController */ = {
+			isa = PBXGroup;
+			children = (
+				499AE6E517DE7CEF0055B9F0 /* FRMIDIConfigController.h */,
+				499AE6E617DE7CEF0055B9F0 /* FRMIDIConfigController.m */,
+				499AE6E717DE7CEF0055B9F0 /* FRMIDIInput.h */,
+				499AE6E817DE7CEF0055B9F0 /* FRMIDIInput.m */,
+				499AE6E917DE7CEF0055B9F0 /* FRMIDIMapping.h */,
+				499AE6EA17DE7CEF0055B9F0 /* FRMIDIMapping.m */,
+				499AE6EB17DE7CEF0055B9F0 /* FRMIDIPublishedMethods.h */,
+				499AE6EC17DE7CF00055B9F0 /* FRMIDIPublishedMethods.m */,
+				499AE6ED17DE7CF00055B9F0 /* midimap_korgNanoKontrol2.plist */,
+				499AE6EE17DE7CF00055B9F0 /* midimap_korgNanoPad.plist */,
+				499AE6EF17DE7CF00055B9F0 /* midimap_vestaxSpin.plist */,
+			);
+			name = FRMIDIController;
+			sourceTree = "<group>";
+		};
+		499AE6E017DE7CC20055B9F0 /* FRUtil */ = {
+			isa = PBXGroup;
+			children = (
+				499AE6F717DE7CF80055B9F0 /* NSView+snapshot.h */,
+				499AE6F817DE7CF80055B9F0 /* NSView+snapshot.m */,
+			);
+			name = FRUtil;
 			sourceTree = "<group>";
 		};
 		49D319951718A798001FE074 /* Frameworks */ = {
@@ -316,10 +362,11 @@
 				493684D6179D480100BE8384 /* Credits.rtf in Resources */,
 				493684D7179D480100BE8384 /* InfoPlist.strings in Resources */,
 				493684DC179D48D600BE8384 /* MainMenu.xib in Resources */,
-				498F2D8A17CE1B8500A38674 /* SCRATCH in Resources */,
 				49BD02D117CEBF4B00CF064E /* Assets in Resources */,
-				495367AA17CF5BF8005EE119 /* midimap_korgNanoKontrol2.plist in Resources */,
 				4964FDE317DCB49D0092E542 /* textify.icns in Resources */,
+				499AE6F417DE7CF00055B9F0 /* midimap_korgNanoKontrol2.plist in Resources */,
+				499AE6F517DE7CF00055B9F0 /* midimap_korgNanoPad.plist in Resources */,
+				499AE6F617DE7CF00055B9F0 /* midimap_vestaxSpin.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,10 +387,13 @@
 				49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */,
 				498F2D8D17CE2A8300A38674 /* NSTextView_NoDrag.m in Sources */,
 				498F2D9017CE2B2300A38674 /* NSTextView_DragOverride.m in Sources */,
-				495367A917CF5BF8005EE119 /* MIDIController.m in Sources */,
-				495367AE17CF5C90005EE119 /* AppCommon.m in Sources */,
 				49CCB37317DB28E5009925EF /* TextSlice.m in Sources */,
 				498DA26D17DB78D80060F022 /* TextSliceScrollView.m in Sources */,
+				499AE6E417DE7CE20055B9F0 /* FRAppCommon.m in Sources */,
+				499AE6F017DE7CF00055B9F0 /* FRMIDIConfigController.m in Sources */,
+				499AE6F117DE7CF00055B9F0 /* FRMIDIInput.m in Sources */,
+				499AE6F217DE7CF00055B9F0 /* FRMIDIMapping.m in Sources */,
+				499AE6F317DE7CF00055B9F0 /* FRMIDIPublishedMethods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
