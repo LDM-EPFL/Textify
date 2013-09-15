@@ -50,11 +50,19 @@
             0
         };
         pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
-        if (!pixelFormat){NSLog(@"No OpenGL pixel format");}
+        if(!pixelFormat){NSLog(@"No OpenGL pixel format");}
+        
         
         // NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
         openGLContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:context];
+
         if (self = [super initWithFrame:frameRect]) {
+            
+            
+            
+
+            
+            
             [[self openGLContext] makeCurrentContext];
             
             // Synchronize buffer swaps with vertical refresh rate
@@ -74,9 +82,6 @@
             [self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
         }
         
-        
-        
-        f_fullscreenMode=false;
         
    
         [self stopTimer];
@@ -139,6 +144,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) drawRect:(NSRect)dirtyRect{
     
+    
+    
     // If we're not animating, start
     if (!isAnimating) {[self startAnimation];}
    
@@ -152,9 +159,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     }else   if ([[NSUserDefaults standardUserDefaults] integerForKey:@"outputResolution"] == 2){
         renderDimensions = NSMakeSize(1024, 768);
     }else   if ([[NSUserDefaults standardUserDefaults] integerForKey:@"outputResolution"] == 3){
-        CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
-        renderDimensions = NSMakeSize((int)CGDisplayModeGetWidth(currentMode)
-                                      , (int)CGDisplayModeGetHeight(currentMode));
+        //CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
+        renderDimensions = NSMakeSize([[NSScreen mainScreen] frame].size.width,[[NSScreen mainScreen] frame].size.height);
     }
     
      NSImage *drawIntoImage = [[NSImage alloc] initWithSize:renderDimensions];
@@ -217,6 +223,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         NSLog(@"Initializing Syphon Server...");
         syphonServer = [[SyphonServer alloc] initWithName:nil context:[openGLContext CGLContextObj] options:nil];
         if(!syphonServer){NSLog(@"Error initializing Syphon server!");}
+        if(![openGLContext CGLContextObj]){NSLog(@"Error missing opengl context");}
         
     
     // Send frame
@@ -350,6 +357,9 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
 ///////////////////////////////////////////////////////////////////////
 -(void)refreshDisplayText{
     
+    if([(AppDelegate*)[[NSApplication sharedApplication] delegate] isLoading]){
+        return;
+    }
     
     // Input text can come from three different sources...
     
@@ -362,14 +372,23 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         
     // 1=textslicer
     } else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"inputSource"] == 1){
+        
+        NSString* string=@"";
+        if ([[[appDelegate slicedText] arrangedObjects] count] >= sliceSelectionIndex){
             TextSlice *thisSlice = [[[appDelegate slicedText] arrangedObjects] objectAtIndex:sliceSelectionIndex];
-            NSString* string = thisSlice.displayText;
+            string = thisSlice.displayText;
+        }
+            // Allow for magic \n which will insert a blankline
+            string=[string stringByReplacingOccurrencesOfString:@" *^*" withString:@"\n"];
+            
             if(![previousLoadString isEqualToString:string]){
                 [[NSUserDefaults standardUserDefaults] setValue:string forKey:@"displayText"];
                 [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffectPause"];
                 [self setRangeMax:0];
-            }
-            previousLoadString = string;
+        }
+        
+        
+        previousLoadString = string;
         
     // 2=watchfile
     } else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"inputSource"] == 2){
@@ -401,6 +420,8 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
             [[NSUserDefaults standardUserDefaults] setValue:string forKey:@"displayText"];
             
     }
+    
+
     
     
 }

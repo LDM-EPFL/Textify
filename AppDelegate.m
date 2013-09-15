@@ -11,6 +11,7 @@
 #import "FRAppCommon.h"
 #import "FRMIDIInput.h"
 #import "TextSlice.h"
+#import "SettingsFile.h"
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -23,6 +24,48 @@
 @synthesize managedObjectContext = _managedObjectContext;
 
 //////////////////////////////////////////////////////////////////////
+- (IBAction)expandSidebar:(id)sender {
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_sidebarVisible"]){
+        [self ensmallen];
+    }else{
+        [self embiggen];
+    }
+}
+
+
+// SETTINGS FILES ////////////////
+- (IBAction)refreshSettingsDir:(id)sender {
+    // Clear the array
+    NSRange range = NSMakeRange(0, [[[(AppDelegate *)[[NSApplication sharedApplication] delegate] settingsFiles] arrangedObjects] count]);
+    [[(AppDelegate *)[[NSApplication sharedApplication] delegate] settingsFiles] removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+    
+    // Check extension...
+    NSString *path=[[NSUserDefaults standardUserDefaults] valueForKey:@"settingsDirectory"];
+    NSArray *directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+    NSArray *fileList = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.settings'"]];
+
+    
+    // Is this a txt file?
+    for(NSString* filename in fileList){
+        SettingsFile* newFile = [[SettingsFile alloc] init];
+        newFile.name=[filename stringByDeletingPathExtension];
+        newFile.path=[NSString stringWithFormat:@"%@/%@",path,filename];
+        [_settingsFiles addObject:newFile];
+    }
+    NSLog(@"%i items",(int)[[_settingsFiles arrangedObjects] count]);
+}
+
+-(void)doubleClickSettings{
+
+    SettingsFile* thisFile = [[(AppDelegate *)[[NSApplication sharedApplication] delegate] settingsFiles] selectedObjects][0];
+    
+    [SettingsFile loadSettingsFromPath:thisFile.path];
+}
+
+
+
+
+
 
 - (IBAction)launchPreferences:(id)sender {
     [prefsWindow makeKeyAndOrderFront:self];
@@ -60,9 +103,16 @@
     [[FRAppCommon sharedFRAppCommon] setMidiConfigController:_midiConfigController];
      midiInput = [[FRMIDIInput alloc] init];
     
-    [_cancelLoad setHidden:TRUE];
-    [_progressBar setHidden:TRUE];
+    
+    
+    if([[NSUserDefaults standardUserDefaults] valueForKey:@"f_sidebarVisible"]){
+        [self embiggen];
+    }else{
+        [self ensmallen];
+    }
 
+    // Settings file list
+    [self refreshSettingsDir:self];
 }
 
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:
@@ -70,20 +120,16 @@
     
     int requestedIndex = (int)[tabView indexOfTabViewItem:tabViewItem];
     if (requestedIndex == 0){
-        [self ensmallen];
     }else if (requestedIndex == 1){
-         [self embiggen];
          int selectionIndex = (int)[[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedTextCollection] selectionIndexes] firstIndex];        int arrayCount = (int)[[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects] count];
         if(selectionIndex < 0 || arrayCount < selectionIndex || arrayCount==0){
-            [AppController alertUser:@"Text Slicer Mode" info:@"To activate, drag a text file onto the TextSlicer to the right."];
-            return NO;
+            //[AppController alertUser:@"Not Available" info:@"To activate TextSlicer mode, expand and drag a text file onto the TextSlicer to the right."];
+            //return NO;
         }
     }else if (requestedIndex == 2){        
         if([[[NSUserDefaults standardUserDefaults] valueForKey:@"externalFilename"] length] ==0){
-            [AppController alertUser:@"External File Mode" info:@"To activate, drag a text file onto the display below."];
+            [AppController alertUser:@"Not Available" info:@"To activate, drag a text file onto the display window below."];
             return NO;
-        }else{
-            [self ensmallen];
         }
     }
     
@@ -93,8 +139,11 @@
 }
 
 -(void)awakeFromNib{
+    
+    // Do we have a slicer to load?
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"isSlicerAvailable"];
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]){
-        [AppDelegate loadSliceFileFromPath:[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]];
+        //[AppDelegate loadSliceFileFromPath:[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]];
         [self embiggen];
     }else{
         [self ensmallen];
@@ -133,25 +182,34 @@
 - (IBAction)saveSliceFileButton:(id)sender {
 
     NSLog(@"Save slice file");
-    [AppDelegate saveSliceFile];
+    [(AppDelegate *)[[NSApplication sharedApplication] delegate] saveSliceFile];
 }
 
 // Save slices to disk
-+ (void)saveSliceFile{
+-(void)saveSliceFile{
     
     // Mark our place
     int selectionIndex = (int)[[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedTextCollection] selectionIndexes] firstIndex];
                           
     
-    NSString *output;
+    // For each slice
+    NSString *outputFileAsString;
     for(TextSlice* thisSlice in [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects]){
         
-        //[output stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
+        // If we have text
         if ([thisSlice displayText]){
-        output = [NSString stringWithFormat:@"%@%@\r\n\r\n",output?output:@"",[thisSlice displayText] ];
+            
+            NSString* thisSliceText=[thisSlice displayText];
+            
+
+            
+            // Aggregate lines
+            outputFileAsString = [NSString stringWithFormat:@"%@%@\r\n\r\n",outputFileAsString?outputFileAsString:@"",thisSliceText];
         }
     }
-    [output writeToFile:[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]  atomically:NO encoding:NSUTF8StringEncoding error:nil];
+    
+    // Write to disk
+    [outputFileAsString writeToFile:[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]  atomically:NO encoding:NSUTF8StringEncoding error:nil];
     
     // Reload
     [self loadSliceFileFromPath:[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]];
@@ -162,64 +220,115 @@
     }
 }
 
-+(void)loadSliceFileFromPath:(NSString*)path{
 
-    
-    //[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] rearrangeObjects];
+
+// Load file
+-(void)loadSliceFileFromPath:(NSString*)path{
+
+    // Clear the array
+    NSRange range = NSMakeRange(0, [[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects] count]);
+    [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
     
     // Split the file on newlines
     NSString *contents = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     NSArray *splitContents = [contents componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]];
     
+    
+    // Progress bar
+    [self setCancelLoad:FALSE];
+    [self setProgressAmount:0.0];
+    
     // Grab the blocks between newlines (we do it this way so it should work with all kinds of newlines)
-   
-    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    NSString *blockAggregator;
-    for(NSString* textChunk in splitContents){
-        
-        // If we hit a blank line, save previous as a block
-        if([[textChunk stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0){
+    NSMutableArray* arrayOfNewSlices=[[NSMutableArray alloc] init];
+    int sliceCount=(int)[splitContents count];
+    NSLog(@"Loading %i chunks...",sliceCount);
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *blockAggregator;
+        int chunkCount=0;
+        for(NSString* textChunk in splitContents){
             
-            // Add new object
-            if ([[blockAggregator stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] != 0){
+            // Cancel?
+            if(_cancelLoad){break;}
+            
+            // If we hit a blank line, save previous as a block
+            if([[textChunk stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] == 0){
                 
-                TextSlice *newSlice=[[TextSlice alloc] init];
-                newSlice.displayText=blockAggregator;
-                [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] addObject:newSlice];
-            }
-            blockAggregator=@"";
-            
-            
-            
-        // Otherwise just aggregate
-        }else{
-            
-            // Aggregate
-            if ([[blockAggregator stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] != 0){
-                blockAggregator = [NSString stringWithFormat:@"%@\n%@",blockAggregator,textChunk];
+                // Add new object
+                if ([[blockAggregator stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] != 0){
+                    
+                    TextSlice *newSlice=[[TextSlice alloc] init];
+                    newSlice.displayText=blockAggregator;
+                    [arrayOfNewSlices addObject:newSlice];
+                }
+                blockAggregator=@"";
+                
+                
+                
+            // Otherwise just aggregate
             }else{
-                blockAggregator = textChunk;
-            }
-            
-            // Edgecase... EOF with no newline after
-            if([splitContents lastObject] == textChunk){
-                TextSlice *newSlice=[[TextSlice alloc] init];
-                newSlice.displayText=blockAggregator;
-                if(newSlice.displayText){
-                [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] addObject:newSlice];
+                
+                // Aggregate
+                if ([[blockAggregator stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] != 0){
+                    blockAggregator = [NSString stringWithFormat:@"%@\n%@",blockAggregator,textChunk];
+                }else{
+                    blockAggregator = textChunk;
+                }
+                
+                // Edgecase... EOF with no newline after
+                if([splitContents lastObject] == textChunk){
+                    TextSlice *newSlice=[[TextSlice alloc] init];
+                    
+                    //Eliminate blank lines from each slice
+                    NSArray *splitContents = [blockAggregator componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]];
+                    NSString *cleanedOutput=[[NSString alloc] init];
+                    for(NSString* line in splitContents){
+                        if([line length] > 0){
+                            cleanedOutput=[NSString stringWithFormat:@"%@\n%@",cleanedOutput,line];
+                        }
+                    }
+                    
+                    newSlice.displayText=cleanedOutput;
+                    if(newSlice.displayText){
+                        [arrayOfNewSlices addObject:newSlice];
+                        
+                    }
                 }
             }
+            
+            
+                self.progressAmount=(double)(((double)chunkCount/(double)sliceCount)*100);
+            
+
+            chunkCount++;
         }
-    }
-    //});
+        
+        // Callback run on main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if(_cancelLoad){
+                [self setCancelLoad:FALSE];
+                [self setIsLoading:false];
+                [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"isSlicerAvailable"];
+                [arrayOfNewSlices removeAllObjects];
+            }else{
+                [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] addObjects:arrayOfNewSlices];
+                [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"isSlicerAvailable"];
+                [self setIsLoading:false];
+                NSLog(@"Done!");
+            }
+
+        });
+    });
+                   
     
+    // Set selection index to first
     [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedTextCollection] setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]];
 }
-- (IBAction)watchfile_clear:(id)sender {
-    [self ensmallen];
+-(IBAction)watchfile_clear:(id)sender {
     [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"displayText"];
     [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"externalFilename"];
-    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"inputSource"];
+    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"isSlicerAvailable"];
     NSRange range = NSMakeRange(0, [[_slicedText arrangedObjects] count]);
     [_slicedText removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
 }

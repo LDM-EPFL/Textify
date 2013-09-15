@@ -8,8 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface TextSlice : NSObject{}
+@interface TextSlice : NSObject{
+    NSString * _displayText;
+}
 
-@property NSString *displayText;
+-(NSString *)displayText;
+-(void)setDisplayText:(NSString *)displayText;
+
+
+@property NSString* displayText;
 
 @end

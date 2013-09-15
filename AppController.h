@@ -20,7 +20,7 @@
 - (void) drawView;
 
 +(void)alertUser:(NSString*)alertTitle info:(NSString*)alertMessage;
-+(NSString*)createTempWorkingFolder;
+//+(NSString*)createTempWorkingFolder;
 +(BOOL)performDragOperation:(id<NSDraggingInfo>)sender;
 +(void)lowerResolution;
 +(void)restoreResolution;

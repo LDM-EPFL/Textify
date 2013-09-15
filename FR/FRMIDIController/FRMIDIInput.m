@@ -64,18 +64,15 @@
 -(void)reloadMidiMappings{
     
     
-    // Files should be in Application Support directory, but this lets us ship with defaults
-    NSArray *directory;
-    NSArray *plistFiles;
-    
+    // Files should be kept in Application Support directory, but this lets us ship with defaults
     // First look in App Support
     NSArray *paths = NSSearchPathForDirectoriesInDomains
     (NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationDirectory =  [paths objectAtIndex:0];
     NSString *appName = [[NSProcessInfo processInfo] processName];
     applicationDirectory = [NSString stringWithFormat:@"%@/%@",applicationDirectory,appName];
-    directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:applicationDirectory error:nil];
-    plistFiles = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.plist'"]];
+    NSArray *directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:applicationDirectory error:nil];
+    NSArray *plistFiles = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.plist'"]];
    
     
     // Not there? Read from bundle and save to app support
@@ -287,7 +284,7 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                 
                 iByte = 0;
                 while (iByte < nBytes) {
-                    size = 0;
+                    //size = 0;
                     
                     // First byte should be status
                     unsigned char status = packet->data[iByte];

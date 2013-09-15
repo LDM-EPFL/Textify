@@ -12,24 +12,9 @@
 
 @implementation TextSliceScrollView
 
-- (id)initWithFrame:(NSRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code here.
-       
-    }
-    
-    return self;
-}
-
-- (void)drawRect:(NSRect)dirtyRect
-{
-    // Drawing code here.
-}
-
 -(void)awakeFromNib{
     [self registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
+    [super awakeFromNib];
 }
 
 -(BOOL)acceptsFirstResponder{return YES;}
@@ -38,7 +23,7 @@
 
 
 -(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
-    // Check extension... If this is a settings file, load the settings
+    // Check extension... 
     NSPasteboard* pbrd = [sender draggingPasteboard];
     NSArray *draggedFilePaths = [pbrd propertyListForType:NSFilenamesPboardType];
     NSString *path=draggedFilePaths[0];
@@ -46,26 +31,22 @@
     NSArray *parsedFilename = [parsedPath[[parsedPath count]-1] componentsSeparatedByString:@"."];
     NSString* extension = parsedFilename[[parsedFilename count]-1];
     
-    [[NSUserDefaults standardUserDefaults] setValue:path forKey:@"textSliceFilename"];
-    [[NSUserDefaults standardUserDefaults] setValue:[[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"] lastPathComponent] forKey:@"textSliceFilenameWithoutPath"];
+    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textSliceFilename"];
+    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textSliceFilenameWithoutPath"];
     
     // Is this a txt file?
     if ([extension isEqualToString:@"txt"]){
         
-        [[(AppDelegate *)[[NSApplication sharedApplication] delegate] cancelLoad] setHidden:FALSE];
-        [[(AppDelegate *)[[NSApplication sharedApplication] delegate] progressBar] setHidden:FALSE];
+        [[NSUserDefaults standardUserDefaults] setValue:path forKey:@"textSliceFilename"];
+        [[NSUserDefaults standardUserDefaults] setValue:[[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"] lastPathComponent] forKey:@"textSliceFilenameWithoutPath"];
+
+        [(AppDelegate *)[[NSApplication sharedApplication] delegate] setIsLoading:TRUE];
 
         // Clear the array
         NSRange range = NSMakeRange(0, [[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects] count]);
         [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
         
-        
-            [AppDelegate loadSliceFileFromPath:path];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[(AppDelegate *)[[NSApplication sharedApplication] delegate] cancelLoad] setHidden:TRUE];
-                [[(AppDelegate *)[[NSApplication sharedApplication] delegate] progressBar] setHidden:TRUE];
-            });
-
+        [(AppDelegate *)[[NSApplication sharedApplication] delegate] loadSliceFileFromPath:path];
         
         
          // Select textSlice mode

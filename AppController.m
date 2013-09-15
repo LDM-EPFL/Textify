@@ -8,9 +8,11 @@
 //  Copyright (c) 2013 Vox Fera. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "AppController.h"
 #import "FRAppCommon.h"
 #import "BigFontView.h"
+#import "SettingsFile.h"
 @implementation AppController
 
 
@@ -131,11 +133,13 @@ bool f_dockedMode=false;
     fullscreen_depth=32;
     
     // Init default restore
+    /*
     CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
     currentScreen_width = (int)CGDisplayModeGetWidth(currentMode);
     currentScreen_height =(int)CGDisplayModeGetHeight(currentMode);
     currentScreen_rate = CGDisplayModeGetRefreshRate(currentMode);
     currentScreen_depth =32;
+     */
 }
 
 -(void)resetWindows{
@@ -174,6 +178,93 @@ bool f_dockedMode=false;
 // Global keyboard handler
 // Be careful with this, it is truly global (will capture even if in a textbox, for example)
 -(void)globalKeyboardHandler{
+    
+   
+    
+    // Global keyboard handler.
+    NSEvent * (^monitorHandler)(NSEvent *);
+    
+    // The event handler
+    monitorHandler = ^NSEvent * (NSEvent * theEvent){
+        unichar key = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+        NSUInteger flags = [[NSApp currentEvent] modifierFlags];
+        
+        
+        // This handles only command keys
+        if(!(flags & NSCommandKeyMask)){return theEvent;}
+        
+        // Parse...
+        if((flags & NSCommandKeyMask)){
+            if((flags & NSAlternateKeyMask)){
+                
+                // CMD + CTRL + ALT + key
+                if((flags & NSControlKeyMask)){
+                    //NSLog(@"Command + CTRL + Alt %i",key);
+                    
+                    
+                // CMD + ALT + key
+                }else{
+                    
+                }
+                
+            // CMD + key
+            }else{
+                
+                switch (key){
+                  case 's':case'S':{
+                      
+                        // Save some stuff with the settings
+                        [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"subtitler_settings_file"];
+                        [[NSUserDefaults standardUserDefaults] setValue:[(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]] familyName] forKey:@"fontRequested"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                        NSDictionary *settings=[[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+                      
+                        // Default to desktop if not specified
+                        NSString* path = [[NSUserDefaults standardUserDefaults] valueForKey:@"settingsDirectory"];
+                        if([path length] == 0){
+                            path = [NSString stringWithFormat:@"%@/Desktop",NSHomeDirectory()];
+                            [[NSFileManager defaultManager ] createDirectoryAtPath:path withIntermediateDirectories: YES attributes: nil error: NULL ];
+                        }
+                      
+                        // Default filename is timestamp
+                        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+                        NSNumber *timeStampObj = [NSNumber numberWithDouble: timeStamp];
+                        NSString *fileName=[[NSString alloc] initWithFormat:@"%@/%@_SUB.settings",path,timeStampObj];
+                      
+                        // Clean the settings
+                        NSMutableDictionary* cleanSettings=[[NSMutableDictionary alloc] init];
+                        for (NSString* key in settings) {
+                            if([SettingsFile allowedKey:key]){
+                                [cleanSettings setObject:[settings objectForKey:key] forKey:key];
+                            }
+                        }
+                        
+                        // Write them to disk
+                        [cleanSettings writeToFile:fileName atomically:YES];
+                      
+                        // Update and refresh UI
+                        [[NSUserDefaults standardUserDefaults] setValue:path forKey:@"settingsDirectory"];
+                        [(AppDelegate *)[[NSApplication sharedApplication] delegate] refreshSettingsDir:self];
+                      
+                        break;
+                        
+                      
+                        
+                    // Unhandled... just forward the event
+                    }default:{
+                        return theEvent;
+                        break;
+                    }
+                }
+            }
+        }
+        // We handled the event, so consume it
+        return nil;
+    };
+    
+    eventMon = [NSEvent addLocalMonitorForEventsMatchingMask:NSKeyDownMask handler:monitorHandler];
+}
+-(void)globalKeyboardHandler_OLD{
     
     NSLog(@"Global keyboard shortcuts disabled...");
     return;
@@ -215,7 +306,7 @@ bool f_dockedMode=false;
                     // CMD+CTRL+ALT+leftArrow Put the stageview on the display to the left/right/above/below of where it is now
                     }case NSLeftArrowFunctionKey:case NSRightArrowFunctionKey:case NSUpArrowFunctionKey:case NSDownArrowFunctionKey:{
                         [stageWindow makeKeyAndOrderFront:self];
-                        BOOL destinationFound=false;
+                        //BOOL destinationFound=false;
                         for(NSScreen *foundScreen in [NSScreen screens]){
                             // Skip the screen we're on
                             
@@ -250,7 +341,6 @@ bool f_dockedMode=false;
                                         [stageWindow orderBack:self];
                                         [stageWindow setFrameOrigin:foundScreen.frame.origin];
                                         [stageWindow center];
-                                        destinationFound=true;
                                         [[[FRAppCommon sharedFRAppCommon] fontViewController] goFullscreen];
                                     }
                                     
@@ -327,7 +417,7 @@ bool f_dockedMode=false;
                         
                         NSMutableDictionary* cleanSettings=[[NSMutableDictionary alloc] init];
                         for (NSString* key in settings) {
-                            if([AppController allowedKey:key]){
+                            if([SettingsFile allowedKey:key]){
                                 [cleanSettings setObject:[settings objectForKey:key] forKey:key];
                             }
                         }
@@ -385,7 +475,7 @@ bool f_dockedMode=false;
     [alert beginSheetModalForWindow:displayWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
 }
 
-
+/*
 // Create a safe temporary working location
 // Thx http://www.cocoawithlove.com/2009/07/temporary-files-and-folders-in-cocoa.html
 +(NSString*)createTempWorkingFolder{
@@ -411,7 +501,7 @@ bool f_dockedMode=false;
     
     return [NSString stringWithFormat:@"%@/",tempDirectoryPath];
 }
-
+*/
 
 // Accept drag and drop
 +(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
@@ -432,138 +522,12 @@ bool f_dockedMode=false;
         [[NSUserDefaults standardUserDefaults] setInteger:2 forKey:@"inputSource"];
         return true;
     }else{
-        
-        NSMutableDictionary *savedSettings = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
-        //NSLog(@"Loading settings file... %@ ",path);
-        
-        // Check to make sure this is a subtitler settings file
-        if (![savedSettings objectForKey:@"subtitler_settings_file"]) {
-            NSBeep();
-            NSLog(@"Not a settings file!");
-            return false;
-            
-        // Ok, update the system with the settings
-        }else{
-            
-            // Reset a few things
-            [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollRate"];
-            [[NSUserDefaults standardUserDefaults] setFloat:0.0 forKey:@"scrollPosition"];
-            [[[FRAppCommon sharedFRAppCommon] fontViewController] stopTimer];
-            
-            // Some junk in here to support old settings files
-            BOOL fontCheckPerformed=FALSE;
-            for (NSString* key in savedSettings) {
-                if([self allowedKey:key]){
-                    
-                    // Check if font is available
-                    if ([key isEqualToString:@"fontRequested"]){
-                        fontCheckPerformed=TRUE;
-                        NSArray *fonts = [[NSFontManager sharedFontManager] availableFontFamilies];
-                        NSString* fontRequested = [savedSettings objectForKey:key];
-                        if(![fonts containsObject:fontRequested]){
-                            [AppController alertUser:@"Font not available!" info:[NSString stringWithFormat:@"'%@' will be replaced with system font.",fontRequested]];
-                        }
-                    }
-
-                    
-                    [[NSUserDefaults standardUserDefaults] setObject:[savedSettings objectForKey:key] forKey:key];
-                }
-            }
-            
-            if(!fontCheckPerformed){
-                 [AppController alertUser:@"Warning!" info:[NSString stringWithFormat:@"You have loaded an older settings file.\n I can't promise it will work correctly."]];
-            }
-            
-            return true;
-        }
-        
+        return [SettingsFile loadSettingsFromPath:path];
     }
     return NO;
 }
 
-// UGH! This is NOT the way to do this, but I don't want to break existing settings files
-+(BOOL)allowedKey:(NSString*)key{
-    return (
-            
-        [key isEqualToString:@"externalFilename"] ||
-            
-        [key isEqualToString:@"global_translateX"] ||
-        [key isEqualToString:@"global_translateY"] ||
-            
-        [key isEqualToString:@"global_offsetX"] ||
-        [key isEqualToString:@"global_offsetY"] ||
-            
-        [key isEqualToString:@"colorBackground2"] ||
-        
-        [key isEqualToString:@"fontSelected"] ||
-        [key isEqualToString:@"scrollSpeed"] ||
-        [key isEqualToString:@"colorFont"] ||
-        [key isEqualToString:@"f_scrollReverse"] ||
-        [key isEqualToString:@"colorBackground"] ||
-        
-        [key isEqualToString:@"gradientAngle"] ||
-        [key isEqualToString:@"publishID"] ||
-        [key isEqualToString:@"displayText"] ||
-        
-        [key isEqualToString:@"f_flipText"] ||
-        [key isEqualToString:@"textFile"] ||
-        [key isEqualToString:@"f_publishImage"] ||
-        [key isEqualToString:@"f_mirrorText"] ||
 
-        [key isEqualToString:@"f_lockScrollOptions"] ||
-        [key isEqualToString:@"f_scroll"] ||
-        [key isEqualToString:@"f_centerTextv"] ||
-        [key isEqualToString:@"scrollRate"] ||
-        [key isEqualToString:@"f_scrollPause"] ||
-        //[key isEqualToString:@"f_watchFile"] ||
-        [key isEqualToString:@"scaleFactor"] ||
-        [key isEqualToString:@"colorFontShadow"] ||
-        [key isEqualToString:@"f_scaleTextType"] ||
-        [key isEqualToString:@"f_scaleText"] ||
-        [key isEqualToString:@"f_autoScale"] ||
-        [key isEqualToString:@"f_drawShadow"] ||
-        [key isEqualToString:@"positionX"] ||
-        [key isEqualToString:@"positionY"] ||
-        [key isEqualToString:@"positionZ"] ||
-        [key isEqualToString:@"scaleTextType"] ||
-        [key isEqualToString:@"f_stripLinebreaks"] ||
-        [key isEqualToString:@"typingRate"] ||
-        [key isEqualToString:@"f_centerText"] ||
-            
-        [key isEqualToString:@"f_typingEffect"] ||
-        [key isEqualToString:@"f_typingEffectPause"] ||
-        [key isEqualToString:@"typingRate"] ||
-        [key isEqualToString:@"f_typingEffectLoop"] ||
-        [key isEqualToString:@"f_typingEffectHumanize"] ||
-        [key isEqualToString:@"outputResolution"] ||
-        [key isEqualToString:@"f_transparentBackground"] ||
-            
-            
-        [key isEqualToString:@"inputSource"] ||
-         [key isEqualToString:@"textSliceFilename"] ||
-         [key isEqualToString:@"textSliceFilenameWithoutPath"] ||            
-            
-        [key isEqualToString:@"globalPosition_0"] ||
-        [key isEqualToString:@"globalPosition_1"] ||
-        [key isEqualToString:@"globalPosition_2"] ||
-        [key isEqualToString:@"globalPosition_3"] ||
-        [key isEqualToString:@"globalPosition_4"] ||
-        [key isEqualToString:@"globalPosition_5"] ||
-        [key isEqualToString:@"globalPosition_6"] ||
-        [key isEqualToString:@"globalPosition_7"] ||
-        [key isEqualToString:@"globalPosition_8"] ||
-        [key isEqualToString:@"globalPosition_9"] ||
-        [key isEqualToString:@"overlayTransparencyVal"] ||
-        [key isEqualToString:@"f_correctOrigin"] ||
-        
-        [key isEqualToString:@"textAlignment"] ||
-        [key isEqualToString:@"fontRequested"] ||
-        [key isEqualToString:@"subtitler_settings_file"] ||
-        
-            
-        [key isEqualToString:@"scrollDirection"]
-        );
-}
 
 
 +(void)lowerResolution{

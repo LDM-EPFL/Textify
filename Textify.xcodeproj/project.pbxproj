@@ -37,6 +37,8 @@
 		4987A38916C322C20035FB17 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4987A38816C322C20035FB17 /* Security.framework */; };
 		4988878417860563007F0413 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4988878317860563007F0413 /* MainView.m */; };
 		498DA26D17DB78D80060F022 /* TextSliceScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA26C17DB78D80060F022 /* TextSliceScrollView.m */; };
+		498DA3AA17E5030700EBDF78 /* SettingsFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA3A917E5030700EBDF78 /* SettingsFile.m */; };
+		498DA3AD17E53FFA00EBDF78 /* SettingsFileBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA3AC17E53FFA00EBDF78 /* SettingsFileBox.m */; };
 		498F2D8D17CE2A8300A38674 /* NSTextView_NoDrag.m in Sources */ = {isa = PBXBuildFile; fileRef = 498F2D8C17CE2A8300A38674 /* NSTextView_NoDrag.m */; };
 		498F2D9017CE2B2300A38674 /* NSTextView_DragOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 498F2D8F17CE2B2200A38674 /* NSTextView_DragOverride.m */; };
 		499AE6E417DE7CE20055B9F0 /* FRAppCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 499AE6E317DE7CE20055B9F0 /* FRAppCommon.m */; };
@@ -105,6 +107,10 @@
 		498DA26A17DB71A50060F022 /* Textify-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Textify-Info.plist"; sourceTree = SOURCE_ROOT; };
 		498DA26B17DB78D80060F022 /* TextSliceScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSliceScrollView.h; sourceTree = SOURCE_ROOT; };
 		498DA26C17DB78D80060F022 /* TextSliceScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSliceScrollView.m; sourceTree = SOURCE_ROOT; };
+		498DA3A817E5030600EBDF78 /* SettingsFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsFile.h; sourceTree = SOURCE_ROOT; };
+		498DA3A917E5030700EBDF78 /* SettingsFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsFile.m; sourceTree = SOURCE_ROOT; };
+		498DA3AB17E53FFA00EBDF78 /* SettingsFileBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsFileBox.h; sourceTree = SOURCE_ROOT; };
+		498DA3AC17E53FFA00EBDF78 /* SettingsFileBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsFileBox.m; sourceTree = SOURCE_ROOT; };
 		498F2D8B17CE2A8300A38674 /* NSTextView_NoDrag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_NoDrag.h; sourceTree = SOURCE_ROOT; };
 		498F2D8C17CE2A8300A38674 /* NSTextView_NoDrag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTextView_NoDrag.m; sourceTree = SOURCE_ROOT; };
 		498F2D8E17CE2B2200A38674 /* NSTextView_DragOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_DragOverride.h; sourceTree = SOURCE_ROOT; };
@@ -192,9 +198,13 @@
 			isa = PBXGroup;
 			children = (
 				493684DA179D48D600BE8384 /* MainMenu.xib */,
+				498DA3AB17E53FFA00EBDF78 /* SettingsFileBox.h */,
+				498DA3AC17E53FFA00EBDF78 /* SettingsFileBox.m */,
 				498DA26B17DB78D80060F022 /* TextSliceScrollView.h */,
 				498DA26C17DB78D80060F022 /* TextSliceScrollView.m */,
 				49CCB37117DB28E5009925EF /* TextSlice.h */,
+				498DA3A817E5030600EBDF78 /* SettingsFile.h */,
+				498DA3A917E5030700EBDF78 /* SettingsFile.m */,
 				49CCB37217DB28E5009925EF /* TextSlice.m */,
 				498F2D8B17CE2A8300A38674 /* NSTextView_NoDrag.h */,
 				498F2D8E17CE2B2200A38674 /* NSTextView_DragOverride.h */,
@@ -394,6 +404,8 @@
 				499AE6F117DE7CF00055B9F0 /* FRMIDIInput.m in Sources */,
 				499AE6F217DE7CF00055B9F0 /* FRMIDIMapping.m in Sources */,
 				499AE6F317DE7CF00055B9F0 /* FRMIDIPublishedMethods.m in Sources */,
+				498DA3AA17E5030700EBDF78 /* SettingsFile.m in Sources */,
+				498DA3AD17E53FFA00EBDF78 /* SettingsFileBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
