@@ -17,11 +17,19 @@
     [super awakeFromNib];
 }
 
+-(void)keyUp:(NSEvent *)event{
+    unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
+    switch(key) {
+            
+        case ' ':
+            [[NSUserDefaults standardUserDefaults] setBool:![[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectPause"] forKey:@"f_typingEffectPause"];
+            break;
+    }
+}
+
 -(BOOL)acceptsFirstResponder{return YES;}
 -(NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {return NSDragOperationCopy;}
 -(BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender {return YES;}
-
-
 -(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {
     // Check extension... 
     NSPasteboard* pbrd = [sender draggingPasteboard];

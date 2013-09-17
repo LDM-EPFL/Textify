@@ -11,7 +11,7 @@
 @class FRMIDIInput;
 @class FRMIDIConfigController;
 
-@interface AppDelegate : NSObject <NSApplicationDelegate,NSTabViewDelegate>{
+@interface AppDelegate : NSObject <NSApplicationDelegate,NSTabViewDelegate,NSSplitViewDelegate,NSTextFieldDelegate>{
     __strong NSArrayController *_slicedText;
     FRMIDIInput *midiInput;
     IBOutlet NSWindow *prefsWindow;

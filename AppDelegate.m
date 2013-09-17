@@ -35,37 +35,57 @@
 
 // SETTINGS FILES ////////////////
 - (IBAction)refreshSettingsDir:(id)sender {
-    // Clear the array
-    NSRange range = NSMakeRange(0, [[[(AppDelegate *)[[NSApplication sharedApplication] delegate] settingsFiles] arrangedObjects] count]);
-    [[(AppDelegate *)[[NSApplication sharedApplication] delegate] settingsFiles] removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
     
-    // Check extension...
-    NSString *path=[[NSUserDefaults standardUserDefaults] valueForKey:@"settingsDirectory"];
-    NSArray *directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
-    NSArray *fileList = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.settings'"]];
+    [SettingsFile refreshSettingsSidebarWithArrayController:_settingsFiles];
+    
+}
 
-    
-    // Is this a txt file?
-    for(NSString* filename in fileList){
-        SettingsFile* newFile = [[SettingsFile alloc] init];
-        newFile.name=[filename stringByDeletingPathExtension];
-        newFile.path=[NSString stringWithFormat:@"%@/%@",path,filename];
-        [_settingsFiles addObject:newFile];
+-(void)saveSettings:(SettingsFile*)sf{
+    [SettingsFile saveCurrentSettingsToPath:sf.path withDisplayName:sf.name];
+}
+
+-(void)deleteSettings:(SettingsFile*)sf{
+    [SettingsFile deleteSettingsFile:sf.path];
+}
+
+
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex
+{
+   if (proposedMinimumPosition < 85)
+    {
+        proposedMinimumPosition = 85;
     }
-    NSLog(@"%i items",(int)[[_settingsFiles arrangedObjects] count]);
+    
+    return proposedMinimumPosition;
+}
+
+- (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMax ofSubviewAt:(NSInteger)dividerIndex
+{
+     if (proposedMax > 700)
+    {
+        proposedMax = 700;
+    }
+    
+    return proposedMax ;
+}
+- (BOOL)splitView:(NSSplitView *)splitView canCollapseSubview:(NSView *)subview{
+    return NO;
 }
 
 -(void)doubleClickSettings{
 
     SettingsFile* thisFile = [[(AppDelegate *)[[NSApplication sharedApplication] delegate] settingsFiles] selectedObjects][0];
     
+    // This loads the cached version
+    /*
+    for(NSString* key in thisFile.settings){
+        [[NSUserDefaults standardUserDefaults] setValue:[thisFile.settings valueForKey:key] forKey:key];
+    }
+     */
+    
+    // This loads from disk
     [SettingsFile loadSettingsFromPath:thisFile.path];
 }
-
-
-
-
-
 
 - (IBAction)launchPreferences:(id)sender {
     [prefsWindow makeKeyAndOrderFront:self];
@@ -89,6 +109,9 @@
 
     NSData *fontSelected = [NSArchiver archivedDataWithRootObject:panelFont];
     [[NSUserDefaults standardUserDefaults] setValue:fontSelected forKey:@"fontSelected"];
+    
+     [[NSUserDefaults standardUserDefaults] setValue:[(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]] familyName] forKey:@"fontRequested"];
+   
 }
 - (unsigned int)validModesForFontPanel:(NSFontPanel *)fontPanel{
     return NSFontPanelFaceModeMask | NSFontPanelCollectionModeMask;// | NSFontPanelSizeModeMask;
@@ -114,6 +137,11 @@
     // Settings file list
     [self refreshSettingsDir:self];
 }
+-(void)applicationWillTerminate:(NSNotification *)notification{
+    //[AppController restoreResolution];
+    [self saveSliceFile];
+}
+
 
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:
 (NSTabViewItem *)tabViewItem{
@@ -143,9 +171,12 @@
     // Do we have a slicer to load?
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"isSlicerAvailable"];
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]){
-        //[AppDelegate loadSliceFileFromPath:[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]];
+        [(AppDelegate *)[[NSApplication sharedApplication] delegate] loadSliceFileFromPath:[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]];
+        
         [self embiggen];
     }else{
+        [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textSliceFilenameWithoutPath"];
+        [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textSliceFilename"];
         [self ensmallen];
     }
 
@@ -169,7 +200,20 @@
     });
 }
 
-
+// Button: Select a destination for logfiles
+- (IBAction)selectSettingsFolder:(id)sender {
+    NSOpenPanel* dlg =[NSOpenPanel openPanel];
+    
+    [dlg setPrompt:@"Choose"];
+    [dlg setCanChooseFiles:NO];
+    [dlg setCanChooseDirectories:YES];
+    [dlg runModal];
+    
+    NSString *path = [[[dlg URLs] objectAtIndex:0] path];
+    [[NSUserDefaults standardUserDefaults] setValue:path forKey:@"settingsDirectory"];
+    
+    [SettingsFile refreshSettingsSidebarWithArrayController:_settingsFiles];
+}
 
 - (IBAction)toggleSidebar:(id)sender {
     if ([(NSButton *)sender state ] == NSOnState){
@@ -180,18 +224,13 @@
 }
 
 - (IBAction)saveSliceFileButton:(id)sender {
-
     NSLog(@"Save slice file");
     [(AppDelegate *)[[NSApplication sharedApplication] delegate] saveSliceFile];
 }
 
 // Save slices to disk
 -(void)saveSliceFile{
-    
-    // Mark our place
-    int selectionIndex = (int)[[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedTextCollection] selectionIndexes] firstIndex];
-                          
-    
+
     // For each slice
     NSString *outputFileAsString;
     for(TextSlice* thisSlice in [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects]){
@@ -201,8 +240,6 @@
             
             NSString* thisSliceText=[thisSlice displayText];
             
-
-            
             // Aggregate lines
             outputFileAsString = [NSString stringWithFormat:@"%@%@\r\n\r\n",outputFileAsString?outputFileAsString:@"",thisSliceText];
         }
@@ -210,20 +247,15 @@
     
     // Write to disk
     [outputFileAsString writeToFile:[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]  atomically:NO encoding:NSUTF8StringEncoding error:nil];
-    
-    // Reload
-    [self loadSliceFileFromPath:[[NSUserDefaults standardUserDefaults] valueForKey:@"textSliceFilename"]];
-    
-    // Reset selection index
-    if (selectionIndex <= [[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects] count]){
-        [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedTextCollection] setSelectionIndexes:[NSIndexSet indexSetWithIndex:selectionIndex]];
-    }
 }
 
 
 
 // Load file
 -(void)loadSliceFileFromPath:(NSString*)path{
+    [self loadSliceFileFromPath:path restoringIndexTo:0];
+}
+-(void)loadSliceFileFromPath:(NSString*)path restoringIndexTo:(int)selectionIndex{
 
     // Clear the array
     NSRange range = NSMakeRange(0, [[[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] arrangedObjects] count]);
@@ -241,7 +273,7 @@
     // Grab the blocks between newlines (we do it this way so it should work with all kinds of newlines)
     NSMutableArray* arrayOfNewSlices=[[NSMutableArray alloc] init];
     int sliceCount=(int)[splitContents count];
-    NSLog(@"Loading %i chunks...",sliceCount);
+    //NSLog(@"Loading %i chunks...",sliceCount);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *blockAggregator;
@@ -315,27 +347,32 @@
                 [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText] addObjects:arrayOfNewSlices];
                 [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"isSlicerAvailable"];
                 [self setIsLoading:false];
-                NSLog(@"Done!");
+                
+                
+                // Restore selection index
+                NSArrayController* ac = [(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedText];
+                //NSLog(@"Attempting to restore to: %i of %li",selectionIndex,(unsigned long)[[ac arrangedObjects] count]);
+                if([[ac arrangedObjects] count] >= selectionIndex){
+                    [ac setSelectionIndex:selectionIndex];
+                }else{
+                    [ac setSelectionIndex:0];
+                }
+            
             }
 
         });
     });
-                   
-    
-    // Set selection index to first
-    [[(AppDelegate *)[[NSApplication sharedApplication] delegate] slicedTextCollection] setSelectionIndexes:[NSIndexSet indexSetWithIndex:0]];
 }
 -(IBAction)watchfile_clear:(id)sender {
     [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"displayText"];
     [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"externalFilename"];
+    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textSliceFilenameWithoutPath"];
+    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"textSliceFilename"];
     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"isSlicerAvailable"];
     NSRange range = NSMakeRange(0, [[_slicedText arrangedObjects] count]);
     [_slicedText removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
 }
 
--(void)applicationWillTerminate:(NSNotification *)notification{
-    [AppController restoreResolution];
-}
 
 ///////////////////////////////////////////////////////////////////////
 // APPLICATION
