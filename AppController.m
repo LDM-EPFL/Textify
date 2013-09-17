@@ -76,6 +76,8 @@ static BOOL allowResolutionChange;
     
 }
 
+
+
 ///////////////////////////////////////////////////////////
 // Displaylink
 ///////////////////////////////////////////////////////////
@@ -175,6 +177,21 @@ bool f_dockedMode=false;
     [controlWindow makeKeyAndOrderFront:self];
 }
 
+/*
+// Edit the display name of settings
+- (IBAction)SettingsNameEdit:(id)sender {
+    for(SettingsFile* thisFile in [[(AppDelegate *)[[NSApplication sharedApplication] delegate]settingsFiles] arrangedObjects]){
+        
+        // If the name should change, write it to disk
+        if(![thisFile.name isEqualToString:thisFile.originalName]){
+            NSLog(@"Rename: %@ to %@",thisFile.originalName,thisFile.name);
+            thisFile.originalName=thisFile.name;
+        }
+        
+    }
+}
+ */
+
 // Global keyboard handler
 // Be careful with this, it is truly global (will capture even if in a textbox, for example)
 -(void)globalKeyboardHandler{
@@ -211,40 +228,36 @@ bool f_dockedMode=false;
             }else{
                 
                 switch (key){
-                  case 's':case'S':{
+               
+                // CMD+f fullscreen
+                case 'f':case'F':{
+                    
+                    if (![[FRAppCommon sharedFRAppCommon] isFullscreen]){
+                        [[[FRAppCommon sharedFRAppCommon] fontViewController] goFullscreen];
+                    }else{
+                       [[[FRAppCommon sharedFRAppCommon] fontViewController] goWindowed];
+                    }
+                        break;
+
+                // CMD+s Save settings
+                    }case 's':case'S':{
                       
-                        // Save some stuff with the settings
-                        [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"subtitler_settings_file"];
-                        [[NSUserDefaults standardUserDefaults] setValue:[(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]] familyName] forKey:@"fontRequested"];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                        NSDictionary *settings=[[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
                       
-                        // Default to desktop if not specified
-                        NSString* path = [[NSUserDefaults standardUserDefaults] valueForKey:@"settingsDirectory"];
-                        if([path length] == 0){
-                            path = [NSString stringWithFormat:@"%@/Desktop",NSHomeDirectory()];
-                            [[NSFileManager defaultManager ] createDirectoryAtPath:path withIntermediateDirectories: YES attributes: nil error: NULL ];
-                        }
+                      // Default to desktop if not specified
+                      NSString* path = [[NSUserDefaults standardUserDefaults] valueForKey:@"settingsDirectory"];
+                      if([path length] == 0){
+                          path = [NSString stringWithFormat:@"%@/Desktop",NSHomeDirectory()];
+                          [[NSFileManager defaultManager ] createDirectoryAtPath:path withIntermediateDirectories: YES attributes: nil error: NULL ];
+                      }
                       
-                        // Default filename is timestamp
-                        NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
-                        NSNumber *timeStampObj = [NSNumber numberWithDouble: timeStamp];
-                        NSString *fileName=[[NSString alloc] initWithFormat:@"%@/%@_SUB.settings",path,timeStampObj];
+                      // Default filename is timestamp
+                      NSTimeInterval timeStamp = [[NSDate date] timeIntervalSince1970];
+                      NSNumber *timeStampObj = [NSNumber numberWithDouble: timeStamp];
+                      NSString *fileName=[[NSString alloc] initWithFormat:@"%@/%@_SUB.settings",path,timeStampObj];
                       
-                        // Clean the settings
-                        NSMutableDictionary* cleanSettings=[[NSMutableDictionary alloc] init];
-                        for (NSString* key in settings) {
-                            if([SettingsFile allowedKey:key]){
-                                [cleanSettings setObject:[settings objectForKey:key] forKey:key];
-                            }
-                        }
-                        
-                        // Write them to disk
-                        [cleanSettings writeToFile:fileName atomically:YES];
-                      
-                        // Update and refresh UI
-                        [[NSUserDefaults standardUserDefaults] setValue:path forKey:@"settingsDirectory"];
-                        [(AppDelegate *)[[NSApplication sharedApplication] delegate] refreshSettingsDir:self];
+                      [SettingsFile saveCurrentSettingsToPath:fileName
+                                              withDisplayName:nil];
+                       
                       
                         break;
                         

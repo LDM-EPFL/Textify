@@ -10,14 +10,16 @@
 #import "FRAppCommon.h"
 #import "BigFontView.h"
 #import "AppController.h"
+#import "AppDelegate.h"
 
 @implementation SettingsFile
 
-// UGH! This is NOT the way to do this, but I don't want to break existing settings files
+// UGH! 
 +(BOOL)allowedKey:(NSString*)key{
     return (
             
             [key isEqualToString:@"externalFilename"] ||
+            [key isEqualToString:@"displayName"] ||
             
             [key isEqualToString:@"global_translateX"] ||
             [key isEqualToString:@"global_translateY"] ||
@@ -147,5 +149,97 @@
     
 }
 
++(void)saveCurrentSettingsToPath:(NSString*)fullFilePath withDisplayName:(NSString*)displayName{
+    
+    // Save some stuff with the settings
+    [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"subtitler_settings_file"];
+    [[NSUserDefaults standardUserDefaults] setValue:[(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]] familyName] forKey:@"fontRequested"];
+    
+    // Synch
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSDictionary *settings=[[NSUserDefaults standardUserDefaults] dictionaryRepresentation];
+    
+    // Displayname
+    if(!displayName){
+        
+        int maxIndex = (int)[[[NSUserDefaults standardUserDefaults] valueForKey:@"displayText"] length];
+        maxIndex=MIN(maxIndex,20);
+        displayName=[NSString stringWithFormat:@"NEW:%@",[[[NSUserDefaults standardUserDefaults] valueForKey:@"displayText" ] substringToIndex:maxIndex]];
+        
+        [displayName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+         
+    }
+    [settings setValue:displayName forKey:@"displayName"];
+    
 
+    // Clean the settings
+    NSMutableDictionary* cleanSettings=[[NSMutableDictionary alloc] init];
+    for (NSString* key in settings) {
+        if([SettingsFile allowedKey:key]){
+            [cleanSettings setObject:[settings objectForKey:key] forKey:key];
+        }
+    }
+    
+    // Write them to disk
+    [cleanSettings writeToFile:fullFilePath atomically:YES];
+    
+    // Update and refresh UI
+    [[NSUserDefaults standardUserDefaults] setValue:[fullFilePath stringByDeletingLastPathComponent] forKey:@"settingsDirectory"];
+    [(AppDelegate *)[[NSApplication sharedApplication] delegate] refreshSettingsDir:self];
+}
+
++(void)refreshSettingsSidebarWithArrayController:(NSArrayController*)ac{
+    
+    //Note the selection index
+    int selectionIndex = (int)[ac selectionIndex];
+    
+    // Clear the array
+    NSRange range = NSMakeRange(0, [[[(AppDelegate *)[[NSApplication sharedApplication] delegate] settingsFiles] arrangedObjects] count]);
+    [[(AppDelegate *)[[NSApplication sharedApplication] delegate] settingsFiles] removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+    
+    // Check extension...
+    NSString *path=[[NSUserDefaults standardUserDefaults] valueForKey:@"settingsDirectory"];
+    NSArray *directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+    NSArray *fileList = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.settings'"]];
+    
+    // Grab name from file and make sure it really is a settings file
+    
+    
+    // Is this a settings file?
+    for(NSString* filename in fileList){
+        NSString* fullPath = [NSString stringWithFormat:@"%@/%@",path,filename];
+        
+        NSMutableDictionary *savedSettings = [[NSMutableDictionary alloc] initWithContentsOfFile:fullPath];
+        // Check to make sure this is a subtitler settings file
+        if ([savedSettings objectForKey:@"subtitler_settings_file"]) {
+            
+            SettingsFile* newFile = [[SettingsFile alloc] init];
+            newFile.settings=savedSettings;
+            if ([savedSettings objectForKey:@"displayName"]) {
+                newFile.name=[savedSettings valueForKey:@"displayName"];
+            }else{
+                newFile.name=[filename stringByDeletingPathExtension];
+            }
+            newFile.originalName=newFile.name;
+            newFile.path=fullPath;
+            [ac addObject:newFile];
+        }else{
+            NSLog(@"Skip: %@: ",filename);
+        }
+        
+    }
+    
+    // Restore selection index
+    if([[ac arrangedObjects] count] >= selectionIndex){
+        [ac setSelectionIndex:selectionIndex];
+    }else{
+        [ac setSelectionIndex:0];
+    }
+
+}
+
++(void)deleteSettingsFile:(NSString*)fullPath{
+    [[NSFileManager defaultManager] removeItemAtPath:fullPath error:nil];
+    [(AppDelegate *)[[NSApplication sharedApplication] delegate] refreshSettingsDir:self];
+}
 @end

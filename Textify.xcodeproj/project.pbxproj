@@ -12,6 +12,7 @@
 		491BD7EA16BBF0570012A5E1 /* SinK3.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 491BD7E816BBF0570012A5E1 /* SinK3.xcdatamodeld */; };
 		491BD83516BED10F0012A5E1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD83416BED10F0012A5E1 /* QuartzCore.framework */; };
 		491BD83916BED11F0012A5E1 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD83816BED11F0012A5E1 /* CoreMedia.framework */; };
+		491D8F5B17E8C65000D7119D /* TextField_keyHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 491D8F5A17E8C65000D7119D /* TextField_keyHandler.m */; };
 		493684CF179D479A00BE8384 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 493684CD179D479A00BE8384 /* AppDelegate.m */; };
 		493684D1179D47E800BE8384 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 493684D0179D47E800BE8384 /* main.m */; };
 		493684D6179D480100BE8384 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 493684D2179D480100BE8384 /* Credits.rtf */; };
@@ -31,11 +32,9 @@
 		493D643A17173FB700E51A6F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD83616BED1150012A5E1 /* OpenGL.framework */; };
 		493D643B1717404D00E51A6F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD7D316BBF0560012A5E1 /* AppKit.framework */; };
 		495367A517CF5BD3005EE119 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495367A417CF5BD3005EE119 /* CoreMIDI.framework */; };
-		4956688417976E5600F5DEF2 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4956688317976E5600F5DEF2 /* PreviewView.m */; };
 		4964FDE317DCB49D0092E542 /* textify.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4964FDE217DCB49D0092E542 /* textify.icns */; };
 		4969723F17CAAA2F0043E260 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4969723E17CAAA2F0043E260 /* Syphon.framework */; };
 		4987A38916C322C20035FB17 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4987A38816C322C20035FB17 /* Security.framework */; };
-		4988878417860563007F0413 /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4988878317860563007F0413 /* MainView.m */; };
 		498DA26D17DB78D80060F022 /* TextSliceScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA26C17DB78D80060F022 /* TextSliceScrollView.m */; };
 		498DA3AA17E5030700EBDF78 /* SettingsFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA3A917E5030700EBDF78 /* SettingsFile.m */; };
 		498DA3AD17E53FFA00EBDF78 /* SettingsFileBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA3AC17E53FFA00EBDF78 /* SettingsFileBox.m */; };
@@ -81,6 +80,8 @@
 		491BD83416BED10F0012A5E1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		491BD83616BED1150012A5E1 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		491BD83816BED11F0012A5E1 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		491D8F5917E8C65000D7119D /* TextField_keyHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextField_keyHandler.h; sourceTree = "<group>"; };
+		491D8F5A17E8C65000D7119D /* TextField_keyHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextField_keyHandler.m; sourceTree = "<group>"; };
 		493684CD179D479A00BE8384 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		493684CE179D479A00BE8384 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		493684D0179D47E800BE8384 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
@@ -97,13 +98,9 @@
 		493D643417173DFA00E51A6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		493D643617173E0000E51A6F /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		495367A417CF5BD3005EE119 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreMIDI.framework; sourceTree = DEVELOPER_DIR; };
-		4956688217976E5600F5DEF2 /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
-		4956688317976E5600F5DEF2 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		4964FDE217DCB49D0092E542 /* textify.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = textify.icns; sourceTree = "<group>"; };
 		4969723E17CAAA2F0043E260 /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Syphon.framework; path = "../../SDK:Samples/Syphon SDK Public Beta 2/Syphon.framework"; sourceTree = "<group>"; };
 		4987A38816C322C20035FB17 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		4988878217860563007F0413 /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
-		4988878317860563007F0413 /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
 		498DA26A17DB71A50060F022 /* Textify-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Textify-Info.plist"; sourceTree = SOURCE_ROOT; };
 		498DA26B17DB78D80060F022 /* TextSliceScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSliceScrollView.h; sourceTree = SOURCE_ROOT; };
 		498DA26C17DB78D80060F022 /* TextSliceScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextSliceScrollView.m; sourceTree = SOURCE_ROOT; };
@@ -173,11 +170,9 @@
 		491BD7C116BBF0560012A5E1 = {
 			isa = PBXGroup;
 			children = (
-				499AE6DD17DE7CA80055B9F0 /* FRApp */,
 				4964FDE217DCB49D0092E542 /* textify.icns */,
+				499AE6DD17DE7CA80055B9F0 /* FRApp */,
 				498F2D8217CE13CE00A38674 /* App */,
-				4956688217976E5600F5DEF2 /* PreviewView.h */,
-				4956688317976E5600F5DEF2 /* PreviewView.m */,
 				491E3FDE171729B300DB7734 /* Main Code */,
 				491BD7D716BBF0560012A5E1 /* Resources */,
 				49BD02D017CEBF4B00CF064E /* Assets */,
@@ -203,9 +198,9 @@
 				498DA26B17DB78D80060F022 /* TextSliceScrollView.h */,
 				498DA26C17DB78D80060F022 /* TextSliceScrollView.m */,
 				49CCB37117DB28E5009925EF /* TextSlice.h */,
+				49CCB37217DB28E5009925EF /* TextSlice.m */,
 				498DA3A817E5030600EBDF78 /* SettingsFile.h */,
 				498DA3A917E5030700EBDF78 /* SettingsFile.m */,
-				49CCB37217DB28E5009925EF /* TextSlice.m */,
 				498F2D8B17CE2A8300A38674 /* NSTextView_NoDrag.h */,
 				498F2D8E17CE2B2200A38674 /* NSTextView_DragOverride.h */,
 				498F2D8F17CE2B2200A38674 /* NSTextView_DragOverride.m */,
@@ -223,10 +218,10 @@
 		491E3FDE171729B300DB7734 /* Main Code */ = {
 			isa = PBXGroup;
 			children = (
+				491D8F5917E8C65000D7119D /* TextField_keyHandler.h */,
+				491D8F5A17E8C65000D7119D /* TextField_keyHandler.m */,
 				4907B3B3175FA3290042E1C8 /* BigFontView.h */,
 				4907B3B4175FA3290042E1C8 /* BigFontView.m */,
-				4988878217860563007F0413 /* MainView.h */,
-				4988878317860563007F0413 /* MainView.m */,
 				49A3DAAA17CA52C70091FEFD /* NSView+snapshot.h */,
 				49A3DAAB17CA52C70091FEFD /* NSView+snapshot.m */,
 			);
@@ -390,8 +385,6 @@
 				491BD7EA16BBF0570012A5E1 /* SinK3.xcdatamodeld in Sources */,
 				4907B3B5175FA3290042E1C8 /* BigFontView.m in Sources */,
 				49BF395217842D910045361C /* AppController.m in Sources */,
-				4988878417860563007F0413 /* MainView.m in Sources */,
-				4956688417976E5600F5DEF2 /* PreviewView.m in Sources */,
 				493684CF179D479A00BE8384 /* AppDelegate.m in Sources */,
 				493684D1179D47E800BE8384 /* main.m in Sources */,
 				49A3DAAC17CA52C70091FEFD /* NSView+snapshot.m in Sources */,
@@ -406,6 +399,7 @@
 				499AE6F317DE7CF00055B9F0 /* FRMIDIPublishedMethods.m in Sources */,
 				498DA3AA17E5030700EBDF78 /* SettingsFile.m in Sources */,
 				498DA3AD17E53FFA00EBDF78 /* SettingsFileBox.m in Sources */,
+				491D8F5B17E8C65000D7119D /* TextField_keyHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

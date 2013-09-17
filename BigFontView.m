@@ -175,8 +175,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     [[NSColor blackColor] set];
     
     [self lockFocus];
-    [NSBezierPath fillRect:self.frame];
-    [drawIntoImage drawAtPoint:NSZeroPoint fromRect:self.frame operation:NSCompositeCopy fraction:1];
+        [NSBezierPath fillRect:self.frame];
+        [drawIntoImage drawAtPoint:NSZeroPoint fromRect:self.frame operation:NSCompositeCopy fraction:1];
     [self unlockFocus];
   
     // OUtput syphon
@@ -356,7 +356,6 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
 // Setup and Draw
 ///////////////////////////////////////////////////////////////////////
 -(void)refreshDisplayText{
-    
     if([(AppDelegate*)[[NSApplication sharedApplication] delegate] isLoading]){
         return;
     }
@@ -428,7 +427,6 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
 
 // Draw loop
 -(void)drawViewOfSize:(NSSize)renderSize{
-    
     // Three possible sources for displaytext
     [self refreshDisplayText];
     NSString *displayText =[[NSUserDefaults standardUserDefaults] valueForKey:@"displayText"];
@@ -695,6 +693,8 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     // Pop the stack
     [NSGraphicsContext restoreGraphicsState];
     
+    [NSThread sleepUntilDate: [[NSDate date] addTimeInterval: .01]];
+
 }
 
 
@@ -770,8 +770,13 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         }
     }
     
+    
+    //[NSThread sleepUntilDate: [[NSDate date] addTimeInterval: .01]];
+    
     // Reset timer rate if requested
     [self adjustTimerToRate:[[NSUserDefaults standardUserDefaults] doubleForKey:@"typingRate"]];
+    
+    
 }
 
 // Key handler
@@ -860,7 +865,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     
     
     if (CGLSetCurrentContext(cgl_ctx) != kCGLNoError){
-        NSLog(@"CANNOT MAKE CURRENT CONTEXT");
+        NSLog(@"CANNOT MAKE CURRENT CONTEzXT");
         return nil;
     };
     
@@ -937,13 +942,11 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     //Hide cursor
     [NSCursor hide];
     
-    // Switch resolution
-    [AppController lowerResolution];
-        
-    NSRect frame = [self.window frame];
+
+    //NSRect frame = [self.window frame];
+    NSRect frame = NSMakeRect(0,0,renderDimensions.width,renderDimensions.height);
     original_size = frame.size;
-    //self.position = frame.origin;
-    
+
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
                              [NSNumber numberWithBool:NO],NSFullScreenModeAllScreens,
                              nil];
