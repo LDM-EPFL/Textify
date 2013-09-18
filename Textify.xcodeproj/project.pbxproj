@@ -33,7 +33,10 @@
 		493D643B1717404D00E51A6F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491BD7D316BBF0560012A5E1 /* AppKit.framework */; };
 		495367A517CF5BD3005EE119 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 495367A417CF5BD3005EE119 /* CoreMIDI.framework */; };
 		4964FDE317DCB49D0092E542 /* textify.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4964FDE217DCB49D0092E542 /* textify.icns */; };
-		4969723F17CAAA2F0043E260 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4969723E17CAAA2F0043E260 /* Syphon.framework */; };
+		4974D18317E9F76D008DA40C /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4974D18217E9F76D008DA40C /* Syphon.framework */; };
+		4974D18417E9F784008DA40C /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4974D18217E9F76D008DA40C /* Syphon.framework */; };
+		4974D18617EA0540008DA40C /* defaultSettings.settings in Resources */ = {isa = PBXBuildFile; fileRef = 4974D18517EA0540008DA40C /* defaultSettings.settings */; };
+		4974D18917EA06CD008DA40C /* SettingsScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4974D18817EA06CD008DA40C /* SettingsScrollView.m */; };
 		4987A38916C322C20035FB17 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4987A38816C322C20035FB17 /* Security.framework */; };
 		498DA26D17DB78D80060F022 /* TextSliceScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA26C17DB78D80060F022 /* TextSliceScrollView.m */; };
 		498DA3AA17E5030700EBDF78 /* SettingsFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 498DA3A917E5030700EBDF78 /* SettingsFile.m */; };
@@ -52,7 +55,6 @@
 		49BD02D117CEBF4B00CF064E /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 49BD02D017CEBF4B00CF064E /* Assets */; };
 		49BF395217842D910045361C /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49BF395117842D910045361C /* AppController.m */; };
 		49CCB37317DB28E5009925EF /* TextSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CCB37217DB28E5009925EF /* TextSlice.m */; };
-		49CF9AA117CBEBF600449D9B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4969723E17CAAA2F0043E260 /* Syphon.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,7 +64,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				49CF9AA117CBEBF600449D9B /* Syphon.framework in CopyFiles */,
+				4974D18417E9F784008DA40C /* Syphon.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,7 +101,10 @@
 		493D643617173E0000E51A6F /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		495367A417CF5BD3005EE119 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreMIDI.framework; sourceTree = DEVELOPER_DIR; };
 		4964FDE217DCB49D0092E542 /* textify.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = textify.icns; sourceTree = "<group>"; };
-		4969723E17CAAA2F0043E260 /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Syphon.framework; path = "../../SDK:Samples/Syphon SDK Public Beta 2/Syphon.framework"; sourceTree = "<group>"; };
+		4974D18217E9F76D008DA40C /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Syphon.framework; sourceTree = "<group>"; };
+		4974D18517EA0540008DA40C /* defaultSettings.settings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = defaultSettings.settings; sourceTree = SOURCE_ROOT; };
+		4974D18717EA06CD008DA40C /* SettingsScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsScrollView.h; sourceTree = SOURCE_ROOT; };
+		4974D18817EA06CD008DA40C /* SettingsScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsScrollView.m; sourceTree = SOURCE_ROOT; };
 		4987A38816C322C20035FB17 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		498DA26A17DB71A50060F022 /* Textify-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Textify-Info.plist"; sourceTree = SOURCE_ROOT; };
 		498DA26B17DB78D80060F022 /* TextSliceScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextSliceScrollView.h; sourceTree = SOURCE_ROOT; };
@@ -160,7 +165,7 @@
 				4987A38916C322C20035FB17 /* Security.framework in Frameworks */,
 				491BD83916BED11F0012A5E1 /* CoreMedia.framework in Frameworks */,
 				491BD83516BED10F0012A5E1 /* QuartzCore.framework in Frameworks */,
-				4969723F17CAAA2F0043E260 /* Syphon.framework in Frameworks */,
+				4974D18317E9F76D008DA40C /* Syphon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,8 +200,11 @@
 				493684DA179D48D600BE8384 /* MainMenu.xib */,
 				498DA3AB17E53FFA00EBDF78 /* SettingsFileBox.h */,
 				498DA3AC17E53FFA00EBDF78 /* SettingsFileBox.m */,
+				4974D18517EA0540008DA40C /* defaultSettings.settings */,
 				498DA26B17DB78D80060F022 /* TextSliceScrollView.h */,
 				498DA26C17DB78D80060F022 /* TextSliceScrollView.m */,
+				4974D18717EA06CD008DA40C /* SettingsScrollView.h */,
+				4974D18817EA06CD008DA40C /* SettingsScrollView.m */,
 				49CCB37117DB28E5009925EF /* TextSlice.h */,
 				49CCB37217DB28E5009925EF /* TextSlice.m */,
 				498DA3A817E5030600EBDF78 /* SettingsFile.h */,
@@ -289,8 +297,8 @@
 		49D319951718A798001FE074 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4974D18217E9F76D008DA40C /* Syphon.framework */,
 				495367A417CF5BD3005EE119 /* CoreMIDI.framework */,
-				4969723E17CAAA2F0043E260 /* Syphon.framework */,
 				493D642417173DC600E51A6F /* Accelerate.framework */,
 				491BD7D316BBF0560012A5E1 /* AppKit.framework */,
 				493D642E17173DE500E51A6F /* ApplicationServices.framework */,
@@ -368,6 +376,7 @@
 				493684D7179D480100BE8384 /* InfoPlist.strings in Resources */,
 				493684DC179D48D600BE8384 /* MainMenu.xib in Resources */,
 				49BD02D117CEBF4B00CF064E /* Assets in Resources */,
+				4974D18617EA0540008DA40C /* defaultSettings.settings in Resources */,
 				4964FDE317DCB49D0092E542 /* textify.icns in Resources */,
 				499AE6F417DE7CF00055B9F0 /* midimap_korgNanoKontrol2.plist in Resources */,
 				499AE6F517DE7CF00055B9F0 /* midimap_korgNanoPad.plist in Resources */,
@@ -400,6 +409,7 @@
 				498DA3AA17E5030700EBDF78 /* SettingsFile.m in Sources */,
 				498DA3AD17E53FFA00EBDF78 /* SettingsFileBox.m in Sources */,
 				491D8F5B17E8C65000D7119D /* TextField_keyHandler.m in Sources */,
+				4974D18917EA06CD008DA40C /* SettingsScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,7 +525,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../SDK:Samples/Syphon SDK Public Beta 2\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_MODEL_TUNING = G5;
@@ -552,7 +561,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../SDK:Samples/Syphon SDK Public Beta 2\"",
 				);
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_MODEL_TUNING = G5;

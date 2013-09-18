@@ -92,6 +92,13 @@
     [prefsWindow center];
 }
 
+// Loads a default textify.settings file
+- (IBAction)resetEverything:(id)sender {
+    NSString *file = [[NSBundle mainBundle] pathForResource:@"defaultSettings" ofType:@"settings"];
+     [SettingsFile loadSettingsFromPath:file];
+}
+
+
 - (IBAction)FontButton:(id)sender {
     
     NSFont *fontToUse=(NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]];

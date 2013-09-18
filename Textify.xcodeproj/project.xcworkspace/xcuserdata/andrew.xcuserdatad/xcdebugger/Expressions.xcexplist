@@ -3,10 +3,10 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[BigFontView drawView]:BigFontView.m">
+         contextName = "-[BigFontView drawRect:]:BigFontView.m">
          <PersistentStrings>
             <PersistentString
-               value = "syphonServer">
+               value = "renderDimensions">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -41,15 +41,20 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "-[BigFontView drawView]:BigFontView.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "syphonServer">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[BigFontView createWindowTexture:mainDrawingContext:width:height:originX:originY:bounds:]:BigFontView.m">
          <PersistentStrings>
             <PersistentString
                value = "bounds">
             </PersistentString>
          </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "-[BigFontView drawRect:]:BigFontView.m">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

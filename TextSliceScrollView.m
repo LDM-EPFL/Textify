@@ -17,6 +17,9 @@
     [super awakeFromNib];
 }
 
+// Keyboard handling
+-(BOOL)acceptsFirstResponder{return YES;}
+-(void)keyDown:(NSEvent *)theEvent{};
 -(void)keyUp:(NSEvent *)event{
     unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
     switch(key) {
@@ -25,9 +28,10 @@
             [[NSUserDefaults standardUserDefaults] setBool:![[NSUserDefaults standardUserDefaults] boolForKey:@"f_typingEffectPause"] forKey:@"f_typingEffectPause"];
             break;
     }
+        
+
 }
 
--(BOOL)acceptsFirstResponder{return YES;}
 -(NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender {return NSDragOperationCopy;}
 -(BOOL)prepareForDragOperation:(id<NSDraggingInfo>)sender {return YES;}
 -(BOOL)performDragOperation:(id<NSDraggingInfo>)sender {

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>colorBackground</key>
+	<data>BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJmZgABhg==</data>
+	<key>colorBackground2</key>
+	<data>BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJmZgABhg==</data>
+	<key>colorFont</key>
+	<data>BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJmZgEBhg==</data>
+	<key>colorFontShadow</key>
+	<data>BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJmZgABhg==</data>
+	<key>displayName</key>
+	<string>DEFAULT SETTINGS</string>
+	<key>f_drawShadow</key>
+	<false/>
+	<key>textAlignment</key>
+	<integer>0</integer>
+	<key>f_flipText</key>
+	<false/>
+	<key>f_mirrorText</key>
+	<false/>
+	<key>f_transparentBackground</key>
+	<false/>
+	<key>f_typingEffect</key>
+	<false/>
+	<key>f_typingEffectPause</key>
+	<false/>
+	<key>fontRequested</key>
+	<string>Helvetica</string>
+	<key>fontSelected</key>
+	<data>BAtzdHJlYW10eXBlZIHoA4QBQISEhAZOU0ZvbnQehIQITlNPYmplY3QAhYQBaRyEBVsyOGNdBgAAABQAAAD//kgAZQBsAHYAZQB0AGkAYwBhAIQBZhSEAWMAmAGYAJgAhg==</data>
+	<key>inputSource</key>
+	<integer>0</integer>
+	<key>outputResolution</key>
+	<integer>2</integer>
+	<key>scaleFactor</key>
+	<string>1.00</string>
+	<key>subtitler_settings_file</key>
+	<true/>
+</dict>
+</plist>

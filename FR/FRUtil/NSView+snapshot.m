@@ -19,7 +19,7 @@
     NSImage *snapshot = [[NSImage alloc] initWithSize:sourceRect.size];
     NSBitmapImageRep *rep;
     [self lockFocus];
-    rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:sourceRect];
+        rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:sourceRect];
     [self unlockFocus];
     [snapshot addRepresentation:rep];
     return snapshot;

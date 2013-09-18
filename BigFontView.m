@@ -165,7 +165,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
      NSImage *drawIntoImage = [[NSImage alloc] initWithSize:renderDimensions];
     [drawIntoImage lockFocus];
-    [self drawViewOfSize:renderDimensions];
+        [self drawViewOfSize:renderDimensions];
     [drawIntoImage unlockFocus];
     //[self syphonSendImage:drawIntoImage];
 
@@ -265,14 +265,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         
         [drawImage lockFocus];
         
-        [transform translateXBy:0 yBy:imageSize.height];
-        [transform scaleXBy:1 yBy:-1];
-        [transform concat];
-        
-        [floorTextureNSImage drawAtPoint:NSZeroPoint
-                                fromRect:(NSRect){NSZeroPoint, imageSize}
-                               operation:NSCompositeCopy
-                                fraction:1];
+            [transform translateXBy:0 yBy:imageSize.height];
+            [transform scaleXBy:1 yBy:-1];
+            [transform concat];
+            
+            [floorTextureNSImage drawAtPoint:NSZeroPoint
+                                    fromRect:(NSRect){NSZeroPoint, imageSize}
+                                   operation:NSCompositeCopy
+                                    fraction:1];
         
         [drawImage unlockFocus];
         
@@ -479,11 +479,13 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     NSColor* fontColor = [NSColor whiteColor];
     NSColor* backgroundColor = [NSColor blackColor];
     NSColor* backgroundColor2 = [NSColor blackColor];
+    NSColor* colorFontShadow=[NSColor blackColor];
     @try {
         fontSelected = (NSFont *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"fontSelected"]];
         fontColor = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFont"]];
         backgroundColor = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground"]];
         backgroundColor2 = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorBackground2"]];
+        colorFontShadow = (NSColor *)[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:@"colorFontShadow"]];
     }
     @catch (NSException *exception) {
         NSLog(@"Running for the first time, setting defaults..");
@@ -491,6 +493,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         [[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:fontColor] forKey:@"colorFont"];
         [[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:backgroundColor] forKey:@"colorBackground"];
         [[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:backgroundColor2] forKey:@"colorBackground2"];
+        [[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:backgroundColor2] forKey:@"colorFontShadow"];
     }
     
                                       
@@ -782,43 +785,60 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
 // Key handler
 - (void)keyDown:(NSEvent *)event {
     
-    NSLog(@"Keyboard shortcuts disabled...");
-    return;
+    NSUInteger flags = [[NSApp currentEvent] modifierFlags];
+    unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
     
-        unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
-        switch(key) {
-                
-            case 'f':case 'F':
-                
-                if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_pinDisplay"]){
-                    NSBeep();
-                     break;
-                }
-                
-                if([event modifierFlags] & NSControlKeyMask){
-                }else{
-                    if (!f_fullscreenMode){
-                        [self goFullscreen];
-                    }else{
-                        [self goWindowed];
-                    }
-                }
+    //FIXME
+    switch (key){
+            
+        case NSLeftArrowFunctionKey:{
+            if((flags & NSCommandKeyMask)){
+                NSLog(@"CMD Arrow");
+            }else{
+                NSLog(@"Left arrow");
+            }
             break;
-                
         }
-        
-        switch([event keyCode]) {
-                // ESC
-            case 53:
-                if (f_fullscreenMode){
-                    [self goWindowed];
-                }
-                break;
+            
+        case NSRightArrowFunctionKey:{
+            if((flags & NSCommandKeyMask)){
+                NSLog(@"CMD Arrow");
+            }else{
+                NSLog(@"Left arrow");
+            }
+            break;
         }
-        
-    // Call controller
-    [[[MainView alloc] init] keyDown:event];
+            
+        case NSUpArrowFunctionKey:{
+            if((flags & NSCommandKeyMask)){
+                NSLog(@"CMD Arrow");
+            }else{
+                NSLog(@"Left arrow");
+            }
+            break;
+        }
+            
+        case NSDownArrowFunctionKey:{
+            if((flags & NSCommandKeyMask)){
+                NSLog(@"CMD Arrow");
+            }else{
+                NSLog(@"Left arrow");
+            }
+            break;
+        }
+    }
+   
 
+    
+    switch([event keyCode]) {
+        // ESC
+        case 53:{
+            if (f_fullscreenMode){
+                [self goWindowed];
+            }
+            break;
+        }
+    }
 }
 
 - (void) stopTimer{
