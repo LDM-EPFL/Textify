@@ -18,9 +18,17 @@
 	<integer>0</integer>
 	<key>f_flipText</key>
 	<false/>
+	<key>f_autoScale</key>
+	<string>NO</string>
 	<key>f_mirrorText</key>
 	<false/>
+	<key>f_centerText</key>
+	<false/>
+	<key>f_correctOrigin</key>
+	<false/>
 	<key>f_transparentBackground</key>
+	<false/>
+	<key>f_lockScrollOptions</key>
 	<false/>
 	<key>f_typingEffect</key>
 	<false/>
@@ -38,5 +46,23 @@
 	<string>1.00</string>
 	<key>subtitler_settings_file</key>
 	<true/>
+	<key>f_typingEffectHumanize</key>
+	<false/>
+	<key>f_typingEffectLoop</key>
+	<false/>
+	<key>gradientAngle</key>
+	<integer>0</integer>
+	<key>scrollRate</key>
+	<integer>0</integer>
+	<key>typingRate</key>
+	<integer>0</integer>
+	<key>global_offsetX</key>
+	<integer>0</integer>
+	<key>global_offsetY</key>
+	<integer>0</integer>
+	<key>global_translateX</key>
+	<integer>0</integer>
+	<key>global_translateY</key>
+	<integer>0</integer>
 </dict>
 </plist>

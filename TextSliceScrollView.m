@@ -18,6 +18,11 @@
 }
 
 // Keyboard handling
+
+// FIXME:
+// This si correct to stop the beeping, however NSScrollView can never become
+// first responder, therfore it never will call keyDown (and never intercept the message)
+// This shouldn't be here...
 -(BOOL)acceptsFirstResponder{return YES;}
 -(void)keyDown:(NSEvent *)theEvent{};
 -(void)keyUp:(NSEvent *)event{

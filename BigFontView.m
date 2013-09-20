@@ -788,41 +788,72 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     NSUInteger flags = [[NSApp currentEvent] modifierFlags];
     unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
     
-    //FIXME
+    float stepSizeScrollRate=0.1;
+    float stepSizeOffset=2;
     switch (key){
             
         case NSLeftArrowFunctionKey:{
             if((flags & NSCommandKeyMask)){
-                NSLog(@"CMD Arrow");
+                //CMD+ <-
+                [[NSUserDefaults standardUserDefaults]
+                 setFloat:[[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetX"]-stepSizeOffset
+                 forKey:@"global_offsetX"];
+
+                
             }else{
-                NSLog(@"Left arrow");
+                // <-
+                [[NSUserDefaults standardUserDefaults]
+                 setFloat:[[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"]-stepSizeScrollRate
+                 forKey:@"scrollRate"];
             }
             break;
         }
             
         case NSRightArrowFunctionKey:{
             if((flags & NSCommandKeyMask)){
-                NSLog(@"CMD Arrow");
+                //CMD+ ->
+                [[NSUserDefaults standardUserDefaults]
+                 setFloat:[[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetX"]+stepSizeOffset
+                 forKey:@"global_offsetX"];
+
             }else{
-                NSLog(@"Left arrow");
+                // ->
+                [[NSUserDefaults standardUserDefaults]
+                 setFloat:[[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"]+stepSizeScrollRate
+                 forKey:@"scrollRate"];
             }
             break;
         }
             
         case NSUpArrowFunctionKey:{
             if((flags & NSCommandKeyMask)){
-                NSLog(@"CMD Arrow");
+                //CMD+ ^
+                [[NSUserDefaults standardUserDefaults]
+                 setFloat:[[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetY"]+stepSizeOffset
+                 forKey:@"global_offsetY"];
+
             }else{
-                NSLog(@"Left arrow");
+                // ^
+                [[NSUserDefaults standardUserDefaults]
+                 setFloat:[[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"]+stepSizeScrollRate
+                 forKey:@"scrollRate"];
             }
             break;
         }
             
         case NSDownArrowFunctionKey:{
+            
+            //CMD+ \/
             if((flags & NSCommandKeyMask)){
-                NSLog(@"CMD Arrow");
+                [[NSUserDefaults standardUserDefaults]
+                 setFloat:[[NSUserDefaults standardUserDefaults] floatForKey:@"global_offsetY"]-stepSizeOffset
+                 forKey:@"global_offsetY"];
+            
+            // \/
             }else{
-                NSLog(@"Left arrow");
+                [[NSUserDefaults standardUserDefaults]
+                 setFloat:[[NSUserDefaults standardUserDefaults] floatForKey:@"scrollRate"]-stepSizeScrollRate
+                 forKey:@"scrollRate"];
             }
             break;
         }
