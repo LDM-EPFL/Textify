@@ -30,9 +30,9 @@
         result = MIDIClientCreate(CFSTR("MIDI client"), NULL, NULL, &midiClient);
         if (result != noErr) {
             NSLog(@"MIDI: Error creating MIDI client");
-           //%s - %s", GetMacOSStatusErrorString(result), GetMacOSStatusCommentString(result));
+            //%s - %s", GetMacOSStatusErrorString(result), GetMacOSStatusCommentString(result));
         }else{
-           // NSLog(@"MIDI: Client Created");
+            // NSLog(@"MIDI: Client Created");
         }
         
         error=nil;
@@ -54,8 +54,8 @@
         // Initializes the controller for the GUI that configures the MIDI
         [[[FRAppCommon sharedFRAppCommon] midiConfigController] setMidiInput:self];
         [[[FRAppCommon sharedFRAppCommon] midiConfigController] initializeMappings];
-    
-    }        
+        
+    }
     return self;
 }
 
@@ -64,24 +64,29 @@
 -(void)reloadMidiMappings{
     
     
-    // Files should be kept in Application Support directory, but this lets us ship with defaults
+    // Files should be in Application Support directory, but this lets us ship with defaults
+    NSArray *directory;
+    NSArray *plistFiles;
+    NSString *configDirectory;
+    
     // First look in App Support
     NSArray *paths = NSSearchPathForDirectoriesInDomains
     (NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationDirectory =  [paths objectAtIndex:0];
     NSString *appName = [[NSProcessInfo processInfo] processName];
     applicationDirectory = [NSString stringWithFormat:@"%@/%@",applicationDirectory,appName];
-    NSArray *directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:applicationDirectory error:nil];
-    NSArray *plistFiles = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.plist'"]];
-   
+    directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:applicationDirectory error:nil];
+    plistFiles = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.plist'"]];
+    configDirectory=applicationDirectory;
     
     // Not there? Read from bundle and save to app support
     if ([plistFiles count] == 0){
-         NSLog(@"FRMIDI: Loading default MIDI configs from bundle (first time run?)");
+        NSLog(@"FRMIDI: Loading default MIDI configs from bundle (first time run?)");
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager createDirectoryAtPath:applicationDirectory withIntermediateDirectories:YES attributes:nil error:nil];
         directory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSBundle mainBundle] resourcePath] error:nil];
         plistFiles = [directory filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.plist'"]];
+        configDirectory=[[NSBundle mainBundle] resourcePath];
     }
     
     // Still can't find? Uh-oh
@@ -90,14 +95,12 @@
         return;
     }
     
-    
-    
-    
     midiMappings=[[NSMutableDictionary alloc] init];
+    NSLog(@"FRMIDI: Loading configs from %@",configDirectory);
     for(NSString* filename in plistFiles){
         if ([filename rangeOfString:@"midimap"].location != NSNotFound) {
             
-            NSString *configFileWithPath=[[NSString alloc] initWithFormat:@"%@/%@",[[NSBundle mainBundle] resourcePath],filename];
+            NSString* configFileWithPath=[[NSString alloc] initWithFormat:@"%@/%@",configDirectory,filename ];
             
             NSMutableDictionary* thisConfig = [[NSMutableDictionary alloc] initWithContentsOfFile:configFileWithPath];
             [thisConfig setValue:configFileWithPath forKey:@"filename"];
@@ -131,7 +134,7 @@
     // Put settings and map in singleton so we can access it via the C style callback below...
     [[FRAppCommon sharedFRAppCommon] setMidiMappings:midiMappings];
     [[FRAppCommon sharedFRAppCommon] setMidiMappings_byMethod:settingsByMethod];
-
+    
     // Saves out a copy of the settings
     [self saveSettingsToConfigFile];
 }
@@ -155,7 +158,7 @@
         // Temporarily remove the filename (so it doesn't get recorded to disk)
         [settingsForDevice removeObjectForKey:@"filename"];
         
-        // Save the file 
+        // Save the file
         //NSLog(@"Saving: %@",filename);
         [settingsForDevice writeToFile:filename atomically: YES];
         [settingsForDevice setValue:filename forKey:@"filename"];
@@ -179,7 +182,7 @@
         CFDictionaryGetValueIfPresent(properties, @"entities", &entity);
         
         // I cannot really believe this is the right way to do this, but it seems to work...
-       
+        
         if(entity){
             NSArray *nameOfDevice = [(__bridge NSDictionary *)entity valueForKey:@"name"];
             if([nameOfDevice count] > 0){
@@ -192,7 +195,7 @@
 
 // Make a connection
 -(void)connectToDeviceNamed:(NSString*)deviceNameToConnect{
-
+    
     for (int i = 0; i < MIDIGetNumberOfDevices(); i++) {
         MIDIDeviceRef midiDevicesOnChannel = MIDIGetDevice(i);
         
@@ -218,7 +221,7 @@
                 NSArray *thisID = [(NSDictionary *)sources[0] valueForKey:@"uniqueID"];
                 deviceID = (MIDIUniqueID)[(NSNumber *)thisID[0] integerValue];
             }
-
+            
             if([nameOfDevice count] > 0 && [idOfDevice count] > 0){
                 NSString* deviceName = nameOfDevice[0];
                 if ([deviceName isEqualToString:deviceNameToConnect]){
@@ -248,12 +251,12 @@
 static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *srcRef){
     
     @autoreleasepool {
-    
+        
         
         // Unpack callback data
         NSString  *deviceName = (__bridge NSString*)srcRef;
         
-       
+        
         
         bool continueSysEx = false;
         UInt16 nBytes;
@@ -273,7 +276,7 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                 
                 // Check if the last byte is SysEx End.
                 continueSysEx = (packet->data[nBytes - 1] == 0xF7);
-
+                
                 if (!continueSysEx || sysExLength == SYSEX_LENGTH) {
                     // We would process the SysEx message here, as it is we're just ignoring it
                     
@@ -284,7 +287,7 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                 
                 iByte = 0;
                 while (iByte < nBytes) {
-                    //size = 0;
+                    size = 0;
                     
                     // First byte should be status
                     unsigned char status = packet->data[iByte];
@@ -319,61 +322,61 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                     unsigned char messageChannel = status & 0xF;
                     unsigned int signalID = packet->data[iByte + 1];
                     unsigned int value = packet->data[iByte + 2];
-                                       
+                    
                     switch (status & 0xF0) {
-                        
-                        // Note OFF
+                            
+                            // Note OFF
                         case 0x80:
                             [FRMIDIInput handleMappingForDeviceNamed:deviceName
-                                                            MessageType:@"NOTE_OFF"
-                                                              onChannel:[NSString stringWithFormat:@"%i",messageChannel]
-                                                               signalID:[NSString stringWithFormat:@"%i",signalID]
-                                                                  value:[NSString stringWithFormat:@"%i",value]];
+                                                         MessageType:@"NOTE_OFF"
+                                                           onChannel:[NSString stringWithFormat:@"%i",messageChannel]
+                                                            signalID:[NSString stringWithFormat:@"%i",signalID]
+                                                               value:[NSString stringWithFormat:@"%i",value]];
                             break;
-                        
-                        // Note ON
+                            
+                            // Note ON
                         case 0x90:
                             [FRMIDIInput handleMappingForDeviceNamed:deviceName
-                                                            MessageType:@"NOTE_ON"
-                                                              onChannel:[NSString stringWithFormat:@"%i",messageChannel]
-                                                               signalID:[NSString stringWithFormat:@"%i",signalID]
-                                                                  value:[NSString stringWithFormat:@"%i",value]];
+                                                         MessageType:@"NOTE_ON"
+                                                           onChannel:[NSString stringWithFormat:@"%i",messageChannel]
+                                                            signalID:[NSString stringWithFormat:@"%i",signalID]
+                                                               value:[NSString stringWithFormat:@"%i",value]];
                             break;
-                       
-                        // CONTROL
+                            
+                            // CONTROL
                         case 0xB0:
                             [FRMIDIInput handleMappingForDeviceNamed:deviceName
-                                                            MessageType:@"CONTROL"
-                                                              onChannel:[NSString stringWithFormat:@"%i",messageChannel]
-                                                               signalID:[NSString stringWithFormat:@"%i",signalID]
-                                                                  value:[NSString stringWithFormat:@"%i",value]];
-                            break;
-
-                        /* 
-                         
-                         We don't care about these types for now...
-                         
-                        case 0xA0:
-                            NSLog(@"%@: Aftertouch: %d, %d", deviceName, packet->data[iByte + 1], packet->data[iByte + 2]);
+                                                         MessageType:@"CONTROL"
+                                                           onChannel:[NSString stringWithFormat:@"%i",messageChannel]
+                                                            signalID:[NSString stringWithFormat:@"%i",signalID]
+                                                               value:[NSString stringWithFormat:@"%i",value]];
                             break;
                             
-                            
-                        case 0xC0:
-                            NSLog(@"%@: Program change: %d", deviceName, packet->data[iByte + 1]);
-                            break;
-                            
-                        case 0xD0:
-                            NSLog(@"%@: Change aftertouch: %d", deviceName, packet->data[iByte + 1]);
-                            break;
-                            
-                        case 0xE0:
-                            NSLog(@"%@: Pitch wheel: %d, %d", deviceName, packet->data[iByte + 1], packet->data[iByte + 2]);
-                            break;
-                            
-                        default:
-                            NSLog(@"%@: Unknown!", deviceName);
-                            break;
-                         */
+                            /*
+                             
+                             We don't care about these types for now...
+                             
+                             case 0xA0:
+                             NSLog(@"%@: Aftertouch: %d, %d", deviceName, packet->data[iByte + 1], packet->data[iByte + 2]);
+                             break;
+                             
+                             
+                             case 0xC0:
+                             NSLog(@"%@: Program change: %d", deviceName, packet->data[iByte + 1]);
+                             break;
+                             
+                             case 0xD0:
+                             NSLog(@"%@: Change aftertouch: %d", deviceName, packet->data[iByte + 1]);
+                             break;
+                             
+                             case 0xE0:
+                             NSLog(@"%@: Pitch wheel: %d, %d", deviceName, packet->data[iByte + 1], packet->data[iByte + 2]);
+                             break;
+                             
+                             default:
+                             NSLog(@"%@: Unknown!", deviceName);
+                             break;
+                             */
                     }
                     
                     iByte += size;
@@ -395,7 +398,8 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
     // We can't access "self" from within this callback, so we use this copy of settings
     NSDictionary* midiMap = [[FRAppCommon sharedFRAppCommon] midiMappings];
     midiMap = [midiMap valueForKey:deviceName];
-
+    
+    
     
     // Look to see if we have a mapping for this
     NSMutableDictionary *mapping = [[[[midiMap valueForKey:@"CHANNEL"] valueForKey:channel] valueForKey:messageType] valueForKey:signalID];
@@ -405,7 +409,7 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
     if(mapping &&
        !([[[FRAppCommon sharedFRAppCommon] midiConfigController] settingsWindowOpen])){
         for(NSDictionary *thisAction in mapping){
-                        
+            
             // Make sure the method is available
             SEL method = NSSelectorFromString([thisAction valueForKey:@"function"]);
             if([FRMIDIPublishedMethods respondsToSelector:method]){
@@ -433,7 +437,7 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
                         NSLog(@"MIDI: Invalid logic %@ specified in mapping!", logic);
                     }
                     
-                // No logic, just pass through
+                    // No logic, just pass through
                 }else{
                     [FRMIDIPublishedMethods performSelector:method withObject:value];
                 }
@@ -449,11 +453,11 @@ static void midiInputCallback (const MIDIPacketList *list, void *procRef, void *
     
     // And also pass callback to controller
     [[[FRAppCommon sharedFRAppCommon] midiConfigController] incomingMidiMessage:deviceName
-                                                                  onChannel:channel
-                                                                messageType:messageType
-                                                                   signalID:signalID
-                                                                      value:value
-                                                                      mappingExists:(mapping?YES:NO)];
+                                                                      onChannel:channel
+                                                                    messageType:messageType
+                                                                       signalID:signalID
+                                                                          value:value
+                                                                  mappingExists:(mapping?YES:NO)];
 }
 
 

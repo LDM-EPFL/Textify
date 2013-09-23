@@ -30,7 +30,7 @@
         path=[path stringByDeletingLastPathComponent];
     }
     
-    NSLog(path);
+    //NSLog(path);
     
     [[NSUserDefaults standardUserDefaults] setValue:path forKey:@"settingsDirectory"];
     
