@@ -894,7 +894,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     if (![typingTimer isValid] || !fequal(currentTimerRate, [[NSUserDefaults standardUserDefaults] doubleForKey:@"typingRate"])){
         //NSLog(@"START Timer: %f",newTimerRate);
         currentTimerRate=newTimerRate;
-         newTimerRate = (double)([self invertValue:newTimerRate rangeMin:0.00001 rangeMax:.5]);
+         newTimerRate = (double)([self invertValue:newTimerRate rangeMin:0.01 rangeMax:1]);
         
         
         [typingTimer invalidate];
