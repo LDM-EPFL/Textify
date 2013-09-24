@@ -381,6 +381,10 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
             string=[string stringByReplacingOccurrencesOfString:@" *^*" withString:@"\n"];
             
             if(![previousLoadString isEqualToString:string]){
+                NSLog(@"Switch...");
+                [self stopTimer];
+                [self resetTimer];
+                
                 [[NSUserDefaults standardUserDefaults] setValue:string forKey:@"displayText"];
                 [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"f_typingEffectPause"];
                 [self setRangeMax:0];

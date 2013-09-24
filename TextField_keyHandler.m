@@ -20,20 +20,20 @@
     switch (code){
         case NSUpArrowFunctionKey:NSRightArrowFunctionKey:{
             self.floatValue=self.floatValue+.1;
+            NSString* updateValueAsString = [NSString stringWithFormat:@"%.2f",self.floatValue];
+            NSDictionary *bindingInfo = [self infoForBinding:NSValueBinding];
+            [[bindingInfo valueForKey:NSObservedObjectKey] setValue:updateValueAsString forKeyPath:[bindingInfo valueForKey:NSObservedKeyPathKey]];
             break;
         }case NSDownArrowFunctionKey:NSLeftArrowFunctionKey:{
            self.floatValue=self.floatValue-.1;
+            NSString* updateValueAsString = [NSString stringWithFormat:@"%.2f",self.floatValue];
+            NSDictionary *bindingInfo = [self infoForBinding:NSValueBinding];
+            [[bindingInfo valueForKey:NSObservedObjectKey] setValue:updateValueAsString forKeyPath:[bindingInfo valueForKey:NSObservedKeyPathKey]];
             break;
         }
     }
-   
     
-    
-    
-    NSString* updateValueAsString = [NSString stringWithFormat:@"%.2f",self.floatValue];
-    NSDictionary *bindingInfo = [self infoForBinding:NSValueBinding];
-    [[bindingInfo valueForKey:NSObservedObjectKey] setValue:updateValueAsString
-                                                 forKeyPath:[bindingInfo valueForKey:NSObservedKeyPathKey]];
+
 
     
 //    [self setFloatValue:2.2];

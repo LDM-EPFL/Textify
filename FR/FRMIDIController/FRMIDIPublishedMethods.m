@@ -17,5 +17,8 @@
     [[NSUserDefaults standardUserDefaults] setFloat:[value floatValue] forKey:@"scaleFactor"];
 }
 
-
++ (void) button_scrollPause:(NSString*)value{
+    [[NSUserDefaults standardUserDefaults] setBool:![[NSUserDefaults standardUserDefaults]
+                                                     boolForKey:@"f_scrollPause"] forKey:@"f_scrollPause"];
+}
 @end

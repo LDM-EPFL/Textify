@@ -70,7 +70,7 @@
             [key isEqualToString:@"f_typingEffectLoop"] ||
             [key isEqualToString:@"f_typingEffectHumanize"] ||
             [key isEqualToString:@"outputResolution"] ||
-            [key isEqualToString:@"f_transparentBackground"] ||
+            //[key isEqualToString:@"f_transparentBackground"] ||
             
             
             [key isEqualToString:@"inputSource"] ||
