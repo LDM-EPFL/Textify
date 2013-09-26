@@ -795,8 +795,11 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
     float stepSizeScrollRate=0.1;
     float stepSizeOffset=2;
     switch (key){
-            
+        
+         
         case NSLeftArrowFunctionKey:{
+            
+            if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_lockScrollOptions"]){return;}
             if((flags & NSCommandKeyMask)){
                 //CMD+ <-
                 [[NSUserDefaults standardUserDefaults]
@@ -814,6 +817,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         }
             
         case NSRightArrowFunctionKey:{
+            if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_lockScrollOptions"]){return;}
             if((flags & NSCommandKeyMask)){
                 //CMD+ ->
                 [[NSUserDefaults standardUserDefaults]
@@ -830,6 +834,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         }
             
         case NSUpArrowFunctionKey:{
+            if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_lockScrollOptions"]){return;}
             if((flags & NSCommandKeyMask)){
                 //CMD+ ^
                 [[NSUserDefaults standardUserDefaults]
@@ -846,7 +851,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
         }
             
         case NSDownArrowFunctionKey:{
-            
+            if([[NSUserDefaults standardUserDefaults] boolForKey:@"f_lockScrollOptions"]){return;}
             //CMD+ \/
             if((flags & NSCommandKeyMask)){
                 [[NSUserDefaults standardUserDefaults]
@@ -862,6 +867,7 @@ static GLint swapbytes2, lsbfirst2, rowlength2, skiprows2, skippixels2, alignmen
             break;
         }
     }
+    
    
 
     
