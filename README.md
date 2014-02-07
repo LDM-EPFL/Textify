@@ -1,8 +1,15 @@
+[Binaries](https://bitbucket.org/tezcatlipoca/textify/downloads)  
+
+NOTE: This is early stage alpha software under active development - it is missing several features and may crash at any time.  
+  
+
 Textify!
 ====================
-Text Manipulation software developed for CYBORGAME
+Text display and manipulation software developed for [*CYBORGAME*](andrewsempere.org/cyborgame).
 
-NOTE: This is early stage alpha software under active development - it is missing several features and may crash at any time.
+This software was developed as part of my PhD work [*Building Consciousness*](http://andrewsempere.org/buildingConsciousness)
+It is released with the MIT License, but if you do something neat with it, let me know?
+
 
 License
 ====================
