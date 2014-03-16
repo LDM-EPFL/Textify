@@ -1,15 +1,14 @@
-**-----> [Download Binaries](https://bitbucket.org/tezcatlipoca/textify/downloads) <----- **
+[Binaries](https://bitbucket.org/tezcatlipoca/textify/downloads)  
 
 NOTE: This is early stage alpha software under active development - it is missing several features and may crash at any time.  
   
 
 Textify!
 ====================
-Text display and manipulation software developed for [*CYBORGAME*](http://andrewsempere.org/cyborgame).
+Text display and manipulation software developed for [*CYBORGAME*](andrewsempere.org/cyborgame).
 
-This software was developed as part of my PhD work [*Building Consciousness*](http://andrewsempere.org/buildingConsciousness).  
-
-Sourcecode is released with the MIT License so you may re-use at will, but let me know if you do something neat?
+This software was developed as part of my PhD work [*Building Consciousness*](http://andrewsempere.org/buildingConsciousness)
+It is released with the MIT License, but if you do something neat with it, let me know?
 
 
 License
